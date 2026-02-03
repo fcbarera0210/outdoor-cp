@@ -15,9 +15,9 @@ export default function TravelJourneyDemo() {
     ]
 
     images.forEach((img) => {
-      img.addEventListener('error', function() {
+      img.addEventListener('error', () => {
         const randomFallback = fallbackImages[Math.floor(Math.random() * fallbackImages.length)]
-        ;(this as HTMLImageElement).src = randomFallback
+        ;(img as HTMLImageElement).src = randomFallback
       })
     })
 
@@ -37,12 +37,13 @@ export default function TravelJourneyDemo() {
       })
     }, observerOptions)
 
-    revealRefs.current.forEach((el) => {
+    const currentRefs = revealRefs.current
+    currentRefs.forEach((el) => {
       if (el) observer.observe(el)
     })
 
     return () => {
-      revealRefs.current.forEach((el) => {
+      currentRefs.forEach((el) => {
         if (el) observer.unobserve(el)
       })
     }

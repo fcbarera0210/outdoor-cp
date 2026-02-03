@@ -15,9 +15,9 @@ export default function AndesTrekDemo() {
     ]
 
     images.forEach((img) => {
-      img.addEventListener('error', function() {
+      img.addEventListener('error', () => {
         const randomFallback = fallbackImages[Math.floor(Math.random() * fallbackImages.length)]
-        ;(this as HTMLImageElement).src = randomFallback
+        ;(img as HTMLImageElement).src = randomFallback
       })
     })
   }, [])

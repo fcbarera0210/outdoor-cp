@@ -14,12 +14,12 @@ export default function PatagoniaDemo() {
     const avatarFallback = 'https://ui-avatars.com/api/?name=User&size=80&background=random'
     
     images.forEach((img) => {
-      img.addEventListener('error', function() {
-        if ((this as HTMLImageElement).src.includes('ui-avatars.com')) {
-          ;(this as HTMLImageElement).src = avatarFallback
+      img.addEventListener('error', () => {
+        if ((img as HTMLImageElement).src.includes('ui-avatars.com')) {
+          ;(img as HTMLImageElement).src = avatarFallback
         } else {
           const randomFallback = fallbackImages[Math.floor(Math.random() * fallbackImages.length)]
-          ;(this as HTMLImageElement).src = randomFallback
+          ;(img as HTMLImageElement).src = randomFallback
         }
       })
     })
