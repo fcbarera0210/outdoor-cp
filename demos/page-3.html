@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNTN - Trekking Guide Chile</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gilroy:wght@400;600;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mntn-bg': '#0B1D26', // El color azul oscuro profundo característico del diseño
+                        'mntn-gold': '#FBD784', // El color dorado/amarillo para acentos
+                        'mntn-gray': '#bdc3c7',
+                    },
+                    fontFamily: {
+                        'sans': ['"Manrope"', 'sans-serif'], // Tipografía moderna para textos
+                        'serif': ['"Playfair Display"', 'serif'], // Tipografía elegante para títulos
+                    },
+                    backgroundImage: {
+                        'hero-gradient': 'linear-gradient(180deg, rgba(11,29,38,0) 0%, #0B1D26 100%)',
+                        'card-gradient': 'linear-gradient(180deg, rgba(11,29,38,0) 0%, rgba(11,29,38,0.8) 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados para efectos específicos */
+        
+        .text-outline {
+            /* Efecto de número gigante transparente con borde */
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1); /* Borde sutil */
+            color: transparent;
+        }
+
+        .vertical-text-left {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+        
+        .vertical-text-right {
+            writing-mode: vertical-rl;
+        }
+
+        /* Parallax suave para la imagen de fondo */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        /* Efecto de fade-in al hacer scroll */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            will-change: opacity, visibility;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+        
+        /* Personalización de inputs form */
+        .input-dark {
+            background: transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            transition: border-color 0.3s;
+        }
+        .input-dark:focus {
+            outline: none;
+            border-color: #FBD784;
+        }
+    </style>
+</head>
+<body class="bg-mntn-bg text-white font-sans overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="absolute top-0 w-full z-50 py-8 px-8 md:px-16 flex justify-between items-center">
+        <div class="text-2xl font-serif font-bold tracking-wider hover:text-mntn-gold transition cursor-pointer">MNTN</div>
+        <div class="hidden md:flex space-x-10 text-sm font-bold tracking-wide">
+            <a href="#equipment" class="hover:text-mntn-gold transition">Equipo</a>
+            <a href="#about" class="hover:text-mntn-gold transition">Nosotros</a>
+            <a href="#blog" class="hover:text-mntn-gold transition">Blog</a>
+        </div>
+        <div class="flex items-center gap-3 cursor-pointer group">
+            <i class="far fa-user-circle text-xl group-hover:text-mntn-gold transition"></i>
+            <span class="text-sm font-bold group-hover:text-mntn-gold transition">Cuenta</span>
+        </div>
+    </nav>
+
+    <!-- Side Indicators (Fixed) -->
+    <div class="fixed left-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-6 mix-blend-difference">
+        <div class="vertical-text-left text-xs font-bold tracking-widest text-white/70">Síguenos</div>
+        <div class="w-px h-12 bg-white/50"></div>
+        <a href="#" class="text-white hover:text-mntn-gold transition"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-white hover:text-mntn-gold transition"><i class="fab fa-twitter"></i></a>
+    </div>
+
+    <div class="fixed right-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-8 text-right font-bold text-xs">
+        <div class="flex items-center gap-4 text-white hover:text-mntn-gold transition cursor-pointer border-r-2 border-transparent hover:border-mntn-gold pr-2">Start <span class="text-[10px] opacity-50">01</span></div>
+        <div class="flex items-center gap-4 text-white/50 hover:text-mntn-gold transition cursor-pointer pr-2">01 <span class="text-[10px] opacity-50">02</span></div>
+        <div class="flex items-center gap-4 text-white/50 hover:text-mntn-gold transition cursor-pointer pr-2">02 <span class="text-[10px] opacity-50">03</span></div>
+        <div class="flex items-center gap-4 text-white/50 hover:text-mntn-gold transition cursor-pointer pr-2">03 <span class="text-[10px] opacity-50">04</span></div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative h-[120vh] w-full">
+        <!-- Background Image Fixed -->
+        <div class="absolute inset-0 z-0">
+            <!-- Usamos una imagen que tenga cielo arriba y montañas oscuras abajo para el blend perfecto -->
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" class="w-full h-full object-cover object-center" alt="Mountain Header">
+            
+            <!-- El degradado mágico que conecta el hero con el fondo -->
+            <div class="absolute inset-x-0 bottom-0 h-[600px] bg-gradient-to-t from-mntn-bg via-mntn-bg/80 to-transparent"></div>
+            <!-- Overlay general suave -->
+            <div class="absolute inset-0 bg-mntn-bg/20"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 container mx-auto px-6 h-screen flex flex-col justify-center max-w-6xl pt-20">
+            <div class="max-w-4xl">
+                <!-- Tagline -->
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-16 h-[2px] bg-mntn-gold"></div>
+                    <span class="text-mntn-gold font-bold tracking-[0.4em] uppercase text-xs md:text-sm">Una Guía de Senderismo</span>
+                </div>
+                
+                <!-- Main Title -->
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium leading-tight mb-8 capitalize">
+                    Prepárate para la <br> montaña y más allá
+                </h1>
+                
+                <!-- Scroll Indicator -->
+                <div class="flex items-center gap-4 text-white font-bold text-sm cursor-pointer animate-bounce mt-8">
+                    <span>Desliza hacia abajo</span>
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-20 -mt-40 container mx-auto px-6 md:px-12 max-w-6xl pb-32 space-y-32 md:space-y-48">
+
+        <!-- Section 01: Image Right -->
+        <section class="flex flex-col md:flex-row items-center gap-12 md:gap-24 fade-in-section">
+            <div class="w-full md:w-1/2 relative">
+                <!-- Big Background Number -->
+                <div class="absolute -top-24 -left-12 text-[180px] md:text-[240px] font-bold text-outline opacity-30 select-none z-0">01</div>
+                
+                <div class="relative z-10 pt-10 pl-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-[2px] bg-mntn-gold"></div>
+                        <span class="text-mntn-gold font-bold tracking-[0.4em] uppercase text-xs">Comenzando</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-serif font-semibold mb-6 leading-tight">
+                        ¿Qué nivel de <br> excursionista eres?
+                    </h2>
+                    <p class="text-mntn-gray leading-relaxed mb-8 text-sm md:text-base font-light">
+                        Determinar qué nivel de excursionista eres puede ser una herramienta importante al planificar futuras caminatas. Esta guía de nivel de senderismo te ayudará a planificar rutas de acuerdo con diferentes clasificaciones establecidas por varios sitios web como All Trails y Modern Hiker.
+                    </p>
+                    <a href="#" class="inline-flex items-center gap-2 text-mntn-gold hover:text-white transition font-bold text-sm">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative h-[500px] md:h-[600px] w-full overflow-hidden shadow-2xl">
+                     <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover hover:scale-105 transition duration-700 ease-in-out">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 02: Image Left -->
+        <section class="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-24 fade-in-section" id="equipment">
+            <div class="w-full md:w-1/2 relative">
+                <!-- Big Background Number -->
+                <div class="absolute -top-24 -left-12 text-[180px] md:text-[240px] font-bold text-outline opacity-30 select-none z-0">02</div>
+                
+                <div class="relative z-10 pt-10 pl-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-[2px] bg-mntn-gold"></div>
+                        <span class="text-mntn-gold font-bold tracking-[0.4em] uppercase text-xs">Esenciales de Montaña</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-serif font-semibold mb-6 leading-tight">
+                        Eligiendo el equipo <br> correcto
+                    </h2>
+                    <p class="text-mntn-gray leading-relaxed mb-8 text-sm md:text-base font-light">
+                        Lo bueno de comenzar a hacer senderismo es que realmente no necesitas ningún equipo especial; probablemente ya tengas algo para salir. Comienza con ropa cómoda y zapatillas resistentes.
+                    </p>
+                    <a href="#" class="inline-flex items-center gap-2 text-mntn-gold hover:text-white transition font-bold text-sm">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative h-[500px] md:h-[600px] w-full overflow-hidden shadow-2xl">
+                     <img src="https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover hover:scale-105 transition duration-700 ease-in-out">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 03: Image Right -->
+        <section class="flex flex-col md:flex-row items-center gap-12 md:gap-24 fade-in-section">
+            <div class="w-full md:w-1/2 relative">
+                <!-- Big Background Number -->
+                <div class="absolute -top-24 -left-12 text-[180px] md:text-[240px] font-bold text-outline opacity-30 select-none z-0">03</div>
+                
+                <div class="relative z-10 pt-10 pl-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-[2px] bg-mntn-gold"></div>
+                        <span class="text-mntn-gold font-bold tracking-[0.4em] uppercase text-xs">Donde ir</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-serif font-semibold mb-6 leading-tight">
+                        Entiende tu mapa <br> y tiempos
+                    </h2>
+                    <p class="text-mntn-gray leading-relaxed mb-8 text-sm md:text-base font-light">
+                        Para empezar, busca rutas cerca de ti. La mayoría son senderos circulares de pocas horas. Con el tiempo, podrás planificar rutas más largas en parques nacionales como Torres del Paine o Villarrica.
+                    </p>
+                    <a href="#" class="inline-flex items-center gap-2 text-mntn-gold hover:text-white transition font-bold text-sm">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="relative h-[500px] md:h-[600px] w-full overflow-hidden shadow-2xl">
+                     <img src="https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover hover:scale-105 transition duration-700 ease-in-out">
+                </div>
+            </div>
+        </section>
+
+        <!-- New Gallery Section -->
+        <section class="py-20 fade-in-section">
+            <div class="text-center mb-16">
+                 <div class="flex items-center justify-center gap-4 mb-4">
+                    <div class="w-8 h-[2px] bg-mntn-gold"></div>
+                    <span class="text-mntn-gold font-bold tracking-[0.4em] uppercase text-xs">Galería</span>
+                    <div class="w-8 h-[2px] bg-mntn-gold"></div>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-serif font-semibold">Vistas Inolvidables</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="h-64 overflow-hidden rounded-sm relative group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition"></div>
+                </div>
+                <div class="h-64 overflow-hidden rounded-sm relative group cursor-pointer md:col-span-2">
+                    <img src="https://images.unsplash.com/photo-1533240332313-0dbdd3199061?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition"></div>
+                </div>
+                <div class="h-64 overflow-hidden rounded-sm relative group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Próximas Salidas Section -->
+        <section id="proximas-salidas-section" class="py-20 bg-[#0c1f28] relative mt-20" style="position: relative !important; z-index: 30 !important; background: #0c1f28 !important; display: block !important; visibility: visible !important; opacity: 1 !important; border: 3px solid yellow !important; min-height: 400px !important;">
+            <div class="container mx-auto px-6 max-w-6xl">
+            <div class="flex items-center justify-center gap-4 mb-12">
+                <div class="w-8 h-[2px] bg-mntn-gold"></div>
+                <span class="text-mntn-gold font-bold tracking-[0.4em] uppercase text-xs">Próximas Salidas</span>
+                <div class="w-8 h-[2px] bg-mntn-gold"></div>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-serif font-semibold text-center mb-12 text-white">Temporada 2025</h2>
+                
+                <div class="space-y-4">
+                    <!-- Date Item 1 -->
+                    <div class="group bg-[#0c1f28] border border-white/10 hover:border-mntn-gold/50 rounded-sm p-6 flex flex-col md:flex-row items-center justify-between transition duration-300 cursor-pointer hover:bg-[#0f2532]">
+                        <div class="flex items-center gap-6 w-full md:w-auto">
+                            <div class="bg-mntn-gold text-mntn-bg px-6 py-4 rounded-sm text-sm font-bold uppercase tracking-widest w-full md:w-40 text-center">
+                                Ene 15 - 20
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-serif font-semibold text-xl text-white">Ruta de los Glaciares</span>
+                                <span class="text-xs text-mntn-gray uppercase tracking-wider mt-1">5 días / 4 noches</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-6 mt-4 md:mt-0 w-full md:w-auto justify-between md:justify-end">
+                            <div class="flex -space-x-2">
+                                <img class="w-8 h-8 rounded-full border-2 border-mntn-bg" src="https://ui-avatars.com/api/?name=male-32&size=80&background=random" alt="">
+                                <img class="w-8 h-8 rounded-full border-2 border-mntn-bg" src="https://ui-avatars.com/api/?name=female-44&size=80&background=random" alt="">
+                                <div class="w-8 h-8 rounded-full border-2 border-mntn-bg bg-white/10 flex items-center justify-center text-xs font-bold text-mntn-gray">+4</div>
+                            </div>
+                            <span class="text-xs font-bold text-green-400 bg-green-400/20 px-4 py-2 rounded-full">Cupos Disponibles</span>
+                            <div class="w-12 h-12 rounded-full bg-mntn-gold text-mntn-bg flex items-center justify-center group-hover:bg-white transition shadow-sm">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date Item 2 -->
+                    <div class="group bg-[#0c1f28] border border-white/10 hover:border-mntn-gold/50 rounded-sm p-6 flex flex-col md:flex-row items-center justify-between transition duration-300 cursor-pointer hover:bg-[#0f2532]">
+                        <div class="flex items-center gap-6 w-full md:w-auto">
+                            <div class="bg-mntn-gold text-mntn-bg px-6 py-4 rounded-sm text-sm font-bold uppercase tracking-widest w-full md:w-40 text-center">
+                                Feb 05 - 10
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-serif font-semibold text-xl text-white">Circuito W - Paine</span>
+                                <span class="text-xs text-mntn-gray uppercase tracking-wider mt-1">Full Experience</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-6 mt-4 md:mt-0 w-full md:w-auto justify-between md:justify-end">
+                            <div class="flex -space-x-2">
+                                <img class="w-8 h-8 rounded-full border-2 border-mntn-bg" src="https://ui-avatars.com/api/?name=female-68&size=80&background=random" alt="">
+                                <img class="w-8 h-8 rounded-full border-2 border-mntn-bg" src="https://ui-avatars.com/api/?name=male-11&size=80&background=random" alt="">
+                                <div class="w-8 h-8 rounded-full border-2 border-mntn-bg bg-white/10 flex items-center justify-center text-xs font-bold text-mntn-gray">+12</div>
+                            </div>
+                            <span class="text-xs font-bold text-mntn-gold bg-mntn-gold/20 px-4 py-2 rounded-full">Últimos Cupos</span>
+                            <div class="w-12 h-12 rounded-full bg-mntn-gold text-mntn-bg flex items-center justify-center group-hover:bg-white transition shadow-sm">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking / Contact Form -->
+        <section class="max-w-4xl mx-auto py-20 bg-[#0c1f28] p-10 md:p-16 rounded-sm border border-white/5 fade-in-section shadow-2xl relative overflow-hidden">
+            <!-- Background detail -->
+            <div class="absolute -top-20 -right-20 text-[300px] text-outline opacity-10 font-serif select-none pointer-events-none">?</div>
+
+            <div class="relative z-10">
+                <h3 class="text-3xl font-serif font-semibold mb-2">Únete a la Aventura</h3>
+                <p class="text-mntn-gray text-sm mb-10 font-light">Reserva tu cupo para la próxima temporada de ascensos.</p>
+                
+                <form class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs uppercase tracking-widest text-mntn-gold font-bold">Nombre Completo</label>
+                        <input type="text" class="input-dark py-2" placeholder="Juan Pérez">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs uppercase tracking-widest text-mntn-gold font-bold">Email</label>
+                        <input type="email" class="input-dark py-2" placeholder="tu@email.com">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs uppercase tracking-widest text-mntn-gold font-bold">Destino de Interés</label>
+                        <select class="input-dark py-2 bg-transparent appearance-none cursor-pointer">
+                            <option class="text-black">Patagonia Sur</option>
+                            <option class="text-black">Desierto Atacama</option>
+                            <option class="text-black">Andes Central</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col justify-end">
+                        <button class="bg-mntn-gold text-mntn-bg font-bold uppercase tracking-widest py-3 hover:bg-white transition duration-300">
+                            Consultar Disponibilidad
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#09161d] pt-20 pb-10 mt-20 border-t border-white/5">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+                
+                <div class="max-w-sm">
+                    <h2 class="text-2xl font-serif font-bold tracking-wider text-white mb-6">MNTN</h2>
+                    <p class="text-mntn-gray text-sm leading-relaxed mb-6 font-light">
+                        Prepárate para la montaña y más allá. Somos una comunidad de amantes de la naturaleza dedicados a explorar los rincones más remotos de Chile.
+                    </p>
+                    <p class="text-xs text-white/40">© 2024 MNTN Inc. Todos los derechos reservados.</p>
+                </div>
+
+                <div class="flex gap-16 md:gap-24">
+                    <div>
+                        <h4 class="text-mntn-gold font-bold uppercase tracking-widest text-sm mb-6">Blog</h4>
+                        <ul class="space-y-4 text-sm font-medium text-white/80">
+                            <li><a href="#" class="hover:text-white transition">Lugares</a></li>
+                            <li><a href="#" class="hover:text-white transition">Equipo</a></li>
+                            <li><a href="#" class="hover:text-white transition">Guías</a></li>
+                            <li><a href="#" class="hover:text-white transition">Historias</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-mntn-gold font-bold uppercase tracking-widest text-sm mb-6">MNTN</h4>
+                        <ul class="space-y-4 text-sm font-medium text-white/80">
+                            <li><a href="#" class="hover:text-white transition">Equipo</a></li>
+                            <li><a href="#" class="hover:text-white transition">Trabajos</a></li>
+                            <li><a href="#" class="hover:text-white transition">Prensa</a></li>
+                            <li><a href="#" class="hover:text-white transition">Contacto</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script para animaciones -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.fade-in-section').forEach((section) => {
+                observer.observe(section);
+            });
+        });
+        
+        // Image fallback mechanism
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            const fallbackImages = [
+                'https://images.unsplash.com/photo-1519681393784-d8e5b5a4570e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                'https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
+                'https://images.unsplash.com/photo-1533240332313-0dbdd3199061?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80'
+            ];
+            
+            images.forEach(function(img) {
+                img.addEventListener('error', function() {
+                    const randomFallback = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+                    this.src = randomFallback;
+                });
+            });
+        });
+        
+        // Debug: Verificar que la sección esté visible
+        function makeSectionsVisible() {
+            // Buscar por ID primero
+            const proximasSalidas = document.getElementById('proximas-salidas-section');
+            if (proximasSalidas) {
+                proximasSalidas.style.cssText = 'position: relative !important; z-index: 9999 !important; background: #0c1f28 !important; display: block !important; visibility: visible !important; opacity: 1 !important; min-height: 400px !important;';
+                console.log('Próximas Salidas section found by ID:', proximasSalidas);
+                console.log('Section parent:', proximasSalidas.parentElement);
+                console.log('Section computed styles:', window.getComputedStyle(proximasSalidas));
+            } else {
+                console.error('Próximas Salidas section NOT FOUND by ID!');
+            }
+            
+            // También buscar por texto
+            const sections = document.querySelectorAll('section');
+            console.log('Total sections found:', sections.length);
+            sections.forEach(function(section, index) {
+                const text = section.textContent || '';
+                if (text.includes('Próximas Salidas') || text.includes('Temporada 2025')) {
+                    section.style.cssText = 'position: relative !important; z-index: 9999 !important; background: #0c1f28 !important; display: block !important; visibility: visible !important; opacity: 1 !important; min-height: 400px !important;';
+                    section.setAttribute('data-visible', 'true');
+                    console.log('Próximas Salidas section found by text:', section);
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', makeSectionsVisible);
+        window.addEventListener('load', makeSectionsVisible);
+        setTimeout(makeSectionsVisible, 100);
+        setTimeout(makeSectionsVisible, 500);
+        setTimeout(makeSectionsVisible, 1000);
+    </script>
+    
+    <!-- Script de emergencia: Verificar y crear secciones si no existen -->
+    <script>
+        (function() {
+            console.log('=== EMERGENCY SCRIPT: Checking for sections ===');
+            const main = document.querySelector('main');
+            if (!main) {
+                console.error('Main element not found!');
+                return;
+            }
+            
+            // Verificar si la sección existe
+            let proximasSalidas = document.getElementById('proximas-salidas-section');
+            
+            console.log('Próximas Salidas found:', !!proximasSalidas);
+            
+            // Si no existe, buscar por texto
+            if (!proximasSalidas) {
+                const sections = document.querySelectorAll('section');
+                sections.forEach(function(section) {
+                    const text = section.textContent || '';
+                    if (text.includes('Próximas Salidas') || text.includes('Temporada 2025')) {
+                        section.id = 'proximas-salidas-section';
+                        proximasSalidas = section;
+                        console.log('Found Próximas Salidas by text, added ID');
+                    }
+                });
+            }
+            
+            // Forzar visibilidad
+            if (proximasSalidas) {
+                proximasSalidas.style.cssText = 'position: relative !important; z-index: 9999 !important; background: #0c1f28 !important; display: block !important; visibility: visible !important; opacity: 1 !important; min-height: 400px !important;';
+                console.log('Próximas Salidas made visible');
+            } else {
+                console.error('Próximas Salidas section NOT FOUND after all attempts!');
+            }
+            
+            // Log todas las secciones
+            const allSections = document.querySelectorAll('section');
+            console.log('Total sections in document:', allSections.length);
+            allSections.forEach(function(section, index) {
+                console.log('Section', index, ':', section.id || '(no id)', 'text preview:', (section.textContent || '').substring(0, 50));
+            });
+        })();
+    </script>
+</body>
+</html>
