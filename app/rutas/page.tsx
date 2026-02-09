@@ -1,0 +1,71 @@
+import Link from 'next/link'
+import HeroCompact from '@/components/ui/HeroCompact'
+import { rutas } from '@/data/rutas'
+
+const dificultadColors: Record<string, string> = {
+  fácil: 'bg-green-500/20 text-green-800',
+  media: 'bg-yellow-500/20 text-yellow-800',
+  alta: 'bg-brand-primary/20 text-brand-primary',
+}
+
+export default function RutasPage() {
+  return (
+    <div>
+      <HeroCompact
+        title="Nuestras Rutas"
+        subtitle="Descubre los senderos más icónicos de los Andes chilenos"
+        breadcrumb={[{ label: 'Inicio', href: '/' }, { label: 'Rutas' }]}
+      />
+      <section className="py-20 bg-brand-light bg-topo-pattern">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <div className="space-y-16">
+            {rutas.map((ruta, index) => (
+              <div
+                key={ruta.slug}
+                className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12`}
+              >
+                <div className="w-full md:w-1/2 relative group">
+                  <div className={`p-2 bg-gray-100 shadow-xl transform ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'} transition duration-500 group-hover:rotate-0`}>
+                    <Link href={`/rutas/${ruta.slug}`}>
+                      <div className="overflow-hidden relative h-[350px]">
+                        <img
+                          src={ruta.imagen}
+                          alt={ruta.nombre}
+                          className="w-full h-full object-cover transform transition duration-1000 group-hover:scale-110"
+                        />
+                      </div>
+                    </Link>
+                  </div>
+                  <div className={`absolute -top-4 ${index % 2 === 0 ? '-left-4' : '-right-4'} bg-brand-primary text-white px-4 py-2 text-xs font-bold uppercase tracking-widest shadow-lg z-10`}>
+                    <i className="fas fa-map-marker-alt mr-2"></i> {ruta.zona}
+                  </div>
+                </div>
+                <div className="w-full md:w-1/2 md:pl-10 md:pr-10">
+                  <div className="text-xs text-brand-earth mb-3 font-heading uppercase tracking-widest font-bold">
+                    <i className="far fa-clock mr-1"></i> {ruta.duracion}
+                    <span className="mx-2 text-gray-300">|</span>
+                    <span className={`px-2 py-0.5 rounded ${dificultadColors[ruta.dificultad]}`}>
+                      Dificultad: {ruta.dificultad}
+                    </span>
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark">
+                    {ruta.nombre}
+                  </h2>
+                  <p className="text-gray-600 mb-8 leading-relaxed font-light text-lg">
+                    {ruta.descripcion}
+                  </p>
+                  <Link
+                    href={`/rutas/${ruta.slug}`}
+                    className="inline-flex items-center text-brand-dark font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group"
+                  >
+                    Ver Detalle <span className="bg-brand-primary w-8 h-[2px] ml-3 group-hover:w-12 transition-all duration-300"></span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

@@ -3,168 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 51, 51, 51;
+  --background-rgb: 244, 242, 215;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-/* Estilos para el selector de demos */
-.demo-selector-container {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-/* Transiciones suaves */
-.demo-transition {
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-/* Ocultar scrollbar en móvil */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+  background: rgb(var(--background-rgb));
 }
 
 /* ============================================
-   ESTILOS DE DEMOS - No convertibles a Tailwind
+   Cherry Experience - Estilos
    ============================================ */
 
-/* Travel Journey - Clip Paths */
-.clip-hero {
-  clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
-}
-
-.clip-rustic-1 {
-  clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
-}
-
-.clip-rustic-2 {
-  clip-path: polygon(0 0, 95% 0, 100% 100%, 5% 100%);
-}
-
-.clip-rustic-3 {
-  clip-path: polygon(0 10%, 100% 0, 100% 90%, 0% 100%);
-}
-
-/* Travel Journey - Image Card Effects */
-.image-card {
-  filter: grayscale(20%) contrast(110%);
-  transition: all 0.5s ease;
-}
-
-.image-card:hover {
-  filter: grayscale(0%) contrast(100%);
-  transform: scale(1.02);
-}
-
-/* Travel Journey - Scroll Reveal */
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 1s cubic-bezier(0.5, 0, 0, 1);
-}
-
-.reveal-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Travel Journey - Path Container */
-.path-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  max-height: 1800px;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-/* MNTN - Text Outline */
-.text-outline {
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-  color: transparent;
-}
-
-/* MNTN - Vertical Text */
-.vertical-text-left {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-
-.vertical-text-right {
-  writing-mode: vertical-rl;
-}
-
-/* MNTN - Parallax */
-.parallax-bg {
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-/* MNTN - Fade In Section */
-.fade-in-section {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 1s ease-out, transform 1s ease-out;
-  will-change: opacity, visibility;
-}
-
-.fade-in-section.is-visible {
-  opacity: 1;
-  transform: none;
-}
-
-/* MNTN - Input Dark */
-.input-dark {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  padding: 0.75rem 1rem;
-  border-radius: 0.25rem;
-  transition: all 0.3s;
-}
-
-.input-dark:focus {
-  outline: none;
-  border-color: #FBD784;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.input-dark::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* Andes Trek - Torn Separators */
+/* Torn Separators */
 .torn-separator-bottom {
   position: absolute;
   bottom: -1px;
   left: 0;
   width: 100%;
   height: 50px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath class='elementor-shape-fill' d='M0,6V0h1000v100L0,6z' fill='%23ffffff'/%3E%3Cpath class='elementor-shape-fill' opacity='0.33' d='M0,6V0h1000v100L0,6z' fill='%23ffffff'/%3E%3Cpath d='M0,0v6l26.6,6.7c32.7,8.2,56.5,8.2,106.3-4.1c38.7-9.5,87.3-9.9,134.1,8.3c21.8,8.5,41.4,9.6,63.1,4.1 c33.1-8.4,72.7-8.9,103,12.5c22.6,16,56.6,13.6,83,8.3c33.5-6.7,68.9-8.7,99.7,8.3c39.6,21.8,69.5,13.6,104.7,2.1 c28.9-9.5,43.4-12.7,93-2.1c37.1,7.9,80.6,3.6,106.3-12.5c20.3-12.7,46.1-14.1,80.1-2.1V0H0z' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath class='elementor-shape-fill' d='M0,6V0h1000v100L0,6z' fill='%23F4F2D7'/%3E%3Cpath class='elementor-shape-fill' opacity='0.33' d='M0,6V0h1000v100L0,6z' fill='%23F4F2D7'/%3E%3Cpath d='M0,0v6l26.6,6.7c32.7,8.2,56.5,8.2,106.3-4.1c38.7-9.5,87.3-9.9,134.1,8.3c21.8,8.5,41.4,9.6,63.1,4.1 c33.1-8.4,72.7-8.9,103,12.5c22.6,16,56.6,13.6,83,8.3c33.5-6.7,68.9-8.7,99.7,8.3c39.6,21.8,69.5,13.6,104.7,2.1 c28.9-9.5,43.4-12.7,93-2.1c37.1,7.9,80.6,3.6,106.3-12.5c20.3-12.7,46.1-14.1,80.1-2.1V0H0z' fill='%23F4F2D7'/%3E%3C/svg%3E");
   background-size: cover;
   background-position: center bottom;
   z-index: 10;
@@ -177,13 +36,13 @@ body {
   left: 0;
   width: 100%;
   height: 50px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath class='elementor-shape-fill' d='M0,6V0h1000v100L0,6z' fill='%23ffffff'/%3E%3Cpath class='elementor-shape-fill' opacity='0.33' d='M0,6V0h1000v100L0,6z' fill='%23ffffff'/%3E%3Cpath d='M0,0v6l26.6,6.7c32.7,8.2,56.5,8.2,106.3-4.1c38.7-9.5,87.3-9.9,134.1,8.3c21.8,8.5,41.4,9.6,63.1,4.1 c33.1-8.4,72.7-8.9,103,12.5c22.6,16,56.6,13.6,83,8.3c33.5-6.7,68.9-8.7,99.7,8.3c39.6,21.8,69.5,13.6,104.7,2.1 c28.9-9.5,43.4-12.7,93-2.1c37.1,7.9,80.6,3.6,106.3-12.5c20.3-12.7,46.1-14.1,80.1-2.1V0H0z' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath class='elementor-shape-fill' d='M0,6V0h1000v100L0,6z' fill='%23F4F2D7'/%3E%3Cpath class='elementor-shape-fill' opacity='0.33' d='M0,6V0h1000v100L0,6z' fill='%23F4F2D7'/%3E%3Cpath d='M0,0v6l26.6,6.7c32.7,8.2,56.5,8.2,106.3-4.1c38.7-9.5,87.3-9.9,134.1,8.3c21.8,8.5,41.4,9.6,63.1,4.1 c33.1-8.4,72.7-8.9,103,12.5c22.6,16,56.6,13.6,83,8.3c33.5-6.7,68.9-8.7,99.7,8.3c39.6,21.8,69.5,13.6,104.7,2.1 c28.9-9.5,43.4-12.7,93-2.1c37.1,7.9,80.6,3.6,106.3-12.5c20.3-12.7,46.1-14.1,80.1-2.1V0H0z' fill='%23F4F2D7'/%3E%3C/svg%3E");
   background-size: cover;
   background-position: center bottom;
   z-index: 10;
 }
 
-/* Andes Trek - Hover Zoom */
+/* Cherry Experience - Hover Zoom */
 .hover-zoom img {
   transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -192,7 +51,7 @@ body {
   transform: scale(1.15);
 }
 
-/* Andes Trek - Custom Input */
+/* Cherry Experience - Custom Input */
 .custom-input {
   border-bottom: 2px solid rgba(255,255,255,0.3);
   background: transparent;
@@ -200,25 +59,5 @@ body {
 }
 
 .custom-input:focus {
-  border-color: #5c7045;
-}
-
-/* Patagonia - Hover Lift */
-.hover-lift {
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.hover-lift:hover {
-  transform: translateY(-8px) scale(1.02);
-}
-
-/* Patagonia - Hero Title Stroke */
-.hero-title-stroke {
-  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8);
-  color: transparent;
-}
-
-/* Patagonia - Floating CTA */
-.floating-cta {
-  box-shadow: 0 20px 40px -10px rgba(255, 69, 0, 0.5);
+  border-color: #7A2235; /* brand-primary */
 }

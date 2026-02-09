@@ -1,6 +1,6 @@
-# Turismo Outdoor - Visualizador de Demos
+# Cherry Experience - Andes of Chile
 
-Aplicación web para visualizar y comparar 4 diseños diferentes para un servicio de guía outdoor en Chile.
+Sitio web para **Cherry Experience**, servicio de turismo outdoor y trekking en Chile. Diseño basado en el demo Andes Trek, con branding corporativo y secciones completas.
 
 ## Stack Tecnológico
 
@@ -14,18 +14,30 @@ Aplicación web para visualizar y comparar 4 diseños diferentes para un servici
 
 ```
 turismo/
-├── app/                 # Next.js App Router
-│   ├── layout.tsx       # Layout principal
-│   ├── page.tsx         # Página principal
-│   └── globals.css      # Estilos globales
-├── components/          # Componentes React
-│   ├── DemoSelector.tsx # Selector de demos
-│   └── DemoViewer.tsx  # Visualizador de demos
-├── demos/               # HTMLs originales (backup)
+├── app/                    # Next.js App Router
+│   ├── layout.tsx          # Layout principal
+│   ├── page.tsx            # Home (Andes Trek)
+│   ├── globals.css         # Estilos globales
+│   ├── blog/               # Blog (listado y detalle)
+│   ├── rutas/              # Rutas (listado y detalle)
+│   ├── reserva/            # Flujo de reserva (4 pasos)
+│   ├── equipo/             # Página de equipo
+│   └── contacto/           # Página de contacto
+├── components/
+│   ├── demos/              # AndesTrekDemo (home)
+│   ├── layout/             # Header, Footer, PageLayout
+│   └── ui/                 # HeroCompact, componentes compartidos
+├── data/                   # Datos estáticos (blog, rutas)
 ├── public/
-│   └── demos/          # HTMLs servidos como estáticos
-└── utils/              # Utilidades
+│   └── logos/              # Logos Cherry Experience
+└── tailwind.config.ts      # Configuración de colores y fuentes
 ```
+
+## Branding
+
+- **Nombre:** Cherry Experience
+- **Slogan:** Andes of Chile
+- **Colores:** Principal #7A2235 (rojo), Secundario #473728 (café), Oscuro #333333, Claro #F4F2D7
 
 ## Instalación
 
@@ -61,26 +73,34 @@ npm i -g vercel
 vercel
 ```
 
+## Páginas
+
+| Ruta | Descripción |
+|------|-------------|
+| `/` | Home con hero y secciones principales |
+| `/rutas` | Listado de rutas disponibles |
+| `/rutas/[slug]` | Detalle de cada ruta |
+| `/blog` | Listado de entradas del blog |
+| `/blog/[slug]` | Detalle de cada entrada |
+| `/reserva` | Inicio del flujo de reserva |
+| `/reserva/fechas` | Selección de fechas |
+| `/reserva/datos` | Datos del pasajero |
+| `/reserva/confirmacion` | Confirmación de reserva |
+| `/equipo` | Información del equipo y guías |
+| `/contacto` | Formulario de contacto |
+
 ## Características
 
-- ✅ Visualización de 4 diseños diferentes
-- ✅ Cambio en tiempo real entre diseños
-- ✅ Animaciones suaves con Framer Motion
+- ✅ Header y Footer compartidos con navegación
+- ✅ Hero compacto en páginas internas (rutas, blog, equipo, contacto)
+- ✅ Flujo de reserva en 4 pasos
 - ✅ Diseño responsive (mobile-first)
-- ✅ Optimizaciones de performance (lazy loading, preload)
-- ✅ Corrección automática de imágenes rotas
-
-## Demos Incluidos
-
-1. **Andes Trek** - Diseño Rústico
-2. **Travel Journey** - Diseño Geométrico
-3. **MNTN** - Diseño Oscuro/Elegante
-4. **Patagonia** - Diseño Moderno/Colorido
+- ✅ Branding Cherry Experience con colores corporativos
+- ✅ Animaciones suaves con Framer Motion
 
 ## Próximos Pasos
 
-Una vez seleccionado el diseño final:
-- Integración con base de datos Neon
-- Funcionalidad completa de formularios
-- Sistema de reservas
+- Integración con base de datos (Neon)
+- Funcionalidad completa de formularios y reservas
 - Autenticación (si es necesaria)
+- Optimización de imágenes con `next/image`

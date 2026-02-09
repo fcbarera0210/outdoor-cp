@@ -1,6 +1,10 @@
+import HeroCompact from '@/components/ui/HeroCompact'
+
 export default function TestPage() {
   return (
-    <div className="p-8">
+    <div>
+      <HeroCompact title="Test de Archivos" subtitle="Demos estáticos" breadcrumb={[{ label: 'Inicio', href: '/' }, { label: 'Test' }]} />
+      <div className="p-8 bg-brand-light">
       <h1 className="text-2xl font-bold mb-4">Test de Archivos Estáticos</h1>
       <div className="space-y-2">
         <a href="/demos/page-1.html" className="block text-blue-600 hover:underline" target="_blank">
@@ -24,6 +28,7 @@ export default function TestPage() {
           style={{ height: '600px' }}
           title="Test iframe"
         />
+      </div>
       </div>
     </div>
   )
