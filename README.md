@@ -18,14 +18,23 @@ turismo/
 │   ├── layout.tsx          # Layout principal
 │   ├── page.tsx            # Home (Andes Trek)
 │   ├── globals.css         # Estilos globales
+│   ├── admin/              # Panel de administración
+│   │   ├── login/           # Login (sin validación de credenciales)
+│   │   ├── dashboard/       # Dashboard con acceso a módulos
+│   │   ├── rutas/           # CRUD rutas
+│   │   ├── blog/            # CRUD blog
+│   │   ├── contacto/       # Configuración de contacto
+│   │   ├── equipo/         # Instrucciones + miembros
+│   │   └── imagenes/       # Galería de imágenes (mockup)
 │   ├── blog/               # Blog (listado y detalle)
 │   ├── rutas/              # Rutas (listado y detalle)
 │   ├── reserva/            # Flujo de reserva (4 pasos)
 │   ├── equipo/             # Página de equipo
 │   └── contacto/           # Página de contacto
 ├── components/
+│   ├── admin/              # AdminSidebar, AdminCard, AdminTable, etc.
 │   ├── demos/              # AndesTrekDemo (home)
-│   ├── layout/             # Header, Footer, PageLayout
+│   ├── layout/             # Header, Footer, PageLayout, ConditionalLayout
 │   └── ui/                 # HeroCompact, componentes compartidos
 ├── data/                   # Datos estáticos (blog, rutas)
 ├── public/
@@ -75,6 +84,8 @@ vercel
 
 ## Páginas
 
+### Sitio público
+
 | Ruta | Descripción |
 |------|-------------|
 | `/` | Home con hero y secciones principales |
@@ -89,6 +100,19 @@ vercel
 | `/equipo` | Información del equipo y guías |
 | `/contacto` | Formulario de contacto |
 
+### Panel de administración
+
+| Ruta | Descripción |
+|------|-------------|
+| `/admin` | Redirige a login o dashboard |
+| `/admin/login` | Login (acepta cualquier credencial) |
+| `/admin/dashboard` | Dashboard con acceso a módulos |
+| `/admin/rutas` | Lista de rutas, crear y editar |
+| `/admin/blog` | Lista de posts, crear y editar |
+| `/admin/contacto` | Configuración: teléfono, email, redes sociales |
+| `/admin/equipo` | Instrucciones de trekking y miembros del equipo |
+| `/admin/imagenes` | Galería de imágenes (mockup) |
+
 ## Características
 
 - ✅ Header y Footer compartidos con navegación
@@ -97,10 +121,26 @@ vercel
 - ✅ Diseño responsive (mobile-first)
 - ✅ Branding Cherry Experience con colores corporativos
 - ✅ Animaciones suaves con Framer Motion
+- ✅ **Panel de administración** (`/admin`) con maquetas CRUD para rutas, blog, contacto, equipo e imágenes
+
+## Panel de administración
+
+El panel admin permite gestionar el contenido del sitio. Accede desde `/admin`:
+
+1. **Login**: Usa cualquier email y contraseña (o deja los campos vacíos) y haz clic en Ingresar.
+2. **Dashboard**: Accede a las secciones desde las cards.
+3. **Módulos disponibles**:
+   - **Rutas**: Lista, crear y editar rutas/expediciones
+   - **Blog**: Lista, crear y editar artículos
+   - **Contacto**: Configuración de teléfono, email, ubicación y redes sociales
+   - **Equipo**: Instrucciones de trekking y miembros del equipo
+   - **Galería**: Maqueta para gestión de imágenes
+
+Actualmente las pantallas son **maquetas** (sin persistencia real). El diseño del admin usa los mismos colores y fuentes que la web pública.
 
 ## Próximos Pasos
 
 - Integración con base de datos (Neon)
 - Funcionalidad completa de formularios y reservas
-- Autenticación (si es necesaria)
+- Autenticación real para el panel admin
 - Optimización de imágenes con `next/image`

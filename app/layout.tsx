@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import PageLayout from '@/components/layout/PageLayout'
+import ConditionalLayout from '@/components/layout/ConditionalLayout'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
@@ -41,7 +41,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
       <body>
-        <PageLayout>{children}</PageLayout>
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   )
