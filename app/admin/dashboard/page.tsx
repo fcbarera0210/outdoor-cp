@@ -3,10 +3,10 @@ import AdminCard from '@/components/admin/AdminCard'
 export default function AdminDashboardPage() {
   return (
     <div>
-      <h1 className="text-3xl font-heading font-bold uppercase text-brand-dark mb-2">
+      <h1 className="text-3xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-2">
         Dashboard
       </h1>
-      <p className="text-gray-600 mb-8">
+      <p className="text-gray-600 dark:text-gray-300 mb-8">
         Gestiona el contenido de Cherry Experience
       </p>
 

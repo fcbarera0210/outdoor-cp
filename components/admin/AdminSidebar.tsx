@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useTheme } from '@/components/providers/ThemeProvider'
 
 const navItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: 'fa-home' },
@@ -17,6 +18,7 @@ export default function AdminSidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { theme, toggleTheme } = useTheme()
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
@@ -29,7 +31,7 @@ export default function AdminSidebar() {
     <>
       {/* Mobile menu button */}
       <button
-        className="lg:hidden fixed top-4 right-4 z-50 bg-brand-dark text-white p-2 rounded"
+        className="lg:hidden fixed top-4 right-4 z-50 rounded-lg bg-brand-dark text-white p-2"
         onClick={() => setMobileOpen(!mobileOpen)}
       >
         <i className={`fas ${mobileOpen ? 'fa-times' : 'fa-bars'}`}></i>
@@ -45,7 +47,7 @@ export default function AdminSidebar() {
           <div className="p-6 border-b border-white/10">
             <Link href="/admin/dashboard" className="block" onClick={() => setMobileOpen(false)}>
               <img
-                src="/logos/che-blanco.svg"
+                src="/logos/che-blanco-2.svg"
                 alt="Cherry Experience"
                 className="h-12 w-auto"
               />
@@ -77,6 +79,15 @@ export default function AdminSidebar() {
           </nav>
 
           <div className="p-4 border-t border-white/10">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="w-full flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition text-sm font-heading uppercase tracking-wider mb-2"
+              aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
+            >
+              <i className={`fas ${theme === 'dark' ? 'fa-sun' : 'fa-moon'} w-5`}></i>
+              {theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+            </button>
             <Link
               href="/"
               className="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition text-sm"

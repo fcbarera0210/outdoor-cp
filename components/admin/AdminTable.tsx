@@ -5,7 +5,7 @@ interface AdminTableProps {
 
 export default function AdminTable({ headers, children }: AdminTableProps) {
   return (
-    <div className="overflow-x-auto border-2 border-gray-200 rounded-lg">
+    <div className="overflow-x-auto border-2 border-gray-200 dark:border-gray-600 rounded-lg">
       <table className="w-full font-body text-sm">
         <thead>
           <tr className="bg-brand-dark text-white">
@@ -19,7 +19,7 @@ export default function AdminTable({ headers, children }: AdminTableProps) {
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white">{children}</tbody>
+        <tbody className="bg-white dark:bg-gray-800 [&_tr]:border-t [&_tr]:border-gray-200 dark:[&_tr]:border-gray-600 [&_tr:hover]:bg-gray-50 dark:[&_tr:hover]:bg-gray-700">{children}</tbody>
       </table>
     </div>
   )

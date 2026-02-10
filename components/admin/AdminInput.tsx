@@ -28,11 +28,11 @@ export default function AdminInput({
   rows = 3,
 }: AdminInputProps) {
   const inputClasses =
-    'w-full border-2 border-gray-200 rounded-lg px-4 py-2 focus:border-brand-primary focus:outline-none transition'
+    'w-full border-2 border-gray-200 dark:border-gray-600 rounded-lg px-4 py-2 focus:border-brand-primary focus:outline-none transition dark:bg-gray-800 dark:text-gray-200 placeholder:dark:text-gray-500'
 
   return (
     <div className={`group ${className}`}>
-      <label className="block text-xs font-heading uppercase tracking-widest text-brand-dark mb-2">
+      <label className="block text-xs font-heading uppercase tracking-widest text-brand-dark dark:text-gray-200 mb-2">
         {label}
         {required && <span className="text-brand-primary">*</span>}
       </label>

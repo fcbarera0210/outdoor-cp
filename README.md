@@ -46,7 +46,7 @@ turismo/
 
 - **Nombre:** Cherry Experience
 - **Slogan:** Andes of Chile
-- **Colores:** Principal #7A2235 (rojo), Secundario #473728 (café), Oscuro #333333, Claro #F4F2D7
+- **Colores:** Principal #7A2235 (rojo), Secundario #473728 (café), Oscuro #111827 (modo dark), Claro #F4F2D7 (crema)
 
 ## Instalación
 
@@ -116,12 +116,14 @@ vercel
 ## Características
 
 - ✅ Header y Footer compartidos con navegación
+- ✅ **Tema claro/oscuro** (toggle en header y en panel admin), persistido en `localStorage`
 - ✅ Hero compacto en páginas internas (rutas, blog, equipo, contacto)
-- ✅ Flujo de reserva en 4 pasos
+- ✅ Flujo de reserva en 4 pasos (todas las pantallas con soporte dark)
 - ✅ Diseño responsive (mobile-first)
 - ✅ Branding Cherry Experience con colores corporativos
-- ✅ Animaciones suaves con Framer Motion
-- ✅ **Panel de administración** (`/admin`) con maquetas CRUD para rutas, blog, contacto, equipo e imágenes
+- ✅ Animaciones con Framer Motion (home, rutas, blog, equipo, contacto, reserva)
+- ✅ Scrollbar personalizada (color principal, fondo según tema)
+- ✅ **Panel de administración** (`/admin`) con maquetas CRUD, tema claro/oscuro y componentes homologados (botones, inputs, tablas)
 
 ## Panel de administración
 
@@ -136,11 +138,21 @@ El panel admin permite gestionar el contenido del sitio. Accede desde `/admin`:
    - **Equipo**: Instrucciones de trekking y miembros del equipo
    - **Galería**: Maqueta para gestión de imágenes
 
-Actualmente las pantallas son **maquetas** (sin persistencia real). El diseño del admin usa los mismos colores y fuentes que la web pública.
+Actualmente las pantallas son **maquetas** (sin persistencia real). El diseño del admin usa los mismos colores y fuentes que la web pública, soporta tema claro/oscuro (toggle en el sidebar) y botones/inputs/tablas con `rounded-lg` y variantes dark.
+
+## Verificación de build
+
+Para comprobar que el proyecto compila y no hay errores de deploy:
+
+```bash
+npm run build
+```
+
+Si el build termina correctamente, puedes desplegar con `npm start` en producción o conectar el repo a Vercel.
 
 ## Próximos Pasos
 
 - Integración con base de datos (Neon)
 - Funcionalidad completa de formularios y reservas
 - Autenticación real para el panel admin
-- Optimización de imágenes con `next/image`
+- Optimización de imágenes con `next/image` (el build muestra warnings de `no-img-element`)

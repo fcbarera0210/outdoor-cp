@@ -7,9 +7,57 @@
   --background-rgb: 244, 242, 215;
 }
 
+.dark {
+  --foreground-rgb: 230, 230, 230;
+  --background-rgb: 26, 26, 26;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Scrollbar: color principal + fondo según tema */
+html {
+  scrollbar-color: #7A2235 #F4F2D7;
+  scrollbar-width: thin;
+}
+
+html.dark {
+  scrollbar-color: #7A2235 #111827;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F4F2D7;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7A2235;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a1a28;
 }
 
 /* ============================================
@@ -30,16 +78,27 @@ body {
   transform: rotate(180deg);
 }
 
+/* Separador superior de Reserva/Aventura: claro #F4F2D7 en modo claro */
 .torn-separator-top {
   position: absolute;
   top: -1px;
   left: 0;
   width: 100%;
   height: 50px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath class='elementor-shape-fill' d='M0,6V0h1000v100L0,6z' fill='%23F4F2D7'/%3E%3Cpath class='elementor-shape-fill' opacity='0.33' d='M0,6V0h1000v100L0,6z' fill='%23F4F2D7'/%3E%3Cpath d='M0,0v6l26.6,6.7c32.7,8.2,56.5,8.2,106.3-4.1c38.7-9.5,87.3-9.9,134.1,8.3c21.8,8.5,41.4,9.6,63.1,4.1 c33.1-8.4,72.7-8.9,103,12.5c22.6,16,56.6,13.6,83,8.3c33.5-6.7,68.9-8.7,99.7,8.3c39.6,21.8,69.5,13.6,104.7,2.1 c28.9-9.5,43.4-12.7,93-2.1c37.1,7.9,80.6,3.6,106.3-12.5c20.3-12.7,46.1-14.1,80.1-2.1V0H0z' fill='%23F4F2D7'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath d='M0,6V0h1000v100L0,6z' fill='%23F4F2D7'/%3E%3Cpath opacity='0.33' d='M0,6V0h1000v100L0,6z' fill='%23F4F2D7'/%3E%3Cpath d='M0,0v6l26.6,6.7c32.7,8.2,56.5,8.2,106.3-4.1c38.7-9.5,87.3-9.9,134.1,8.3c21.8,8.5,41.4,9.6,63.1,4.1 c33.1-8.4,72.7-8.9,103,12.5c22.6,16,56.6,13.6,83,8.3c33.5-6.7,68.9-8.7,99.7,8.3c39.6,21.8,69.5,13.6,104.7,2.1 c28.9-9.5,43.4-12.7,93-2.1c37.1,7.9,80.6,3.6,106.3-12.5c20.3-12.7,46.1-14.1,80.1-2.1V0H0z' fill='%23F4F2D7'/%3E%3C/svg%3E");
   background-size: cover;
   background-position: center bottom;
   z-index: 10;
+}
+
+/* Separador bajo hero: en dark coincide con la sección de marcas (#111827) */
+.dark .torn-separator-bottom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath d='M0,6V0h1000v100L0,6z' fill='%23111827'/%3E%3Cpath opacity='0.33' d='M0,6V0h1000v100L0,6z' fill='%23111827'/%3E%3Cpath d='M0,0v6l26.6,6.7c32.7,8.2,56.5,8.2,106.3-4.1c38.7-9.5,87.3-9.9,134.1,8.3c21.8,8.5,41.4,9.6,63.1,4.1 c33.1-8.4,72.7-8.9,103,12.5c22.6,16,56.6,13.6,83,8.3c33.5-6.7,68.9-8.7,99.7,8.3c39.6,21.8,69.5,13.6,104.7,2.1 c28.9-9.5,43.4-12.7,93-2.1c37.1,7.9,80.6,3.6,106.3-12.5c20.3-12.7,46.1-14.1,80.1-2.1V0H0z' fill='%23111827'/%3E%3C/svg%3E");
+}
+
+/* Separador Reserva/Aventura en modo oscuro: #111826 */
+.dark .torn-separator-top {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'%3E%3Cpath d='M0,6V0h1000v100L0,6z' fill='%23111826'/%3E%3Cpath opacity='0.33' d='M0,6V0h1000v100L0,6z' fill='%23111826'/%3E%3Cpath d='M0,0v6l26.6,6.7c32.7,8.2,56.5,8.2,106.3-4.1c38.7-9.5,87.3-9.9,134.1,8.3c21.8,8.5,41.4,9.6,63.1,4.1 c33.1-8.4,72.7-8.9,103,12.5c22.6,16,56.6,13.6,83,8.3c33.5-6.7,68.9-8.7,99.7,8.3c39.6,21.8,69.5,13.6,104.7,2.1 c28.9-9.5,43.4-12.7,93-2.1c37.1,7.9,80.6,3.6,106.3-12.5c20.3-12.7,46.1-14.1,80.1-2.1V0H0z' fill='%23111826'/%3E%3C/svg%3E");
 }
 
 /* Cherry Experience - Hover Zoom */

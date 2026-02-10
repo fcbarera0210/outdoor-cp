@@ -38,22 +38,22 @@ export default function AdminEquipoPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-heading font-bold uppercase text-brand-dark mb-2">
+      <h1 className="text-3xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-2">
         Contenido Equipo
       </h1>
-      <p className="text-gray-600 mb-8">
+      <p className="text-gray-600 dark:text-gray-300 mb-8">
         Instrucciones de trekking y miembros del equipo
       </p>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-8 border-b-2 border-gray-200">
+      <div className="flex gap-2 mb-8 border-b-2 border-gray-200 dark:border-gray-600">
         <button
           type="button"
           onClick={() => setActiveTab('instrucciones')}
-          className={`px-6 py-3 font-heading font-bold uppercase text-sm tracking-wider transition ${
+          className={`px-6 py-3 font-heading font-bold uppercase text-sm tracking-wider transition rounded-t-lg ${
             activeTab === 'instrucciones'
               ? 'border-b-2 border-brand-primary text-brand-primary -mb-0.5'
-              : 'text-gray-500 hover:text-brand-dark'
+              : 'text-gray-500 dark:text-gray-400 hover:text-brand-dark dark:hover:text-white'
           }`}
         >
           <i className="fas fa-book-open mr-2"></i>
@@ -62,10 +62,10 @@ export default function AdminEquipoPage() {
         <button
           type="button"
           onClick={() => setActiveTab('miembros')}
-          className={`px-6 py-3 font-heading font-bold uppercase text-sm tracking-wider transition ${
+          className={`px-6 py-3 font-heading font-bold uppercase text-sm tracking-wider transition rounded-t-lg ${
             activeTab === 'miembros'
               ? 'border-b-2 border-brand-primary text-brand-primary -mb-0.5'
-              : 'text-gray-500 hover:text-brand-dark'
+              : 'text-gray-500 dark:text-gray-400 hover:text-brand-dark dark:hover:text-white'
           }`}
         >
           <i className="fas fa-users mr-2"></i>
@@ -76,9 +76,9 @@ export default function AdminEquipoPage() {
       {activeTab === 'instrucciones' && (
         <form
           onSubmit={handleInstruccionesSubmit}
-          className="bg-white border-2 border-gray-200 rounded-lg p-8 max-w-3xl"
+          className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-8 max-w-3xl"
         >
-          <h2 className="text-xl font-heading font-bold uppercase text-brand-dark mb-6 border-b-2 border-brand-primary pb-2">
+          <h2 className="text-xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-6 border-b-2 border-brand-primary pb-2">
             Instrucciones Básicas
           </h2>
           <div className="space-y-6 mb-10">
@@ -108,7 +108,7 @@ export default function AdminEquipoPage() {
             />
           </div>
 
-          <h2 className="text-xl font-heading font-bold uppercase text-brand-dark mb-6 border-b-2 border-brand-primary pb-2">
+          <h2 className="text-xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-6 border-b-2 border-brand-primary pb-2">
             Niveles de Dificultad
           </h2>
           <div className="space-y-6 mb-10">
@@ -152,21 +152,21 @@ export default function AdminEquipoPage() {
             headers={['Nombre', 'Rol', 'Acciones']}
           >
             {miembrosMock.map((m) => (
-              <tr key={m.id} className="border-t border-gray-200 hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium text-brand-dark">{m.nombre}</td>
-                <td className="px-4 py-3 text-gray-600">{m.rol}</td>
+              <tr key={m.id} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td className="px-4 py-3 font-medium text-brand-dark dark:text-white">{m.nombre}</td>
+                <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{m.rol}</td>
                 <td className="px-4 py-3">
                   <div className="flex gap-2">
                     <button
                       type="button"
-                      className="px-3 py-1.5 bg-brand-primary/10 text-brand-primary rounded hover:bg-brand-primary hover:text-white transition text-xs font-heading uppercase"
+                      className="rounded-lg px-3 py-1.5 bg-brand-primary/10 dark:bg-brand-primary/20 text-brand-primary hover:bg-brand-primary hover:text-white transition text-xs font-heading uppercase"
                     >
                       <i className="fas fa-edit mr-1"></i>
                       Editar
                     </button>
                     <button
                       type="button"
-                      className="px-3 py-1.5 bg-red-100 text-red-600 rounded hover:bg-red-600 hover:text-white transition text-xs font-heading uppercase"
+                      className="rounded-lg px-3 py-1.5 bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition text-xs font-heading uppercase"
                     >
                       <i className="fas fa-trash mr-1"></i>
                       Eliminar

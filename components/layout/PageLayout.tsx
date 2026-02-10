@@ -3,16 +3,15 @@ import Footer from './Footer'
 
 interface PageLayoutProps {
   children: React.ReactNode
-  darkOverlay?: boolean
 }
 
-export default function PageLayout({ children, darkOverlay = true }: PageLayoutProps) {
+export default function PageLayout({ children }: PageLayoutProps) {
   return (
-    <div className="font-body text-gray-700 bg-brand-light min-h-screen">
-      <Header darkOverlay={darkOverlay} />
+    <div className="font-body text-gray-700 bg-brand-light dark:bg-[rgb(var(--background-rgb))] min-h-screen overflow-x-hidden">
       <main className="relative">
         {children}
       </main>
+      <Header />
       <Footer />
     </div>
   )

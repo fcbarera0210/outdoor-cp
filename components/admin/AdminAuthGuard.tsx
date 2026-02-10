@@ -49,8 +49,8 @@ export default function AdminAuthGuard({
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-brand-light flex items-center justify-center">
-        <div className="animate-pulse text-brand-primary">
+      <div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-pulse text-brand-primary dark:text-white">
           <i className="fas fa-circle-notch fa-spin text-4xl"></i>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function AdminAuthGuard({
   }
 
   return (
-    <div className="min-h-screen bg-brand-light font-body">
+    <div className="min-h-screen bg-brand-light dark:bg-gray-900 font-body">
       <AdminSidebar />
       <main className="lg:ml-64 min-h-screen p-6 lg:p-8">
         {children}

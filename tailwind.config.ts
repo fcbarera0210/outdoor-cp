@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -12,7 +13,7 @@ const config: Config = {
         // Cherry Experience
         'brand-primary': '#7A2235',
         'brand-secondary': '#473728',
-        'brand-dark': '#333333',
+        'brand-dark': '#111827',
         'brand-light': '#F4F2D7',
         'brand-earth': '#8c7b6c',
         'brand-gray': '#f4f4f4',

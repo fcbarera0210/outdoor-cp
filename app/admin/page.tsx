@@ -16,8 +16,8 @@ export default function AdminPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen bg-brand-light flex items-center justify-center">
-      <div className="animate-pulse text-brand-primary">
+    <div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center">
+      <div className="animate-pulse text-brand-primary dark:text-white">
         <i className="fas fa-circle-notch fa-spin text-4xl"></i>
       </div>
     </div>

@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-light flex items-center justify-center p-4">
+    <div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/">
@@ -27,21 +27,21 @@ export default function AdminLoginPage() {
               className="h-16 mx-auto mb-4"
             />
           </Link>
-          <h1 className="text-2xl font-heading font-bold uppercase text-brand-dark">
+          <h1 className="text-2xl font-heading font-bold uppercase text-brand-dark dark:text-white">
             Panel de Administración
           </h1>
-          <p className="text-gray-600 mt-2 text-sm">
+          <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm">
             Ingresa para gestionar el contenido
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white border-2 border-brand-primary rounded-lg p-8 shadow-lg"
+          className="bg-white dark:bg-gray-800 border-2 border-brand-primary dark:border-gray-600 rounded-lg p-8 shadow-lg"
         >
           <div className="space-y-6">
             <div>
-              <label className="block text-xs font-heading uppercase tracking-widest text-brand-dark mb-2">
+              <label className="block text-xs font-heading uppercase tracking-widest text-brand-dark dark:text-gray-200 mb-2">
                 Email
               </label>
               <input
@@ -49,11 +49,11 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@cherryexperience.cl"
-                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-brand-primary focus:outline-none transition"
+                className="w-full border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 placeholder:dark:text-gray-500 rounded-lg px-4 py-3 focus:border-brand-primary focus:outline-none transition"
               />
             </div>
             <div>
-              <label className="block text-xs font-heading uppercase tracking-widest text-brand-dark mb-2">
+              <label className="block text-xs font-heading uppercase tracking-widest text-brand-dark dark:text-gray-200 mb-2">
                 Contraseña
               </label>
               <input
@@ -61,21 +61,21 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:border-brand-primary focus:outline-none transition"
+                className="w-full border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 placeholder:dark:text-gray-500 rounded-lg px-4 py-3 focus:border-brand-primary focus:outline-none transition"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="mt-8 w-full bg-brand-primary hover:bg-brand-dark text-white font-heading font-bold uppercase tracking-widest py-4 rounded-lg transition"
+            className="mt-8 w-full rounded-lg bg-brand-primary hover:bg-brand-dark text-white font-heading font-bold uppercase tracking-widest py-4 transition"
           >
             Ingresar
           </button>
 
           <Link
             href="/"
-            className="block mt-6 text-center text-sm text-gray-600 hover:text-brand-primary transition"
+            className="block mt-6 text-center text-sm text-gray-600 dark:text-gray-400 hover:text-brand-primary transition"
           >
             <i className="fas fa-arrow-left mr-2"></i>
             Volver al sitio

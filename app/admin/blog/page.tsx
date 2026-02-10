@@ -8,10 +8,10 @@ export default function AdminBlogPage() {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-heading font-bold uppercase text-brand-dark mb-2">
+          <h1 className="text-3xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-2">
             Blog
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             Gestiona los artículos del blog
           </p>
         </div>
@@ -25,22 +25,22 @@ export default function AdminBlogPage() {
         headers={['Título', 'Autor', 'Fecha', 'Acciones']}
       >
         {blogPosts.map((post) => (
-          <tr key={post.slug} className="border-t border-gray-200 hover:bg-gray-50">
-            <td className="px-4 py-3 font-medium text-brand-dark">{post.title}</td>
-            <td className="px-4 py-3 text-gray-600">{post.author}</td>
-            <td className="px-4 py-3 text-gray-600">{post.date}</td>
+          <tr key={post.slug} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <td className="px-4 py-3 font-medium text-brand-dark dark:text-white">{post.title}</td>
+            <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{post.author}</td>
+            <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{post.date}</td>
             <td className="px-4 py-3">
               <div className="flex gap-2">
                 <Link
                   href={`/admin/blog/${post.slug}/editar`}
-                  className="px-3 py-1.5 bg-brand-primary/10 text-brand-primary rounded hover:bg-brand-primary hover:text-white transition text-xs font-heading uppercase"
+                  className="rounded-lg px-3 py-1.5 bg-brand-primary/10 dark:bg-brand-primary/20 text-brand-primary hover:bg-brand-primary hover:text-white transition text-xs font-heading uppercase"
                 >
                   <i className="fas fa-edit mr-1"></i>
                   Editar
                 </Link>
                 <button
                   type="button"
-                  className="px-3 py-1.5 bg-red-100 text-red-600 rounded hover:bg-red-600 hover:text-white transition text-xs font-heading uppercase"
+                  className="rounded-lg px-3 py-1.5 bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition text-xs font-heading uppercase"
                 >
                   <i className="fas fa-trash mr-1"></i>
                   Eliminar

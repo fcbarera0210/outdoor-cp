@@ -39,20 +39,20 @@ export default function AdminRutaNuevaPage() {
       <div className="mb-8">
         <Link
           href="/admin/rutas"
-          className="text-brand-primary hover:text-brand-dark transition text-sm font-heading uppercase tracking-wider"
+          className="text-brand-primary hover:text-brand-dark dark:hover:text-white transition text-sm font-heading uppercase tracking-wider"
         >
           <i className="fas fa-arrow-left mr-2"></i>
           Volver a Rutas
         </Link>
-        <h1 className="text-3xl font-heading font-bold uppercase text-brand-dark mt-4 mb-2">
+        <h1 className="text-3xl font-heading font-bold uppercase text-brand-dark dark:text-white mt-4 mb-2">
           Nueva Ruta
         </h1>
-        <p className="text-gray-600">Crea una nueva ruta o expedición</p>
+        <p className="text-gray-600 dark:text-gray-300">Crea una nueva ruta o expedición</p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white border-2 border-gray-200 rounded-lg p-8 max-w-3xl"
+        className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-8 max-w-3xl"
       >
         <div className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">

@@ -1,14 +1,23 @@
+'use client'
+
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-dark text-white py-20 border-t border-white/10">
+    <footer className="bg-brand-dark dark:bg-gray-950 text-white py-20 border-t border-white/10 dark:border-gray-800">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-sm font-light">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-4 gap-12 text-sm font-light"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.5 }}
+        >
           {/* Col 1: Brand */}
           <div className="md:col-span-1">
             <Link href="/">
-              <img src="/logos/che-blanco.svg" alt="Cherry Experience - Andes of Chile" className="h-16 w-auto mb-6" />
+              <img src="/logos/che-blanco-2.svg" alt="Cherry Experience - Andes of Chile" className="h-16 w-auto mb-6" />
             </Link>
             <p className="text-gray-500 mb-6 leading-relaxed">
               Expertos en turismo de montaña y conservación. Llevamos más de 10 años conectando personas con la naturaleza salvaje de Chile.
@@ -72,9 +81,9 @@ export default function Footer() {
               <img src="https://images.unsplash.com/photo-1533240332313-0dbdd3199061?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" className="w-full h-20 object-cover opacity-60 hover:opacity-100 transition cursor-pointer" alt="Instagram" />
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600 uppercase tracking-widest">
+        <div className="border-t border-white/10 dark:border-gray-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest">
           <p>&copy; 2024 Cherry Experience. Todos los derechos reservados.</p>
           <div className="mt-4 md:mt-0 space-x-4">
             <a href="#" className="hover:text-white">Privacidad</a>
