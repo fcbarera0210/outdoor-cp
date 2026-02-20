@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { getLocaleFromRequest } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
@@ -48,6 +49,7 @@ export async function GET(
 
     const locale = localeParam === 'en' ? 'en' : 'es'
     const response = {
+      id: ruta.id,
       slug: ruta.slug,
       nombre: locale === 'es' ? ruta.nombreEs : ruta.nombreEn,
       zona: locale === 'es' ? ruta.zonaEs : ruta.zonaEn,
@@ -73,7 +75,7 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     const slug = params.slug
@@ -155,6 +157,7 @@ export async function PUT(
         proximasSalidas: true,
       },
     })
+    revalidatePath('/', 'layout')
     return NextResponse.json(ruta)
   } catch (e) {
     console.error(e)
@@ -166,10 +169,11 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     await prisma.ruta.delete({ where: { slug: params.slug } })
+    revalidatePath('/', 'layout')
     return NextResponse.json({ ok: true })
   } catch (e) {
     console.error(e)

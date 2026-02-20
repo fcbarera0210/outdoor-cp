@@ -3,34 +3,34 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { setAdminAuthenticated } from '@/components/admin/AdminAuthGuard'
+import { signIn } from 'next-auth/react'
 
 export default function AdminLoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setLoading(true)
     try {
-      const res = await fetch('/api/admin/login', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        setError(data.error === 'Invalid password' ? 'Contraseña incorrecta' : 'Error al iniciar sesión')
+      if (result?.error) {
+        setError('Email o contraseña incorrecta')
         return
       }
-      setAdminAuthenticated()
       router.push('/admin/dashboard')
     } catch {
       setError('Error de conexión')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -67,6 +67,7 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@cherryexperience.cl"
+                required
                 className="w-full border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 placeholder:dark:text-gray-500 rounded-lg px-4 py-3 focus:border-brand-primary focus:outline-none transition"
               />
             </div>
@@ -79,6 +80,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
+                required
                 className="w-full border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 placeholder:dark:text-gray-500 rounded-lg px-4 py-3 focus:border-brand-primary focus:outline-none transition"
               />
             </div>
@@ -89,9 +91,10 @@ export default function AdminLoginPage() {
           )}
           <button
             type="submit"
-            className="mt-8 w-full rounded-lg bg-brand-primary hover:bg-brand-dark text-white font-heading font-bold uppercase tracking-widest py-4 transition"
+            disabled={loading}
+            className="mt-8 w-full rounded-lg bg-brand-primary hover:bg-brand-dark text-white font-heading font-bold uppercase tracking-widest py-4 transition disabled:opacity-50"
           >
-            Ingresar
+            {loading ? 'Ingresando...' : 'Ingresar'}
           </button>
 
           <Link

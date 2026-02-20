@@ -7,9 +7,18 @@ import { Link, usePathname } from '@/i18n/navigation'
 
 const SCROLL_THRESHOLD = 80
 
+interface ContactSettings {
+  telefono?: string
+  email?: string
+  instagram?: string
+  facebook?: string
+  whatsapp?: string
+}
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [contact, setContact] = useState<ContactSettings>({})
   const { theme, toggleTheme } = useTheme()
   const t = useTranslations('nav')
   const pathname = usePathname()
@@ -19,6 +28,13 @@ export default function Header() {
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/settings/contacto')
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data) setContact(data) })
+      .catch(() => {})
   }, [])
 
   const atTop = !scrolled
@@ -47,16 +63,16 @@ export default function Header() {
       <div className={`hidden md:block text-xs py-2 border-b transition-colors duration-300 ${atTop ? 'text-white/90 border-white/10 bg-transparent' : theme === 'dark' ? 'text-gray-300 border-white/10 bg-brand-dark' : 'text-brand-dark border-brand-dark/10 bg-transparent'}`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <span><i className="fas fa-phone-alt mr-2 text-brand-primary"></i> +56 9 1234 5678</span>
+            <span><i className="fas fa-phone-alt mr-2 text-brand-primary"></i> {contact.telefono || '+56 9 1234 5678'}</span>
             <Link href="/contacto" className="hover:text-brand-primary transition">
-              <span><i className="fas fa-envelope mr-2 text-brand-primary"></i> contacto@cherryexperience.cl</span>
+              <span><i className="fas fa-envelope mr-2 text-brand-primary"></i> {contact.email || 'contacto@cherryexperience.cl'}</span>
             </Link>
           </div>
           <div className="flex items-center space-x-4">
             <span className="opacity-70">{t('followUs')}</span>
-            <a href="#" className="hover:text-brand-primary transition"><i className="fab fa-instagram"></i></a>
-            <a href="#" className="hover:text-brand-primary transition"><i className="fab fa-facebook-f"></i></a>
-            <a href="#" className="hover:text-brand-primary transition"><i className="fab fa-whatsapp"></i></a>
+            <a href={contact.instagram || '#'} target="_blank" rel="noopener noreferrer" className="hover:text-brand-primary transition"><i className="fab fa-instagram"></i></a>
+            <a href={contact.facebook || '#'} target="_blank" rel="noopener noreferrer" className="hover:text-brand-primary transition"><i className="fab fa-facebook-f"></i></a>
+            <a href={contact.whatsapp || '#'} target="_blank" rel="noopener noreferrer" className="hover:text-brand-primary transition"><i className="fab fa-whatsapp"></i></a>
             <span className="opacity-70 ml-2">
               <Link href={pathname} locale="es" className="hover:text-brand-primary transition font-bold">ES</Link>
               <span className="mx-1">|</span>

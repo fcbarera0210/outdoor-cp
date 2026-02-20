@@ -1,14 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { signOut } from 'next-auth/react'
 import { useTheme } from '@/components/providers/ThemeProvider'
 
 const navItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: 'fa-home' },
   { href: '/admin/rutas', label: 'Rutas', icon: 'fa-route' },
   { href: '/admin/blog', label: 'Blog', icon: 'fa-newspaper' },
+  { href: '/admin/reservas', label: 'Reservas', icon: 'fa-calendar-check' },
   { href: '/admin/contacto', label: 'Contacto', icon: 'fa-address-book' },
   { href: '/admin/equipo', label: 'Equipo', icon: 'fa-users' },
   { href: '/admin/imagenes', label: 'Galería', icon: 'fa-images' },
@@ -16,15 +18,11 @@ const navItems = [
 
 export default function AdminSidebar() {
   const pathname = usePathname()
-  const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
 
   const handleLogout = () => {
-    if (typeof window !== 'undefined') {
-      sessionStorage.removeItem('admin-authenticated')
-      router.push('/admin/login')
-    }
+    signOut({ callbackUrl: '/admin/login' })
   }
 
   return (

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { getLocaleFromRequest } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
@@ -22,6 +23,7 @@ export async function GET(request: NextRequest) {
 
     const suffix = locale === 'es' ? 'Es' : 'En'
     const list = rutas.map((r) => ({
+      id: r.id,
       slug: r.slug,
       nombre: locale === 'es' ? r.nombreEs : r.nombreEn,
       zona: locale === 'es' ? r.zonaEs : r.zonaEn,
@@ -46,7 +48,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     const body = await request.json()
@@ -113,6 +115,7 @@ export async function POST(request: NextRequest) {
         proximasSalidas: true,
       },
     })
+    revalidatePath('/', 'layout')
     return NextResponse.json(ruta)
   } catch (e) {
     console.error(e)

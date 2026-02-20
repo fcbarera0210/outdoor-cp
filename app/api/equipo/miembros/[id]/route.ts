@@ -8,7 +8,7 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     const body = await request.json()
@@ -35,7 +35,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     await prisma.miembroEquipo.delete({ where: { id: params.id } })

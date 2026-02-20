@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
+import ImageUploader from '@/components/admin/ImageUploader'
 import { createRuta } from '@/services/rutas'
 import type { Dificultad } from '@/services/rutas'
 
@@ -121,7 +122,7 @@ export default function AdminRutaNuevaPage() {
             <AdminInput label="Descripción (ES)" name="descripcionEs" value={formData.descripcionEs} onChange={handleChange} as="textarea" rows={4} placeholder="Descripción..." />
             <AdminInput label="Descripción (EN)" name="descripcionEn" value={formData.descripcionEn} onChange={handleChange} as="textarea" rows={4} placeholder="Description..." className="mt-2" />
           </div>
-          <AdminInput label="URL de imagen" name="imagen" type="url" value={formData.imagen} onChange={handleChange} placeholder="https://..." />
+          <ImageUploader label="Imagen de la ruta" value={formData.imagen} onChange={(url) => setFormData((prev) => ({ ...prev, imagen: url }))} />
           <label className="flex items-center gap-2">
             <input type="checkbox" name="destacada" checked={formData.destacada} onChange={handleChange} className="rounded border-gray-300" />
             <span className="text-sm font-heading uppercase text-brand-dark dark:text-white">Destacada (aparece en home)</span>

@@ -2,18 +2,19 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { isAdminAuthenticated } from '@/components/admin/AdminAuthGuard'
+import { useSession } from 'next-auth/react'
 
 export default function AdminPage() {
   const router = useRouter()
+  const { status } = useSession()
 
   useEffect(() => {
-    if (isAdminAuthenticated()) {
+    if (status === 'authenticated') {
       router.replace('/admin/dashboard')
-    } else {
+    } else if (status === 'unauthenticated') {
       router.replace('/admin/login')
     }
-  }, [router])
+  }, [status, router])
 
   return (
     <div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center">

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
+import ImageUploader from '@/components/admin/ImageUploader'
 import { createPost } from '@/services/blog'
 
 export default function AdminBlogNuevoPage() {
@@ -83,7 +84,7 @@ export default function AdminBlogNuevoPage() {
           <AdminInput label="Extracto (EN)" name="excerptEn" value={formData.excerptEn} onChange={handleChange} as="textarea" rows={2} placeholder="Short description..." />
           <AdminInput label="Contenido (ES)" name="contentEs" value={formData.contentEs} onChange={handleChange} as="textarea" rows={8} placeholder="Contenido completo..." />
           <AdminInput label="Contenido (EN)" name="contentEn" value={formData.contentEn} onChange={handleChange} as="textarea" rows={8} placeholder="Full content..." />
-          <AdminInput label="URL de imagen" name="image" type="url" value={formData.image} onChange={handleChange} placeholder="https://..." />
+          <ImageUploader label="Imagen del artículo" value={formData.image} onChange={(url) => setFormData((prev) => ({ ...prev, image: url }))} />
         </div>
         <div className="flex gap-4">
           <AdminButton type="submit" disabled={saving}>

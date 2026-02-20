@@ -1,11 +1,10 @@
 // Prisma schema - Cherry Experience
-// SQLite for development; switch to Postgres via DATABASE_URL if needed
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -21,13 +20,14 @@ model Ruta {
   descripcionEn String @default("")
   duracionEs String
   duracionEn String   @default("")
-  dificultad String   // 'fácil' | 'media' | 'alta'
+  dificultad String
   imagen     String
   destacada  Boolean  @default(false)
   orden      Int      @default(0)
   itinerarios RutaItinerario[]
   equipos    RutaEquipo[]
   proximasSalidas RutaProximaSalida[]
+  reservas   Reserva[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -126,10 +126,65 @@ model HomeBlock {
   updatedAt DateTime @updatedAt
 }
 
-// --- Admin user (simple auth) ---
-model AdminUser {
+// --- Reservas ---
+model Reserva {
   id        String   @id @default(cuid())
-  email     String   @unique
-  passwordHash String
+  rutaId    String?
+  ruta      Ruta?    @relation(fields: [rutaId], references: [id])
+  salidaId  String?
+  nombre    String
+  email     String
+  telefono  String   @default("")
+  pais      String   @default("")
+  notas     String   @default("")
+  estado    String   @default("pendiente")
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// --- NextAuth.js models ---
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  role          String    @default("admin")
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }

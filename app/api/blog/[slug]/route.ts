@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { getLocaleFromRequest } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
@@ -52,7 +53,7 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     const body = await request.json()
@@ -72,6 +73,7 @@ export async function PUT(
         ...(body.authorEn != null && { authorEn: body.authorEn }),
       },
     })
+    revalidatePath('/', 'layout')
     return NextResponse.json(post)
   } catch (e) {
     console.error(e)
@@ -83,10 +85,11 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     await prisma.blogPost.delete({ where: { slug: params.slug } })
+    revalidatePath('/', 'layout')
     return NextResponse.json({ ok: true })
   } catch (e) {
     console.error(e)

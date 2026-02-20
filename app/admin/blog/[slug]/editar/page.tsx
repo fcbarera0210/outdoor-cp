@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
+import ImageUploader from '@/components/admin/ImageUploader'
 import { getPostBySlugForAdmin, updatePost } from '@/services/blog'
 
 export default function AdminBlogEditarPage() {
@@ -125,7 +126,7 @@ export default function AdminBlogEditarPage() {
           <AdminInput label="Extracto (EN)" name="excerptEn" value={formData.excerptEn} onChange={handleChange} as="textarea" rows={2} />
           <AdminInput label="Contenido (ES)" name="contentEs" value={formData.contentEs} onChange={handleChange} as="textarea" rows={8} />
           <AdminInput label="Contenido (EN)" name="contentEn" value={formData.contentEn} onChange={handleChange} as="textarea" rows={8} />
-          <AdminInput label="URL de imagen" name="image" type="url" value={formData.image} onChange={handleChange} />
+          <ImageUploader label="Imagen del artículo" value={formData.image} onChange={(url) => setFormData((prev) => ({ ...prev, image: url }))} />
         </div>
         <div className="flex gap-4">
           <AdminButton type="submit" disabled={saving}>

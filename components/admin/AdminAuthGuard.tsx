@@ -1,23 +1,9 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import AdminSidebar from './AdminSidebar'
-
-const AUTH_KEY = 'admin-authenticated'
-
-export function setAdminAuthenticated() {
-  if (typeof window !== 'undefined') {
-    sessionStorage.setItem(AUTH_KEY, 'true')
-  }
-}
-
-export function isAdminAuthenticated(): boolean {
-  if (typeof window !== 'undefined') {
-    return sessionStorage.getItem(AUTH_KEY) === 'true'
-  }
-  return false
-}
 
 export default function AdminAuthGuard({
   children,
@@ -26,28 +12,17 @@ export default function AdminAuthGuard({
 }) {
   const pathname = usePathname()
   const router = useRouter()
-  const [mounted, setMounted] = useState(false)
-  const [authenticated, setAuthenticated] = useState(false)
+  const { status } = useSession()
 
   const isLoginPage = pathname === '/admin/login'
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (!mounted) return
-    setAuthenticated(isAdminAuthenticated())
-  }, [mounted, pathname])
-
-  useEffect(() => {
-    if (!mounted) return
-    if (!isLoginPage && !isAdminAuthenticated()) {
+    if (status === 'unauthenticated' && !isLoginPage) {
       router.replace('/admin/login')
     }
-  }, [mounted, isLoginPage, router])
+  }, [status, isLoginPage, router])
 
-  if (!mounted) {
+  if (status === 'loading') {
     return (
       <div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center">
         <div className="animate-pulse text-brand-primary dark:text-white">
@@ -61,7 +36,7 @@ export default function AdminAuthGuard({
     return <>{children}</>
   }
 
-  if (!authenticated) {
+  if (status !== 'authenticated') {
     return null
   }
 

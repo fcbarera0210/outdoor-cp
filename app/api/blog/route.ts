@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { getLocaleFromRequest } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     const body = await request.json()
@@ -48,6 +49,7 @@ export async function POST(request: NextRequest) {
         authorEn: body.authorEn ?? '',
       },
     })
+    revalidatePath('/', 'layout')
     return NextResponse.json(post)
   } catch (e) {
     console.error(e)

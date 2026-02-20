@@ -28,6 +28,8 @@ function ReservaConfirmacionContent() {
 
   const [data, setData] = useState<Record<string, string> | null>(null)
   const [confirmed, setConfirmed] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (!rutaSlug) {
@@ -38,9 +40,31 @@ function ReservaConfirmacionContent() {
     if (stored) setData(JSON.parse(stored))
   }, [rutaSlug, router])
 
-  const handleConfirmar = () => {
-    setConfirmed(true)
-    localStorage.removeItem(STORAGE_KEY)
+  const handleConfirmar = async () => {
+    if (!data || !ruta) return
+    setSubmitting(true)
+    setError('')
+    try {
+      const res = await fetch('/api/reservas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rutaId: (ruta as unknown as { id?: string }).id || undefined,
+          nombre: data.nombre,
+          email: data.email,
+          telefono: data.telefono || '',
+          pais: data.pais || '',
+          notas: data.notas ? `${data.notas}${data.fechaSalida ? ` | Fecha: ${data.fechaSalida}` : ''}${data.tipoSalida ? ` | Tipo: ${data.tipoSalida}` : ''}` : `Fecha: ${data.fechaSalida || ''} | Tipo: ${data.tipoSalida || ''}`,
+        }),
+      })
+      if (!res.ok) throw new Error('Error al enviar la reserva')
+      setConfirmed(true)
+      localStorage.removeItem(STORAGE_KEY)
+    } catch {
+      setError('Hubo un error al procesar tu reserva. Por favor intenta nuevamente.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (ruta === undefined) return <div className="min-h-screen flex items-center justify-center"><p className="font-heading uppercase text-brand-dark dark:text-white">{tCommon('loading')}</p></div>
@@ -123,10 +147,12 @@ function ReservaConfirmacionContent() {
                 </Link>
                 <button
                   onClick={handleConfirmar}
-                  className="rounded-lg bg-brand-primary hover:bg-brand-dark text-white font-heading font-bold uppercase text-sm px-8 py-3 transition"
+                  disabled={submitting}
+                  className="rounded-lg bg-brand-primary hover:bg-brand-dark disabled:opacity-50 text-white font-heading font-bold uppercase text-sm px-8 py-3 transition"
                 >
-                  Confirmar Reserva
+                  {submitting ? 'Enviando...' : 'Confirmar Reserva'}
                 </button>
+                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
               </motion.div>
             </>
           )}

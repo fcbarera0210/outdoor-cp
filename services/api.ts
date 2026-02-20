@@ -1,7 +1,17 @@
-const BASE = typeof window !== 'undefined' ? '' : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+function getBaseUrl(): string {
+  if (typeof window !== 'undefined') return ''
+  return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+}
 
 export function apiUrl(path: string, params?: Record<string, string>): string {
-  const url = new URL(path.startsWith('http') ? path : `${BASE}${path}`)
+  const base = getBaseUrl()
+
+  if (!base) {
+    const qs = params ? '?' + new URLSearchParams(params).toString() : ''
+    return `${path}${qs}`
+  }
+
+  const url = new URL(path, base)
   if (params) {
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
   }

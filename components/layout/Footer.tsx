@@ -1,11 +1,40 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+
+interface BlogPostPreview {
+  slug: string
+  title: string
+  image: string
+  date: string
+}
+
+interface ContactData {
+  instagram?: string
+  youtube?: string
+}
 
 export default function Footer() {
   const t = useTranslations('footer')
+  const locale = useLocale()
+  const [recentPosts, setRecentPosts] = useState<BlogPostPreview[]>([])
+  const [contact, setContact] = useState<ContactData>({})
+
+  useEffect(() => {
+    fetch(`/api/blog?locale=${locale}`)
+      .then((r) => r.ok ? r.json() : [])
+      .then((posts: BlogPostPreview[]) => setRecentPosts(posts.slice(0, 2)))
+      .catch(() => {})
+
+    fetch('/api/settings/contacto')
+      .then((r) => r.ok ? r.json() : null)
+      .then((data: ContactData | null) => { if (data) setContact(data) })
+      .catch(() => {})
+  }, [locale])
+
   return (
     <footer className="bg-brand-dark dark:bg-gray-950 text-white py-20 border-t border-white/10 dark:border-gray-800">
       <div className="container mx-auto px-6">
@@ -24,37 +53,27 @@ export default function Footer() {
               {t('tagline')}
             </p>
             <div className="flex space-x-4 text-gray-400 text-lg">
-              <a href="#" className="hover:text-brand-primary transition"><i className="fab fa-instagram"></i></a>
-              <a href="#" className="hover:text-brand-primary transition"><i className="fab fa-youtube"></i></a>
-              <a href="#" className="hover:text-brand-primary transition"><i className="fab fa-spotify"></i></a>
+              <a href={contact.instagram || '#'} target="_blank" rel="noopener noreferrer" className="hover:text-brand-primary transition"><i className="fab fa-instagram"></i></a>
+              <a href={contact.youtube || '#'} target="_blank" rel="noopener noreferrer" className="hover:text-brand-primary transition"><i className="fab fa-youtube"></i></a>
             </div>
           </div>
 
           <div className="md:col-span-1">
             <h4 className="font-heading font-bold uppercase tracking-widest mb-8 text-white border-b-2 border-brand-primary pb-2 inline-block">{t('recentBlog')}</h4>
             <ul className="space-y-6 text-gray-400">
-              <li className="flex gap-4 group cursor-pointer">
-                <img
-                  src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                  className="w-16 h-16 object-cover grayscale group-hover:grayscale-0 transition duration-500"
-                  alt="Blog post"
-                />
-                <div>
-                  <Link href="/blog/equipo-esencial-invierno" className="block group-hover:text-brand-primary transition font-bold text-gray-300 uppercase text-xs leading-tight mb-1">Equipo Esencial: Invierno</Link>
-                  <span className="text-[10px] text-gray-600 block">{t('daysAgo')}</span>
-                </div>
-              </li>
-              <li className="flex gap-4 group cursor-pointer">
-                <img
-                  src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                  className="w-16 h-16 object-cover grayscale group-hover:grayscale-0 transition duration-500"
-                  alt="Blog post"
-                />
-                <div>
-                  <Link href="/blog/flora-nativa-del-sur" className="block group-hover:text-brand-primary transition font-bold text-gray-300 uppercase text-xs leading-tight mb-1">Flora Nativa del Sur</Link>
-                  <span className="text-[10px] text-gray-600 block">{t('lastWeek')}</span>
-                </div>
-              </li>
+              {recentPosts.map((post) => (
+                <li key={post.slug} className="flex gap-4 group cursor-pointer">
+                  <img
+                    src={post.image || 'https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'}
+                    className="w-16 h-16 object-cover grayscale group-hover:grayscale-0 transition duration-500"
+                    alt={post.title}
+                  />
+                  <div>
+                    <Link href={`/blog/${post.slug}`} className="block group-hover:text-brand-primary transition font-bold text-gray-300 uppercase text-xs leading-tight mb-1">{post.title}</Link>
+                    <span className="text-[10px] text-gray-600 block">{post.date}</span>
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
 

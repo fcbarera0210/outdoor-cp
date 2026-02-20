@@ -1,8 +1,23 @@
 import { PrismaClient } from '@prisma/client'
+import { hashSync } from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
+  // Seed admin user
+  const adminEmail = 'admin@cherryexperience.cl'
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    create: {
+      email: adminEmail,
+      name: 'Admin',
+      passwordHash: hashSync('admin123', 10),
+      role: 'admin',
+    },
+    update: {},
+  })
+  console.log('Created admin user:', adminEmail)
+
   // Seed Rutas (from data/rutas.ts - map to _es, copy to _en for demo)
   const rutasData = [
     {

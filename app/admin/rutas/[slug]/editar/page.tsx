@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
+import ImageUploader from '@/components/admin/ImageUploader'
 import { getRutaBySlugForAdmin, updateRuta } from '@/services/rutas'
 import type { Dificultad } from '@/services/rutas'
 
@@ -175,7 +176,7 @@ export default function AdminRutaEditarPage() {
           <AdminInput label="Dificultad" name="dificultad" value={formData.dificultad} onChange={handleChange} as="select" options={[{ value: 'fácil', label: 'Fácil' }, { value: 'media', label: 'Media' }, { value: 'alta', label: 'Alta' }]} />
           <AdminInput label="Descripción (ES)" name="descripcionEs" value={formData.descripcionEs} onChange={handleChange} as="textarea" rows={4} />
           <AdminInput label="Descripción (EN)" name="descripcionEn" value={formData.descripcionEn} onChange={handleChange} as="textarea" rows={4} />
-          <AdminInput label="URL de imagen" name="imagen" type="url" value={formData.imagen} onChange={handleChange} />
+          <ImageUploader label="Imagen de la ruta" value={formData.imagen} onChange={(url) => setFormData((prev) => ({ ...prev, imagen: url }))} />
           <label className="flex items-center gap-2">
             <input type="checkbox" name="destacada" checked={formData.destacada} onChange={handleChange} className="rounded border-gray-300" />
             <span className="text-sm font-heading uppercase text-brand-dark dark:text-white">Destacada</span>

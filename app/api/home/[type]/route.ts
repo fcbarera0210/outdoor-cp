@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/auth-admin'
 
@@ -26,7 +27,7 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { type: string } }
 ) {
-  const auth = requireAdmin(request)
+  const auth = await requireAdmin()
   if (auth) return auth
   try {
     const value = await request.json()
@@ -35,6 +36,7 @@ export async function PUT(
       create: { type: params.type, value: JSON.stringify(value) },
       update: { value: JSON.stringify(value) },
     })
+    revalidatePath('/', 'layout')
     return NextResponse.json({ ok: true })
   } catch (e) {
     console.error(e)
