@@ -1,9 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 
 export default function Footer() {
+  const t = useTranslations('footer')
   return (
     <footer className="bg-brand-dark dark:bg-gray-950 text-white py-20 border-t border-white/10 dark:border-gray-800">
       <div className="container mx-auto px-6">
@@ -14,13 +16,12 @@ export default function Footer() {
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.5 }}
         >
-          {/* Col 1: Brand */}
           <div className="md:col-span-1">
             <Link href="/">
               <img src="/logos/che-blanco-2.svg" alt="Cherry Experience - Andes of Chile" className="h-16 w-auto mb-6" />
             </Link>
             <p className="text-gray-500 mb-6 leading-relaxed">
-              Expertos en turismo de montaña y conservación. Llevamos más de 10 años conectando personas con la naturaleza salvaje de Chile.
+              {t('tagline')}
             </p>
             <div className="flex space-x-4 text-gray-400 text-lg">
               <a href="#" className="hover:text-brand-primary transition"><i className="fab fa-instagram"></i></a>
@@ -29,9 +30,8 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Col 2: Recent Posts */}
           <div className="md:col-span-1">
-            <h4 className="font-heading font-bold uppercase tracking-widest mb-8 text-white border-b-2 border-brand-primary pb-2 inline-block">Blog Reciente</h4>
+            <h4 className="font-heading font-bold uppercase tracking-widest mb-8 text-white border-b-2 border-brand-primary pb-2 inline-block">{t('recentBlog')}</h4>
             <ul className="space-y-6 text-gray-400">
               <li className="flex gap-4 group cursor-pointer">
                 <img
@@ -41,7 +41,7 @@ export default function Footer() {
                 />
                 <div>
                   <Link href="/blog/equipo-esencial-invierno" className="block group-hover:text-brand-primary transition font-bold text-gray-300 uppercase text-xs leading-tight mb-1">Equipo Esencial: Invierno</Link>
-                  <span className="text-[10px] text-gray-600 block">Hace 2 días</span>
+                  <span className="text-[10px] text-gray-600 block">{t('daysAgo')}</span>
                 </div>
               </li>
               <li className="flex gap-4 group cursor-pointer">
@@ -52,24 +52,22 @@ export default function Footer() {
                 />
                 <div>
                   <Link href="/blog/flora-nativa-del-sur" className="block group-hover:text-brand-primary transition font-bold text-gray-300 uppercase text-xs leading-tight mb-1">Flora Nativa del Sur</Link>
-                  <span className="text-[10px] text-gray-600 block">Semana pasada</span>
+                  <span className="text-[10px] text-gray-600 block">{t('lastWeek')}</span>
                 </div>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Quick Links */}
           <div className="md:col-span-1">
-            <h4 className="font-heading font-bold uppercase tracking-widest mb-8 text-white border-b-2 border-brand-primary pb-2 inline-block">Info Útil</h4>
+            <h4 className="font-heading font-bold uppercase tracking-widest mb-8 text-white border-b-2 border-brand-primary pb-2 inline-block">{t('usefulInfo')}</h4>
             <ul className="space-y-3 text-gray-400 uppercase text-xs font-bold tracking-wider">
-              <li><Link href="/equipo#dificultad" className="hover:text-brand-primary transition block py-1 flex items-center"><i className="fas fa-chevron-right text-[8px] mr-2 text-brand-primary"></i> Niveles de Dificultad</Link></li>
-              <li><Link href="/equipo" className="hover:text-brand-primary transition block py-1 flex items-center"><i className="fas fa-chevron-right text-[8px] mr-2 text-brand-primary"></i> Simbología</Link></li>
-              <li><Link href="/contacto" className="hover:text-brand-primary transition block py-1 flex items-center"><i className="fas fa-chevron-right text-[8px] mr-2 text-brand-primary"></i> Contacto</Link></li>
-              <li><Link href="/reserva" className="hover:text-brand-primary transition block py-1 flex items-center"><i className="fas fa-chevron-right text-[8px] mr-2 text-brand-primary"></i> Reservar</Link></li>
+              <li><Link href="/equipo#dificultad" className="hover:text-brand-primary transition block py-1 flex items-center"><i className="fas fa-chevron-right text-[8px] mr-2 text-brand-primary"></i> {t('difficultyLevels')}</Link></li>
+              <li><Link href="/equipo" className="hover:text-brand-primary transition block py-1 flex items-center"><i className="fas fa-chevron-right text-[8px] mr-2 text-brand-primary"></i> {t('symbology')}</Link></li>
+              <li><Link href="/contacto" className="hover:text-brand-primary transition block py-1 flex items-center"><i className="fas fa-chevron-right text-[8px] mr-2 text-brand-primary"></i> {t('contact')}</Link></li>
+              <li><Link href="/reserva" className="hover:text-brand-primary transition block py-1 flex items-center"><i className="fas fa-chevron-right text-[8px] mr-2 text-brand-primary"></i> {t('book')}</Link></li>
             </ul>
           </div>
 
-          {/* Col 4: Gallery Widget */}
           <div className="md:col-span-1">
             <h4 className="font-heading font-bold uppercase tracking-widest mb-8 text-white border-b-2 border-brand-primary pb-2 inline-block">Instagram</h4>
             <div className="grid grid-cols-3 gap-2">
@@ -84,10 +82,10 @@ export default function Footer() {
         </motion.div>
 
         <div className="border-t border-white/10 dark:border-gray-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-          <p>&copy; 2024 Cherry Experience. Todos los derechos reservados.</p>
+          <p>{t('copyright')}</p>
           <div className="mt-4 md:mt-0 space-x-4">
-            <a href="#" className="hover:text-white">Privacidad</a>
-            <a href="#" className="hover:text-white">Términos</a>
+            <a href="#" className="hover:text-white">{t('privacy')}</a>
+            <a href="#" className="hover:text-white">{t('terms')}</a>
           </div>
         </div>
       </div>

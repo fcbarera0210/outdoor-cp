@@ -10,10 +10,28 @@ export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setAdminAuthenticated()
-    router.push('/admin/dashboard')
+    setError('')
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(data.error === 'Invalid password' ? 'Contraseña incorrecta' : 'Error al iniciar sesión')
+        return
+      }
+      setAdminAuthenticated()
+      router.push('/admin/dashboard')
+    } catch {
+      setError('Error de conexión')
+    }
   }
 
   return (
@@ -66,6 +84,9 @@ export default function AdminLoginPage() {
             </div>
           </div>
 
+          {error && (
+            <p className="mt-4 text-red-600 dark:text-red-400 text-sm text-center">{error}</p>
+          )}
           <button
             type="submit"
             className="mt-8 w-full rounded-lg bg-brand-primary hover:bg-brand-dark text-white font-heading font-bold uppercase tracking-widest py-4 transition"

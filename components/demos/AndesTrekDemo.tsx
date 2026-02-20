@@ -2,6 +2,9 @@
 
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from '@/i18n/navigation'
+import type { HomeData } from '@/services/home'
+import type { Ruta } from '@/services/rutas'
 
 const sectionView = {
   initial: { opacity: 0, y: 40 },
@@ -10,7 +13,20 @@ const sectionView = {
   transition: { duration: 0.5 },
 }
 
-export default function AndesTrekDemo() {
+interface AndesTrekDemoProps {
+  homeData?: HomeData | null
+  featuredRutas?: Ruta[]
+}
+
+export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemoProps) {
+  const hero = homeData?.hero as Record<string, string> | undefined
+  const partners = homeData?.partners as Record<string, string>[] | undefined
+  const featuredSection = homeData?.featuredSection as Record<string, string> | undefined
+  const gallery = homeData?.gallery as (Record<string, string> & { imagen?: string; enlace?: string; orden?: number })[] | undefined
+  const gallerySection = homeData?.gallerySection as Record<string, string> | undefined
+  const salidasSection = homeData?.salidasSection as Record<string, string> | undefined
+  const reserva = homeData?.reserva as Record<string, string> | undefined
+
   useEffect(() => {
     // Image fallback handler
     const images = document.querySelectorAll('img[src*="unsplash.com"]')
@@ -35,7 +51,7 @@ export default function AndesTrekDemo() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
+            src={hero?.imagenHero ?? 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80'} 
             alt="Paisaje Montañas" 
             className="w-full h-full object-cover opacity-90"
           />
@@ -59,7 +75,7 @@ export default function AndesTrekDemo() {
             transition={{ duration: 0.5 }}
             className="text-xs md:text-sm font-heading tracking-[0.3em] uppercase mb-4 text-brand-primary font-bold bg-brand-dark/40 inline-block px-4 py-1 rounded backdrop-blur-sm"
           >
-            <i className="fas fa-mountain mr-2"></i> Temporada 2024 / 2025
+            <i className="fas fa-mountain mr-2"></i> {hero?.temporada ?? 'Temporada 2024 / 2025'}
           </motion.div>
           
           <motion.h2
@@ -67,7 +83,11 @@ export default function AndesTrekDemo() {
             transition={{ duration: 0.5 }}
             className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold uppercase leading-none mb-6 drop-shadow-2xl tracking-tight"
           >
-            Patagonia <br /> <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">Sin Límites</span>
+            {hero?.titulo ? (() => {
+              const parts = hero.titulo.split(' ')
+              const last = parts.pop()
+              return parts.length ? <>{parts.join(' ')} <br /> <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">{last}</span></> : <>{hero.titulo}</>
+            })() : <>Patagonia <br /> <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">Sin Límites</span></>}
           </motion.h2>
           
           <motion.p
@@ -75,7 +95,7 @@ export default function AndesTrekDemo() {
             transition={{ duration: 0.5 }}
             className="text-sm md:text-lg max-w-2xl mx-auto mb-10 font-light text-gray-200 tracking-wide leading-relaxed"
           >
-            Descubre los senderos más prístinos del sur del mundo. Guiamos tus pasos por glaciares milenarios, bosques nativos y las cumbres más imponentes de los Andes.
+            {hero?.subtitulo ?? 'Descubre los senderos más prístinos del sur del mundo. Guiamos tus pasos por glaciares milenarios, bosques nativos y las cumbres más imponentes de los Andes.'}
           </motion.p>
           
           <motion.div
@@ -83,12 +103,12 @@ export default function AndesTrekDemo() {
             transition={{ duration: 0.5 }}
             className="flex flex-col md:flex-row gap-4 justify-center"
           >
-            <a href="/rutas" className="rounded-lg bg-brand-primary hover:bg-brand-light hover:text-brand-primary text-white font-heading font-bold uppercase text-xs tracking-widest px-10 py-4 transition duration-300 shadow-lg">
-              Ver Expediciones
-            </a>
-            <a href="/equipo" className="rounded-lg border border-white hover:bg-brand-light hover:text-brand-dark text-white font-heading font-bold uppercase text-xs tracking-widest px-10 py-4 transition duration-300">
-              Nuestro Equipo
-            </a>
+            <Link href="/rutas" className="rounded-lg bg-brand-primary hover:bg-brand-light hover:text-brand-primary text-white font-heading font-bold uppercase text-xs tracking-widest px-10 py-4 transition duration-300 shadow-lg text-center">
+              {hero?.cta1 ?? 'Ver Expediciones'}
+            </Link>
+            <Link href="/equipo" className="rounded-lg border border-white hover:bg-brand-light hover:text-brand-dark text-white font-heading font-bold uppercase text-xs tracking-widest px-10 py-4 transition duration-300 text-center">
+              {hero?.cta2 ?? 'Nuestro Equipo'}
+            </Link>
           </motion.div>
         </motion.div>
 
@@ -103,21 +123,30 @@ export default function AndesTrekDemo() {
       >
         <div className="container mx-auto px-6">
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-            <div className="flex flex-col items-center group">
-              <i className="fas fa-hiking text-4xl mb-2 text-brand-dark dark:text-gray-300 group-hover:text-brand-primary transition"></i>
-              <span className="font-heading font-bold text-xs tracking-widest uppercase text-brand-dark dark:text-gray-300">Trek Chile</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="font-heading font-bold text-2xl tracking-tighter text-brand-dark dark:text-white uppercase border-b-2 border-brand-primary pb-1">SERNATUR <i className="fas fa-check-circle text-xs align-top text-brand-primary"></i></span>
-            </div>
-            <div className="flex flex-col items-center border-2 border-brand-dark dark:border-gray-400 p-2 px-3 rounded-lg">
-              <span className="font-heading font-bold text-sm uppercase text-brand-dark dark:text-gray-300">Guías</span>
-              <span className="text-[9px] uppercase tracking-widest text-brand-primary font-bold">Certificados</span>
-            </div>
-            <div className="flex flex-col items-center group">
-              <i className="fas fa-mountain text-3xl mb-1 text-brand-dark dark:text-gray-300 group-hover:text-brand-primary transition"></i>
-              <span className="font-heading font-bold text-xs tracking-[0.3em] uppercase text-brand-dark dark:text-gray-300">Andes</span>
-            </div>
+            {partners?.length ? partners.map((p, i) => (
+              <div key={i} className="flex flex-col items-center group">
+                <i className="fas fa-hiking text-4xl mb-2 text-brand-dark dark:text-gray-300 group-hover:text-brand-primary transition"></i>
+                <span className="font-heading font-bold text-xs tracking-widest uppercase text-brand-dark dark:text-gray-300">{p.nombre ?? ''}</span>
+              </div>
+            )) : (
+              <>
+                <div className="flex flex-col items-center group">
+                  <i className="fas fa-hiking text-4xl mb-2 text-brand-dark dark:text-gray-300 group-hover:text-brand-primary transition"></i>
+                  <span className="font-heading font-bold text-xs tracking-widest uppercase text-brand-dark dark:text-gray-300">Trek Chile</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="font-heading font-bold text-2xl tracking-tighter text-brand-dark dark:text-white uppercase border-b-2 border-brand-primary pb-1">SERNATUR <i className="fas fa-check-circle text-xs align-top text-brand-primary"></i></span>
+                </div>
+                <div className="flex flex-col items-center border-2 border-brand-dark dark:border-gray-400 p-2 px-3 rounded-lg">
+                  <span className="font-heading font-bold text-sm uppercase text-brand-dark dark:text-gray-300">Guías</span>
+                  <span className="text-[9px] uppercase tracking-widest text-brand-primary font-bold">Certificados</span>
+                </div>
+                <div className="flex flex-col items-center group">
+                  <i className="fas fa-mountain text-3xl mb-1 text-brand-dark dark:text-gray-300 group-hover:text-brand-primary transition"></i>
+                  <span className="font-heading font-bold text-xs tracking-[0.3em] uppercase text-brand-dark dark:text-gray-300">Andes</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </motion.section>
@@ -130,87 +159,102 @@ export default function AndesTrekDemo() {
         <div className="container mx-auto px-6 max-w-6xl">
           {/* Section Header */}
           <div className="text-center mb-20">
-            <p className="font-script text-brand-earth dark:text-gray-400 text-2xl mb-2">Vive la experiencia</p>
+            <p className="font-script text-brand-earth dark:text-gray-400 text-2xl mb-2">{featuredSection?.subtitulo ?? 'Vive la experiencia'}</p>
             <h3 className="text-4xl md:text-5xl font-heading font-bold uppercase text-brand-dark dark:text-white">
-              Nuestras <span className="text-brand-primary underline decoration-brand-primary/30 decoration-4 underline-offset-4">Rutas</span> Destacadas
+              {featuredSection?.titulo && featuredSection?.tituloDestacado ? (
+                (() => {
+                  const [before, ...rest] = (featuredSection.titulo || '').split(featuredSection.tituloDestacado)
+                  const after = rest.join(featuredSection.tituloDestacado)
+                  return <>{before}<span className="text-brand-primary underline decoration-brand-primary/30 decoration-4 underline-offset-4">{featuredSection.tituloDestacado}</span>{after}</>
+                })()
+              ) : featuredSection?.titulo ? (
+                featuredSection.titulo
+              ) : (
+                <>Nuestras <span className="text-brand-primary underline decoration-brand-primary/30 decoration-4 underline-offset-4">Rutas</span> Destacadas</>
+              )}
             </h3>
           </div>
 
-          {/* Post 1: Torres del Paine / Sur */}
-          <motion.div
-            className="flex flex-col md:flex-row items-center gap-12 mb-24"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="w-full md:w-1/2 relative group">
-              <div className="p-2 bg-gray-100 shadow-xl transform rotate-1 transition duration-500 group-hover:rotate-0">
-                <div className="overflow-hidden relative h-[400px]">
-                  <img 
-                    src="https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                    alt="Trekking Hiker" 
-                    className="w-full h-full object-cover transform transition duration-1000 group-hover:scale-110"
-                  />
+          {featuredRutas && featuredRutas.length > 0 ? (
+            featuredRutas.slice(0, 2).map((ruta, idx) => (
+              <motion.div
+                key={ruta.slug}
+                className={`flex flex-col md:flex-row items-center gap-12 mb-24 ${idx === 1 ? 'md:flex-row-reverse' : ''}`}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+              >
+                <div className={`w-full md:w-1/2 relative group ${idx === 1 ? 'md:order-2' : ''}`}>
+                  <div className={`p-2 bg-gray-100 shadow-xl transform transition duration-500 group-hover:rotate-0 ${idx === 0 ? 'rotate-1' : '-rotate-1'}`}>
+                    <div className="overflow-hidden relative h-[400px]">
+                      <img src={ruta.imagen || 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'} alt={ruta.nombre} className="w-full h-full object-cover transform transition duration-1000 group-hover:scale-110" />
+                    </div>
+                  </div>
+                  <div className={`absolute -top-4 rounded-lg bg-brand-primary text-white px-4 py-2 text-xs font-bold uppercase tracking-widest shadow-lg z-10 ${idx === 0 ? '-left-4' : '-right-4'}`}>
+                    <i className="fas fa-map-marker-alt mr-2"></i> {ruta.zona}
+                  </div>
                 </div>
-              </div>
-              <div className="absolute -top-4 -left-4 rounded-lg bg-brand-primary text-white px-4 py-2 text-xs font-bold uppercase tracking-widest shadow-lg z-10">
-                <i className="fas fa-map-marker-alt mr-2"></i> Patagonia
-              </div>
-            </div>
-            <div className="w-full md:w-1/2 md:pl-10">
-              <div className="text-xs text-brand-earth mb-3 font-heading uppercase tracking-widest font-bold">
-                <i className="far fa-clock mr-1"></i> 5 Días / 4 Noches <span className="mx-2 text-gray-300">|</span> Dificultad: Media
-              </div>
-              <h4 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark dark:text-white">
-                Circuito W: <br /> El Corazón de Paine
-              </h4>
-              <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed font-light text-lg">
-                Una travesía inolvidable por los senderos más icónicos del Parque Nacional Torres del Paine. Camina junto a los Cuernos, el Valle del Francés y el Glaciar Grey. Incluye refugios y comidas.
-              </p>
-              <a href="/rutas/circuito-w" className="inline-flex items-center text-brand-dark dark:text-white font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group">
-                Ver Itinerario <span className="bg-brand-primary w-8 h-[2px] ml-3 group-hover:w-12 transition-all duration-300"></span>
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Post 2: Norte / Desierto / Volcanes */}
-          <motion.div
-            className="flex flex-col md:flex-row-reverse items-center gap-12 mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <div className="w-full md:w-1/2 relative group">
-              <div className="p-2 bg-gray-100 shadow-xl transform -rotate-1 transition duration-500 group-hover:rotate-0">
-                <div className="overflow-hidden relative h-[400px]">
-                  <img 
-                    src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                    alt="Nature Hiking" 
-                    className="w-full h-full object-cover transform transition duration-1000 group-hover:scale-110"
-                  />
+                <div className={`w-full md:w-1/2 ${idx === 0 ? 'md:pl-10' : 'md:pr-10'} text-left ${idx === 1 ? 'md:text-right' : ''}`}>
+                  <div className={`text-xs text-brand-earth mb-3 font-heading uppercase tracking-widest font-bold flex items-center ${idx === 1 ? 'justify-start md:justify-end' : ''}`}>
+                    <i className="far fa-clock mr-1"></i> {ruta.duracion} <span className="mx-2 text-gray-300">|</span> Dificultad: {ruta.dificultad}
+                  </div>
+                  <h4 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark dark:text-white">
+                    {ruta.nombre}
+                  </h4>
+                  <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed font-light text-lg">
+                    {ruta.descripcion}
+                  </p>
+                  <Link href={`/rutas/${ruta.slug}`} className={`inline-flex items-center text-brand-dark dark:text-white font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group ${idx === 1 ? 'flex-row-reverse' : ''}`}>
+                    Ver Itinerario <span className={`bg-brand-primary w-8 h-[2px] ${idx === 1 ? 'mr-3' : 'ml-3'} group-hover:w-12 transition-all duration-300`}></span>
+                  </Link>
                 </div>
-              </div>
-              <div className="absolute -top-4 -right-4 rounded-lg bg-brand-primary text-white px-4 py-2 text-xs font-bold uppercase tracking-widest shadow-lg z-10">
-                <i className="fas fa-map-marker-alt mr-2"></i> Araucanía
-              </div>
-            </div>
-            <div className="w-full md:w-1/2 md:pr-10 text-left md:text-right">
-              <div className="text-xs text-brand-earth mb-3 font-heading uppercase tracking-widest font-bold flex items-center justify-start md:justify-end">
-                <i className="far fa-clock mr-1"></i> Full Day <span className="mx-2 text-gray-300">|</span> Dificultad: Alta
-              </div>
-              <h4 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark dark:text-white">
-                Ascenso al Cráter: <br /> Volcán Villarrica
-              </h4>
-              <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed font-light text-lg">
-                Desafía tus límites con el ascenso a uno de los volcanes más activos de Sudamérica. Vistas panorámicas de lagos y cordillera desde la cima humeante. Equipo técnico incluido.
-              </p>
-              <a href="/rutas/volcan-villarrica" className="inline-flex items-center flex-row-reverse text-brand-dark dark:text-white font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group">
-                Ver Itinerario <span className="bg-brand-primary w-8 h-[2px] mr-3 group-hover:w-12 transition-all duration-300"></span>
-              </a>
-            </div>
-          </motion.div>
+              </motion.div>
+            ))
+          ) : (
+            <>
+              <motion.div className="flex flex-col md:flex-row items-center gap-12 mb-24" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5 }}>
+                <div className="w-full md:w-1/2 relative group">
+                  <div className="p-2 bg-gray-100 shadow-xl transform rotate-1 transition duration-500 group-hover:rotate-0">
+                    <div className="overflow-hidden relative h-[400px]">
+                      <img src="https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Trekking" className="w-full h-full object-cover transform transition duration-1000 group-hover:scale-110" />
+                    </div>
+                  </div>
+                  <div className="absolute -top-4 -left-4 rounded-lg bg-brand-primary text-white px-4 py-2 text-xs font-bold uppercase tracking-widest shadow-lg z-10">
+                    <i className="fas fa-map-marker-alt mr-2"></i> Patagonia
+                  </div>
+                </div>
+                <div className="w-full md:w-1/2 md:pl-10">
+                  <div className="text-xs text-brand-earth mb-3 font-heading uppercase tracking-widest font-bold">
+                    <i className="far fa-clock mr-1"></i> 5 Días / 4 Noches <span className="mx-2 text-gray-300">|</span> Dificultad: Media
+                  </div>
+                  <h4 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark dark:text-white">Circuito W: <br /> El Corazón de Paine</h4>
+                  <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed font-light text-lg">Una travesía inolvidable por los senderos más icónicos del Parque Nacional Torres del Paine.</p>
+                  <Link href="/rutas/circuito-w" className="inline-flex items-center text-brand-dark dark:text-white font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group">Ver Itinerario <span className="bg-brand-primary w-8 h-[2px] ml-3 group-hover:w-12 transition-all duration-300"></span></Link>
+                </div>
+              </motion.div>
+              <motion.div className="flex flex-col md:flex-row-reverse items-center gap-12 mb-20" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5, delay: 0.1 }}>
+                <div className="w-full md:w-1/2 relative group">
+                  <div className="p-2 bg-gray-100 shadow-xl transform -rotate-1 transition duration-500 group-hover:rotate-0">
+                    <div className="overflow-hidden relative h-[400px]">
+                      <img src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nature" className="w-full h-full object-cover transform transition duration-1000 group-hover:scale-110" />
+                    </div>
+                  </div>
+                  <div className="absolute -top-4 -right-4 rounded-lg bg-brand-primary text-white px-4 py-2 text-xs font-bold uppercase tracking-widest shadow-lg z-10">
+                    <i className="fas fa-map-marker-alt mr-2"></i> Araucanía
+                  </div>
+                </div>
+                <div className="w-full md:w-1/2 md:pr-10 text-left md:text-right">
+                  <div className="text-xs text-brand-earth mb-3 font-heading uppercase tracking-widest font-bold flex items-center justify-start md:justify-end">
+                    <i className="far fa-clock mr-1"></i> Full Day <span className="mx-2 text-gray-300">|</span> Dificultad: Alta
+                  </div>
+                  <h4 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark dark:text-white">Ascenso al Cráter: <br /> Volcán Villarrica</h4>
+                  <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed font-light text-lg">Desafía tus límites con el ascenso a uno de los volcanes más activos de Sudamérica.</p>
+                  <Link href="/rutas/volcan-villarrica" className="inline-flex items-center flex-row-reverse text-brand-dark dark:text-white font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group">Ver Itinerario <span className="bg-brand-primary w-8 h-[2px] mr-3 group-hover:w-12 transition-all duration-300"></span></Link>
+                </div>
+              </motion.div>
+            </>
+          )}
         </div>
       </motion.section>
 
@@ -222,74 +266,59 @@ export default function AndesTrekDemo() {
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 pb-6 border-b border-gray-300">
             <div>
-              <p className="font-script text-brand-primary text-2xl mb-1">Galería de Aventuras</p>
-              <h3 className="text-3xl md:text-4xl font-heading font-bold uppercase text-brand-dark dark:text-white">Momentos en la Montaña</h3>
+              <p className="font-script text-brand-primary text-2xl mb-1">{gallerySection?.subtitulo ?? 'Galería de Aventuras'}</p>
+              <h3 className="text-3xl md:text-4xl font-heading font-bold uppercase text-brand-dark dark:text-white">{gallerySection?.titulo ?? 'Momentos en la Montaña'}</h3>
             </div>
             <div className="mt-4 md:mt-0">
-              <a href="#" className="text-xs font-heading font-bold uppercase tracking-widest text-gray-500 hover:text-brand-primary transition">Ver Todo en Instagram <i className="fab fa-instagram ml-2"></i></a>
+              <a href="#" className="text-xs font-heading font-bold uppercase tracking-widest text-gray-500 hover:text-brand-primary transition">{gallerySection?.link ?? 'Ver Todo en Instagram'} <i className="fab fa-instagram ml-2"></i></a>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1 */}
-            <motion.div
-              className="group relative overflow-hidden h-[450px] hover-zoom cursor-pointer shadow-lg"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0 }}
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                className="w-full h-full object-cover filter brightness-90"
-                alt="Cajón del Maipo"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-80"></div>
-              <div className="absolute bottom-8 left-8 text-white">
-                <span className="text-[10px] font-bold font-heading rounded-lg bg-brand-primary px-2 py-1 uppercase tracking-widest mb-3 inline-block">Cajón del Maipo</span>
-                <h5 className="text-2xl font-heading font-bold uppercase leading-none">Atardecer Andino</h5>
-              </div>
-            </motion.div>
-
-            {/* Card 2 */}
-            <motion.div
-              className="group relative overflow-hidden h-[450px] hover-zoom cursor-pointer shadow-lg mt-0 md:-mt-8"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                className="w-full h-full object-cover filter brightness-90"
-                alt="Carretera Austral"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-80"></div>
-              <div className="absolute bottom-8 left-8 text-white">
-                <span className="text-[10px] font-bold font-heading rounded-lg bg-brand-primary px-2 py-1 uppercase tracking-widest mb-3 inline-block text-white">Carretera Austral</span>
-                <h5 className="text-2xl font-heading font-bold uppercase leading-none">Bosque Profundo</h5>
-              </div>
-            </motion.div>
-
-            {/* Card 3 */}
-            <motion.div
-              className="group relative overflow-hidden h-[450px] hover-zoom cursor-pointer shadow-lg"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                className="w-full h-full object-cover filter brightness-90"
-                alt="San Pedro"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-80"></div>
-              <div className="absolute bottom-8 left-8 text-white">
-                <span className="text-[10px] font-bold font-heading rounded-lg bg-brand-primary px-2 py-1 uppercase tracking-widest mb-3 inline-block">San Pedro</span>
-                <h5 className="text-2xl font-heading font-bold uppercase leading-none">Valle de la Luna</h5>
-              </div>
-            </motion.div>
+            {gallery?.length ? gallery.slice(0, 3).map((item, i) => (
+              <motion.div
+                key={i}
+                className={`group relative overflow-hidden h-[450px] hover-zoom cursor-pointer shadow-lg ${i === 1 ? 'mt-0 md:-mt-8' : ''}`}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+              >
+                <img src={item.imagen ?? ''} className="w-full h-full object-cover filter brightness-90" alt={item.titulo ?? ''} />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-80"></div>
+                <div className="absolute bottom-8 left-8 text-white">
+                  <span className="text-[10px] font-bold font-heading rounded-lg bg-brand-primary px-2 py-1 uppercase tracking-widest mb-3 inline-block">{item.titulo ?? ''}</span>
+                  <h5 className="text-2xl font-heading font-bold uppercase leading-none">{item.subtitulo ?? ''}</h5>
+                </div>
+              </motion.div>
+            )) : (
+              <>
+                <motion.div className="group relative overflow-hidden h-[450px] hover-zoom cursor-pointer shadow-lg" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>
+                  <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover filter brightness-90" alt="Cajón del Maipo" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-80"></div>
+                  <div className="absolute bottom-8 left-8 text-white">
+                    <span className="text-[10px] font-bold font-heading rounded-lg bg-brand-primary px-2 py-1 uppercase tracking-widest mb-3 inline-block">Cajón del Maipo</span>
+                    <h5 className="text-2xl font-heading font-bold uppercase leading-none">Atardecer Andino</h5>
+                  </div>
+                </motion.div>
+                <motion.div className="group relative overflow-hidden h-[450px] hover-zoom cursor-pointer shadow-lg mt-0 md:-mt-8" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.1 }}>
+                  <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover filter brightness-90" alt="Carretera Austral" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-80"></div>
+                  <div className="absolute bottom-8 left-8 text-white">
+                    <span className="text-[10px] font-bold font-heading rounded-lg bg-brand-primary px-2 py-1 uppercase tracking-widest mb-3 inline-block">Carretera Austral</span>
+                    <h5 className="text-2xl font-heading font-bold uppercase leading-none">Bosque Profundo</h5>
+                  </div>
+                </motion.div>
+                <motion.div className="group relative overflow-hidden h-[450px] hover-zoom cursor-pointer shadow-lg" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }}>
+                  <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover filter brightness-90" alt="San Pedro" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-80"></div>
+                  <div className="absolute bottom-8 left-8 text-white">
+                    <span className="text-[10px] font-bold font-heading rounded-lg bg-brand-primary px-2 py-1 uppercase tracking-widest mb-3 inline-block">San Pedro</span>
+                    <h5 className="text-2xl font-heading font-bold uppercase leading-none">Valle de la Luna</h5>
+                  </div>
+                </motion.div>
+              </>
+            )}
           </div>
         </div>
       </motion.section>
@@ -316,9 +345,19 @@ export default function AndesTrekDemo() {
         </div>
         <div className="container mx-auto px-6 max-w-6xl relative">
           <div className="text-center mb-12">
-            <p className="font-script text-brand-earth dark:text-gray-400 text-2xl mb-2">Temporada 2024 / 2025</p>
+            <p className="font-script text-brand-earth dark:text-gray-400 text-2xl mb-2">{salidasSection?.subtitulo ?? 'Temporada 2024 / 2025'}</p>
             <h3 className="text-4xl md:text-5xl font-heading font-bold uppercase text-brand-dark dark:text-white">
-              Próximas <span className="text-brand-primary underline decoration-brand-primary/30 decoration-4 underline-offset-4">Salidas</span>
+              {salidasSection?.titulo && salidasSection?.tituloDestacado ? (
+                (() => {
+                  const [before, ...rest] = (salidasSection.titulo || '').split(salidasSection.tituloDestacado)
+                  const after = rest.join(salidasSection.tituloDestacado)
+                  return <>{before}<span className="text-brand-primary underline decoration-brand-primary/30 decoration-4 underline-offset-4">{salidasSection.tituloDestacado}</span>{after}</>
+                })()
+              ) : salidasSection?.titulo ? (
+                salidasSection.titulo
+              ) : (
+                <>Próximas <span className="text-brand-primary underline decoration-brand-primary/30 decoration-4 underline-offset-4">Salidas</span></>
+              )}
             </h3>
           </div>
           
@@ -412,19 +451,25 @@ export default function AndesTrekDemo() {
             {/* Text Side */}
             <div className="w-full lg:w-1/2 text-center lg:text-left">
               <i className="fas fa-compass text-5xl text-brand-primary mb-6"></i>
-              <h3 className="text-4xl md:text-6xl font-heading font-bold uppercase mb-4 leading-none">Reserva tu <br /> <span className="text-brand-primary">Aventura</span></h3>
+              <h3 className="text-4xl md:text-6xl font-heading font-bold uppercase mb-4 leading-none">
+                {reserva?.titulo ? (() => {
+                  const parts = (reserva.titulo || '').split(' ')
+                  const last = parts.pop()
+                  return parts.length ? <>{parts.join(' ')} <br /> <span className="text-brand-primary">{last}</span></> : <>{reserva.titulo}</>
+                })() : <>Reserva tu <br /> <span className="text-brand-primary">Aventura</span></>}
+              </h3>
               <p className="font-light text-gray-400 mb-8 text-lg leading-relaxed">
-                ¿Listo para desconectar? Cuéntanos qué tipo de experiencia buscas y nuestro equipo de guías expertos te ayudará a planificar la expedición perfecta. Cupos limitados por temporada.
+                {reserva?.texto ?? '¿Listo para desconectar? Cuéntanos qué tipo de experiencia buscas y nuestro equipo de guías expertos te ayudará a planificar la expedición perfecta. Cupos limitados por temporada.'}
               </p>
               <div className="flex flex-col space-y-4 text-sm font-heading tracking-widest text-gray-500">
                 <div className="flex items-center justify-center lg:justify-start">
-                  <i className="fas fa-check text-brand-primary mr-3"></i> Guías Certificados WFR
+                  <i className="fas fa-check text-brand-primary mr-3"></i> {reserva?.bullet1 ?? 'Guías Certificados WFR'}
                 </div>
                 <div className="flex items-center justify-center lg:justify-start">
-                  <i className="fas fa-check text-brand-primary mr-3"></i> Equipamiento de Alta Montaña
+                  <i className="fas fa-check text-brand-primary mr-3"></i> {reserva?.bullet2 ?? 'Equipamiento de Alta Montaña'}
                 </div>
                 <div className="flex items-center justify-center lg:justify-start">
-                  <i className="fas fa-check text-brand-primary mr-3"></i> Transporte Privado
+                  <i className="fas fa-check text-brand-primary mr-3"></i> {reserva?.bullet3 ?? 'Transporte Privado'}
                 </div>
               </div>
             </div>
@@ -434,17 +479,17 @@ export default function AndesTrekDemo() {
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="group">
-                  <label className="block text-xs font-heading uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary">Tu Nombre</label>
-                  <input type="text" className="w-full custom-input text-white pb-2 outline-none" placeholder="Ej: Juan Pérez" />
+                  <label className="block text-xs font-heading uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary">{reserva?.labelNombre ?? 'Tu Nombre'}</label>
+                  <input type="text" className="w-full custom-input text-white pb-2 outline-none" placeholder={reserva?.placeholderNombre ?? 'Ej: Juan Pérez'} />
                 </div>
                 <div className="group">
-                  <label className="block text-xs font-heading uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary">Tu Email</label>
-                  <input type="email" className="w-full custom-input text-white pb-2 outline-none" placeholder="correo@ejemplo.com" />
+                  <label className="block text-xs font-heading uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary">{reserva?.labelEmail ?? 'Tu Email'}</label>
+                  <input type="email" className="w-full custom-input text-white pb-2 outline-none" placeholder={reserva?.placeholderEmail ?? 'correo@ejemplo.com'} />
                 </div>
                 </div>
                 
                 <div className="group">
-                  <label className="block text-xs font-heading uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary">Tipo de Aventura</label>
+                  <label className="block text-xs font-heading uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary">{reserva?.labelTipo ?? 'Tipo de Aventura'}</label>
                   <select className="w-full custom-input text-white pb-2 outline-none bg-transparent appearance-none cursor-pointer">
                     <option className="text-brand-dark">Trekking Patagonia (Circuito W)</option>
                     <option className="text-brand-dark">Ascenso Volcán Villarrica</option>
@@ -455,13 +500,13 @@ export default function AndesTrekDemo() {
                 </div>
 
                 <div className="group">
-                  <label className="block text-xs font-heading uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary">Mensaje / Fechas</label>
-                  <textarea rows={2} className="w-full custom-input text-white pb-2 outline-none resize-none" placeholder="Cuéntanos más..."></textarea>
+                  <label className="block text-xs font-heading uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary">{reserva?.labelMensaje ?? 'Mensaje / Fechas'}</label>
+                  <textarea rows={2} className="w-full custom-input text-white pb-2 outline-none resize-none" placeholder={reserva?.placeholderMensaje ?? 'Cuéntanos más...'}></textarea>
                 </div>
 
-                <a href="/reserva" className="block w-full rounded-lg bg-brand-primary hover:bg-brand-light hover:text-brand-dark text-white font-heading font-bold uppercase tracking-[0.2em] py-4 transition duration-300 mt-4 text-center">
-                  Solicitar Reserva
-                </a>
+                <Link href="/reserva" className="block w-full rounded-lg bg-brand-primary hover:bg-brand-light hover:text-brand-dark text-white font-heading font-bold uppercase tracking-[0.2em] py-4 transition duration-300 mt-4 text-center">
+                  {reserva?.cta ?? 'Solicitar Reserva'}
+                </Link>
               </form>
             </div>
           </div>

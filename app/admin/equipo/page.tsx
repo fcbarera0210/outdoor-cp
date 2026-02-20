@@ -1,39 +1,86 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
 import AdminTable from '@/components/admin/AdminTable'
+import { getInstruccionesForAdmin, updateInstrucciones } from '@/services/equipo'
+import { getMiembros, deleteMiembro } from '@/services/equipo'
+import type { InstruccionesAdmin } from '@/services/equipo'
+import type { MiembroEquipo } from '@/services/equipo'
 
-// Datos mock para miembros
-const miembrosMock = [
-  { id: '1', nombre: 'Juan Pérez', rol: 'Guía Principal', imagen: '', bio: 'Más de 15 años de experiencia.' },
-]
+const defaultInstrucciones = {
+  seguridadEs: '',
+  seguridadEn: '',
+  queLlevarEs: '',
+  queLlevarEn: '',
+  comportamientoEs: '',
+  comportamientoEn: '',
+  dificultadFacilEs: '',
+  dificultadFacilEn: '',
+  dificultadMediaEs: '',
+  dificultadMediaEn: '',
+  dificultadAltaEs: '',
+  dificultadAltaEn: '',
+  equipoNecesario: [] as { tituloEs?: string; tituloEn?: string; textoEs?: string; textoEn?: string }[],
+  senaletica: [] as { tituloEs?: string; tituloEn?: string; textoEs?: string; textoEn?: string }[],
+}
 
 export default function AdminEquipoPage() {
   const [activeTab, setActiveTab] = useState<'instrucciones' | 'miembros'>('instrucciones')
+  const [instrucciones, setInstrucciones] = useState<InstruccionesAdmin>(defaultInstrucciones)
+  const [instruccionesLoading, setInstruccionesLoading] = useState(true)
+  const [instruccionesSaving, setInstruccionesSaving] = useState(false)
+  const [miembros, setMiembros] = useState<MiembroEquipo[]>([])
+  const [miembrosLoading, setMiembrosLoading] = useState(false)
 
-  const [instrucciones, setInstrucciones] = useState({
-    seguridad: 'Siempre sigue las indicaciones del guía. No te separes del grupo. En caso de mal tiempo, el guía puede modificar o cancelar la ruta por tu seguridad.',
-    queLlevar: 'Ropa por capas, protección solar, botella de agua (mínimo 2L), snack energético. El equipo específico varía según la ruta; consulta la lista en cada expedición.',
-    comportamiento: 'Respeta la naturaleza: no dejes basura, no te aproximes a la fauna silvestre, camina solo por los senderos marcados. Principio de no dejar rastro.',
-    dificultadFacil: 'Terreno accesible, desnivel moderado. Ideal para principiantes y familias.',
-    dificultadMedia: 'Requiere condición física básica. Algunos tramos con mayor exigencia.',
-    dificultadAlta: 'Terreno técnico, condición física buena. Equipo especializado requerido.',
-  })
+  useEffect(() => {
+    getInstruccionesForAdmin()
+      .then((data) => data && setInstrucciones({ ...defaultInstrucciones, ...data }))
+      .catch(() => {})
+      .finally(() => setInstruccionesLoading(false))
+  }, [])
+
+  useEffect(() => {
+    if (activeTab === 'miembros') {
+      setMiembrosLoading(true)
+      getMiembros('es')
+        .then(setMiembros)
+        .catch(() => setMiembros([]))
+        .finally(() => setMiembrosLoading(false))
+    }
+  }, [activeTab])
 
   const handleInstruccionesChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    setInstrucciones((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }))
+    const name = e.target.name as keyof InstruccionesAdmin
+    setInstrucciones((prev) => ({ ...prev, [name]: e.target.value }))
   }
 
-  const handleInstruccionesSubmit = (e: React.FormEvent) => {
+  const handleInstruccionesSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Maqueta: no persiste
+    setInstruccionesSaving(true)
+    try {
+      await updateInstrucciones(instrucciones as unknown as Record<string, unknown>)
+      alert('Guardado correctamente')
+    } catch (err) {
+      console.error(err)
+      alert('Error al guardar')
+    } finally {
+      setInstruccionesSaving(false)
+    }
+  }
+
+  const handleDeleteMiembro = async (id: string) => {
+    if (!confirm('¿Eliminar este miembro?')) return
+    try {
+      await deleteMiembro(id)
+      setMiembros((prev) => prev.filter((m) => m.id !== id))
+    } catch (err) {
+      console.error(err)
+      alert('Error al eliminar')
+    }
   }
 
   return (
@@ -78,104 +125,71 @@ export default function AdminEquipoPage() {
           onSubmit={handleInstruccionesSubmit}
           className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-8 max-w-3xl"
         >
-          <h2 className="text-xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-6 border-b-2 border-brand-primary pb-2">
-            Instrucciones Básicas
-          </h2>
-          <div className="space-y-6 mb-10">
-            <AdminInput
-              label="Seguridad"
-              name="seguridad"
-              value={instrucciones.seguridad}
-              onChange={handleInstruccionesChange}
-              as="textarea"
-              rows={3}
-            />
-            <AdminInput
-              label="Qué llevar"
-              name="queLlevar"
-              value={instrucciones.queLlevar}
-              onChange={handleInstruccionesChange}
-              as="textarea"
-              rows={3}
-            />
-            <AdminInput
-              label="Comportamiento en montaña"
-              name="comportamiento"
-              value={instrucciones.comportamiento}
-              onChange={handleInstruccionesChange}
-              as="textarea"
-              rows={3}
-            />
-          </div>
+          {instruccionesLoading ? (
+            <p className="text-gray-500 dark:text-gray-400">Cargando...</p>
+          ) : (
+            <>
+              <h2 className="text-xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-6 border-b-2 border-brand-primary pb-2">
+                Instrucciones Básicas (ES / EN)
+              </h2>
+              <div className="space-y-6 mb-10">
+                <AdminInput label="Seguridad (ES)" name="seguridadEs" value={instrucciones.seguridadEs} onChange={handleInstruccionesChange} as="textarea" rows={3} />
+                <AdminInput label="Seguridad (EN)" name="seguridadEn" value={instrucciones.seguridadEn} onChange={handleInstruccionesChange} as="textarea" rows={3} />
+                <AdminInput label="Qué llevar (ES)" name="queLlevarEs" value={instrucciones.queLlevarEs} onChange={handleInstruccionesChange} as="textarea" rows={3} />
+                <AdminInput label="Qué llevar (EN)" name="queLlevarEn" value={instrucciones.queLlevarEn} onChange={handleInstruccionesChange} as="textarea" rows={3} />
+                <AdminInput label="Comportamiento (ES)" name="comportamientoEs" value={instrucciones.comportamientoEs} onChange={handleInstruccionesChange} as="textarea" rows={3} />
+                <AdminInput label="Comportamiento (EN)" name="comportamientoEn" value={instrucciones.comportamientoEn} onChange={handleInstruccionesChange} as="textarea" rows={3} />
+              </div>
 
-          <h2 className="text-xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-6 border-b-2 border-brand-primary pb-2">
-            Niveles de Dificultad
-          </h2>
-          <div className="space-y-6 mb-10">
-            <AdminInput
-              label="Descripción Fácil"
-              name="dificultadFacil"
-              value={instrucciones.dificultadFacil}
-              onChange={handleInstruccionesChange}
-            />
-            <AdminInput
-              label="Descripción Media"
-              name="dificultadMedia"
-              value={instrucciones.dificultadMedia}
-              onChange={handleInstruccionesChange}
-            />
-            <AdminInput
-              label="Descripción Alta"
-              name="dificultadAlta"
-              value={instrucciones.dificultadAlta}
-              onChange={handleInstruccionesChange}
-            />
-          </div>
+              <h2 className="text-xl font-heading font-bold uppercase text-brand-dark dark:text-white mb-6 border-b-2 border-brand-primary pb-2">
+                Niveles de Dificultad (ES / EN)
+              </h2>
+              <div className="space-y-6 mb-10">
+                <AdminInput label="Fácil (ES)" name="dificultadFacilEs" value={instrucciones.dificultadFacilEs} onChange={handleInstruccionesChange} />
+                <AdminInput label="Fácil (EN)" name="dificultadFacilEn" value={instrucciones.dificultadFacilEn} onChange={handleInstruccionesChange} />
+                <AdminInput label="Media (ES)" name="dificultadMediaEs" value={instrucciones.dificultadMediaEs} onChange={handleInstruccionesChange} />
+                <AdminInput label="Media (EN)" name="dificultadMediaEn" value={instrucciones.dificultadMediaEn} onChange={handleInstruccionesChange} />
+                <AdminInput label="Alta (ES)" name="dificultadAltaEs" value={instrucciones.dificultadAltaEs} onChange={handleInstruccionesChange} />
+                <AdminInput label="Alta (EN)" name="dificultadAltaEn" value={instrucciones.dificultadAltaEn} onChange={handleInstruccionesChange} />
+              </div>
 
-          <AdminButton type="submit">
-            <i className="fas fa-save"></i>
-            Guardar Instrucciones
-          </AdminButton>
+              <AdminButton type="submit" disabled={instruccionesSaving}>
+                <i className="fas fa-save"></i>
+                {instruccionesSaving ? 'Guardando...' : 'Guardar Instrucciones'}
+              </AdminButton>
+            </>
+          )}
         </form>
       )}
 
       {activeTab === 'miembros' && (
         <div>
-          <div className="flex justify-end mb-6">
-            <AdminButton>
-              <i className="fas fa-plus"></i>
-              Nuevo Miembro
-            </AdminButton>
-          </div>
-
-          <AdminTable
-            headers={['Nombre', 'Rol', 'Acciones']}
-          >
-            {miembrosMock.map((m) => (
-              <tr key={m.id} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                <td className="px-4 py-3 font-medium text-brand-dark dark:text-white">{m.nombre}</td>
-                <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{m.rol}</td>
-                <td className="px-4 py-3">
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      className="rounded-lg px-3 py-1.5 bg-brand-primary/10 dark:bg-brand-primary/20 text-brand-primary hover:bg-brand-primary hover:text-white transition text-xs font-heading uppercase"
-                    >
-                      <i className="fas fa-edit mr-1"></i>
-                      Editar
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-lg px-3 py-1.5 bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition text-xs font-heading uppercase"
-                    >
-                      <i className="fas fa-trash mr-1"></i>
-                      Eliminar
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </AdminTable>
+          {miembrosLoading ? (
+            <p className="text-gray-500 dark:text-gray-400">Cargando miembros...</p>
+          ) : (
+            <>
+              <AdminTable headers={['Nombre', 'Rol', 'Acciones']}>
+                {miembros.map((m) => (
+                  <tr key={m.id} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-4 py-3 font-medium text-brand-dark dark:text-white">{m.nombre}</td>
+                    <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{m.rol}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteMiembro(m.id)}
+                          className="rounded-lg px-3 py-1.5 bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition text-xs font-heading uppercase"
+                        >
+                          <i className="fas fa-trash mr-1"></i>
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </AdminTable>
+            </>
+          )}
         </div>
       )}
     </div>

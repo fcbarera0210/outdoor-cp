@@ -1,0 +1,107 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "routes": "Rutas",
+    "blog": "Blog",
+    "team": "Equipo",
+    "contact": "Contacto",
+    "book": "Reservar",
+    "followUs": "Síguenos",
+    "themeLight": "Activar modo claro",
+    "themeDark": "Activar modo oscuro",
+    "openMenu": "Abrir menú",
+    "lightMode": "Modo claro",
+    "darkMode": "Modo oscuro"
+  },
+  "footer": {
+    "tagline": "Expertos en turismo de montaña y conservación. Llevamos más de 10 años conectando personas con la naturaleza salvaje de Chile.",
+    "recentBlog": "Blog Reciente",
+    "usefulInfo": "Info Útil",
+    "difficultyLevels": "Niveles de Dificultad",
+    "symbology": "Simbología",
+    "contact": "Contacto",
+    "book": "Reservar",
+    "copyright": "© 2024 Cherry Experience. Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "daysAgo": "Hace 2 días",
+    "lastWeek": "Semana pasada"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "back": "Volver",
+    "seeMore": "Ver más",
+    "select": "Seleccionar",
+    "detail": "Ver Detalle",
+    "itinerary": "Ver Itinerario",
+    "difficulty": "Dificultad",
+    "reserve": "Reservar",
+    "reserveThisRoute": "Reservar esta Ruta",
+    "allRoutes": "Ver Todas las Rutas",
+    "backToBlog": "Volver al Blog",
+    "cuposDisponibles": "Cupos Disponibles",
+    "ultimosCupos": "Últimos Cupos"
+  },
+  "home": {
+    "breadcrumbHome": "Inicio"
+  },
+  "rutas": {
+    "title": "Nuestras Rutas",
+    "subtitle": "Descubre los senderos más icónicos de los Andes chilenos",
+    "breadcrumb": "Rutas"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Historias, consejos y experiencias desde los Andes",
+    "breadcrumb": "Blog"
+  },
+  "contacto": {
+    "title": "Contacto",
+    "subtitle": "Estamos aquí para ayudarte a planificar tu aventura",
+    "breadcrumb": "Contacto",
+    "contactData": "Datos de Contacto",
+    "phone": "Teléfono",
+    "email": "Email",
+    "location": "Ubicación",
+    "mapPlaceholder": "Mapa (placeholder)",
+    "sendMessage": "Envíanos un mensaje",
+    "messageSent": "Mensaje enviado",
+    "messageSentDetail": "Te responderemos en las próximas 24 horas.",
+    "name": "Nombre",
+    "yourName": "Tu nombre",
+    "yourEmail": "Tu Email",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "generalQuery": "Consulta general",
+    "booking": "Reserva",
+    "routeInfo": "Información de rutas",
+    "other": "Otro",
+    "messagePlaceholder": "Escribe tu mensaje...",
+    "sendButton": "Enviar Mensaje"
+  },
+  "equipo": {
+    "title": "Nuestro Equipo",
+    "subtitle": "Instrucciones básicas y simbología para tus expediciones",
+    "breadcrumb": "Equipo",
+    "basicInstructions": "Instrucciones Básicas",
+    "safety": "Seguridad",
+    "whatToBring": "Qué llevar",
+    "mountainBehavior": "Comportamiento en montaña",
+    "symbology": "Simbología",
+    "difficultyLevels": "Niveles de Dificultad",
+    "easy": "Fácil",
+    "medium": "Media",
+    "hard": "Alta",
+    "requiredGear": "Equipo Necesario",
+    "trailMarkers": "Señalética de Senderos",
+    "backpack": "Mochila",
+    "poles": "Bastones",
+    "helmet": "Casco",
+    "crampons": "Crampones"
+  },
+  "reserva": {
+    "title": "Elige tu Aventura",
+    "subtitle": "Paso 1 de 4: Selecciona la ruta que deseas reservar",
+    "breadcrumb": "Reserva"
+  }
+}

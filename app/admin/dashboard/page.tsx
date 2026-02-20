@@ -36,6 +36,12 @@ export default function AdminDashboardPage() {
           icon="fa-users"
         />
         <AdminCard
+          title="Configuración Home"
+          description="Hero, partners, galería, salidas y bloque reserva"
+          href="/admin/home"
+          icon="fa-home"
+        />
+        <AdminCard
           title="Galería de Imágenes"
           description="Gestiona las imágenes del sitio"
           href="/admin/imagenes"

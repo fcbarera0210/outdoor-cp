@@ -7,6 +7,7 @@ interface AdminButtonProps {
   type?: 'button' | 'submit'
   variant?: 'primary' | 'secondary' | 'danger'
   className?: string
+  disabled?: boolean
 }
 
 export default function AdminButton({
@@ -16,6 +17,7 @@ export default function AdminButton({
   type = 'button',
   variant = 'primary',
   className = '',
+  disabled = false,
 }: AdminButtonProps) {
   const baseClasses =
     'rounded-lg inline-flex items-center justify-center gap-2 px-4 py-2 font-heading font-bold uppercase tracking-widest text-sm transition'
@@ -35,7 +37,7 @@ export default function AdminButton({
   }
 
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
       {children}
     </button>
   )

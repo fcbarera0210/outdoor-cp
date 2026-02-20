@@ -1,0 +1,135 @@
+// Prisma schema - Cherry Experience
+// SQLite for development; switch to Postgres via DATABASE_URL if needed
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// --- Rutas ---
+model Ruta {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  nombreEs   String
+  nombreEn   String   @default("")
+  zonaEs     String
+  zonaEn     String   @default("")
+  descripcionEs String
+  descripcionEn String @default("")
+  duracionEs String
+  duracionEn String   @default("")
+  dificultad String   // 'fácil' | 'media' | 'alta'
+  imagen     String
+  destacada  Boolean  @default(false)
+  orden      Int      @default(0)
+  itinerarios RutaItinerario[]
+  equipos    RutaEquipo[]
+  proximasSalidas RutaProximaSalida[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model RutaItinerario {
+  id       String @id @default(cuid())
+  rutaId   String
+  ruta     Ruta   @relation(fields: [rutaId], references: [id], onDelete: Cascade)
+  textoEs  String
+  textoEn  String @default("")
+  orden    Int    @default(0)
+}
+
+model RutaEquipo {
+  id       String @id @default(cuid())
+  rutaId   String
+  ruta     Ruta   @relation(fields: [rutaId], references: [id], onDelete: Cascade)
+  textoEs  String
+  textoEn  String @default("")
+  orden    Int    @default(0)
+}
+
+model RutaProximaSalida {
+  id     String @id @default(cuid())
+  rutaId String
+  ruta   Ruta   @relation(fields: [rutaId], references: [id], onDelete: Cascade)
+  fecha  String
+  tipoEs String
+  tipoEn String @default("")
+  orden  Int    @default(0)
+}
+
+// --- Blog ---
+model BlogPost {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  titleEs    String
+  titleEn    String   @default("")
+  excerptEs  String
+  excerptEn  String   @default("")
+  contentEs  String
+  contentEn  String   @default("")
+  image      String
+  date       String
+  authorEs   String
+  authorEn   String   @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// --- Settings (key-value: contacto, site) ---
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String // JSON string
+}
+
+// --- Equipo: instrucciones (single row) + miembros ---
+model EquipoInstrucciones {
+  id                String   @id @default("singleton")
+  seguridadEs       String
+  seguridadEn       String   @default("")
+  queLlevarEs       String
+  queLlevarEn       String   @default("")
+  comportamientoEs  String
+  comportamientoEn  String   @default("")
+  dificultadFacilEs String
+  dificultadFacilEn String   @default("")
+  dificultadMediaEs String
+  dificultadMediaEn String   @default("")
+  dificultadAltaEs  String
+  dificultadAltaEn  String   @default("")
+  // Equipo necesario + señalética as JSON arrays of { tituloEs, tituloEn, textoEs, textoEn }
+  equipoNecesarioJson String @default("[]")
+  senaleticaJson      String @default("[]")
+  updatedAt          DateTime @updatedAt
+}
+
+model MiembroEquipo {
+  id      String   @id @default(cuid())
+  nombre  String
+  rolEs   String
+  rolEn   String   @default("")
+  imagen  String   @default("")
+  bioEs   String   @default("")
+  bioEn   String   @default("")
+  orden   Int      @default(0)
+}
+
+// --- Home content (one row per block type or single row with JSON) ---
+// Using a single HomeBlock model with type + JSON for flexibility
+model HomeBlock {
+  id    String   @id @default(cuid())
+  type  String   @unique // hero, partners, featuredSection, gallery, salidas, reserva
+  value String   // JSON
+  updatedAt DateTime @updatedAt
+}
+
+// --- Admin user (simple auth) ---
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  passwordHash String
+  createdAt DateTime @default(now())
+}

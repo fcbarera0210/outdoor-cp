@@ -1,20 +1,44 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
+import { getSettingRaw, updateSetting } from '@/services/settings'
 
 export default function AdminContactoPage() {
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [formData, setFormData] = useState({
     telefono: '+56 9 1234 5678',
     email: 'contacto@cherryexperience.cl',
-    ubicacion: 'Puerto Varas, Región de Los Lagos, Chile',
-    instagram: '#',
-    facebook: '#',
-    whatsapp: '#',
-    youtube: '#',
+    ubicacionEs: 'Puerto Varas, Región de Los Lagos, Chile',
+    ubicacionEn: 'Puerto Varas, Los Lagos Region, Chile',
+    instagram: '',
+    facebook: '',
+    whatsapp: '',
+    youtube: '',
     mapaEmbed: '',
   })
+
+  useEffect(() => {
+    getSettingRaw('contacto')
+      .then((data) => {
+        setFormData((prev) => ({
+          ...prev,
+          telefono: String(data.telefono ?? prev.telefono),
+          email: String(data.email ?? prev.email),
+          ubicacionEs: String(data.ubicacionEs ?? data.ubicacion ?? prev.ubicacionEs),
+          ubicacionEn: String(data.ubicacionEn ?? prev.ubicacionEn),
+          instagram: String(data.instagram ?? ''),
+          facebook: String(data.facebook ?? ''),
+          whatsapp: String(data.whatsapp ?? ''),
+          youtube: String(data.youtube ?? ''),
+          mapaEmbed: String(data.mapaEmbed ?? ''),
+        }))
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -25,9 +49,22 @@ export default function AdminContactoPage() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Maqueta: no persiste
+    setSaving(true)
+    try {
+      await updateSetting('contacto', formData)
+      alert('Guardado correctamente')
+    } catch (err) {
+      console.error(err)
+      alert('Error al guardar')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) {
+    return <p className="text-gray-500 dark:text-gray-400">Cargando...</p>
   }
 
   return (
@@ -44,65 +81,20 @@ export default function AdminContactoPage() {
         className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-8 max-w-2xl"
       >
         <div className="space-y-6">
-          <AdminInput
-            label="Teléfono"
-            name="telefono"
-            type="tel"
-            value={formData.telefono}
-            onChange={handleChange}
-            placeholder="+56 9 1234 5678"
-          />
-
-          <AdminInput
-            label="Email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="contacto@cherryexperience.cl"
-          />
-
-          <AdminInput
-            label="Ubicación"
-            name="ubicacion"
-            value={formData.ubicacion}
-            onChange={handleChange}
-            placeholder="Puerto Varas, Región de Los Lagos, Chile"
-          />
+          <AdminInput label="Teléfono" name="telefono" type="tel" value={formData.telefono} onChange={handleChange} placeholder="+56 9 1234 5678" />
+          <AdminInput label="Email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="contacto@cherryexperience.cl" />
+          <AdminInput label="Ubicación (ES)" name="ubicacionEs" value={formData.ubicacionEs} onChange={handleChange} placeholder="Puerto Varas, Región de Los Lagos, Chile" />
+          <AdminInput label="Ubicación (EN)" name="ubicacionEn" value={formData.ubicacionEn} onChange={handleChange} placeholder="Puerto Varas, Los Lagos Region, Chile" />
 
           <div className="pt-4 border-t border-gray-200 dark:border-gray-600">
             <h3 className="text-lg font-heading font-bold uppercase text-brand-dark dark:text-white mb-4">
               Redes Sociales
             </h3>
             <div className="space-y-4">
-              <AdminInput
-                label="Instagram URL"
-                name="instagram"
-                type="url"
-                value={formData.instagram}
-                onChange={handleChange}
-              />
-              <AdminInput
-                label="Facebook URL"
-                name="facebook"
-                type="url"
-                value={formData.facebook}
-                onChange={handleChange}
-              />
-              <AdminInput
-                label="WhatsApp URL"
-                name="whatsapp"
-                type="url"
-                value={formData.whatsapp}
-                onChange={handleChange}
-              />
-              <AdminInput
-                label="YouTube URL"
-                name="youtube"
-                type="url"
-                value={formData.youtube}
-                onChange={handleChange}
-              />
+              <AdminInput label="Instagram URL" name="instagram" type="url" value={formData.instagram} onChange={handleChange} />
+              <AdminInput label="Facebook URL" name="facebook" type="url" value={formData.facebook} onChange={handleChange} />
+              <AdminInput label="WhatsApp URL" name="whatsapp" type="url" value={formData.whatsapp} onChange={handleChange} />
+              <AdminInput label="YouTube URL" name="youtube" type="url" value={formData.youtube} onChange={handleChange} />
             </div>
           </div>
 
@@ -110,25 +102,14 @@ export default function AdminContactoPage() {
             <h3 className="text-lg font-heading font-bold uppercase text-brand-dark dark:text-white mb-4">
               Mapa
             </h3>
-            <AdminInput
-              label="URL o iframe del mapa"
-              name="mapaEmbed"
-              value={formData.mapaEmbed}
-              onChange={handleChange}
-              placeholder="Embed de Google Maps u otro servicio"
-            />
-            <div className="mt-4 aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-              <p className="text-gray-500 dark:text-gray-400 font-heading uppercase text-sm">
-                Vista previa del mapa
-              </p>
-            </div>
+            <AdminInput label="URL o iframe del mapa" name="mapaEmbed" value={formData.mapaEmbed} onChange={handleChange} placeholder="Embed de Google Maps u otro servicio" />
           </div>
         </div>
 
         <div className="mt-8">
-          <AdminButton type="submit">
+          <AdminButton type="submit" disabled={saving}>
             <i className="fas fa-save"></i>
-            Guardar
+            {saving ? 'Guardando...' : 'Guardar'}
           </AdminButton>
         </div>
       </form>
