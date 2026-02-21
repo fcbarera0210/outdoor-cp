@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
-import { getLocaleFromRequest } from '@/lib/locale'
+import { getLocaleFromRequest, getLocalized } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
 
 export const dynamic = 'force-dynamic'
@@ -21,22 +21,21 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    const suffix = locale === 'es' ? 'Es' : 'En'
     const list = rutas.map((r) => ({
       id: r.id,
       slug: r.slug,
-      nombre: locale === 'es' ? r.nombreEs : r.nombreEn,
-      zona: locale === 'es' ? r.zonaEs : r.zonaEn,
-      descripcion: locale === 'es' ? r.descripcionEs : r.descripcionEn,
-      duracion: locale === 'es' ? r.duracionEs : r.duracionEn,
+      nombre: getLocalized(r, 'nombre', locale),
+      zona: getLocalized(r, 'zona', locale),
+      descripcion: getLocalized(r, 'descripcion', locale),
+      duracion: getLocalized(r, 'duracion', locale),
       dificultad: r.dificultad,
       imagen: r.imagen,
       destacada: r.destacada,
-      itinerario: r.itinerarios.map((i) => (locale === 'es' ? i.textoEs : i.textoEn)),
-      equipo: r.equipos.map((e) => (locale === 'es' ? e.textoEs : e.textoEn)),
+      itinerario: r.itinerarios.map((i) => getLocalized(i, 'texto', locale)),
+      equipo: r.equipos.map((e) => getLocalized(e, 'texto', locale)),
       proximasSalidas: r.proximasSalidas.map((s) => ({
         fecha: s.fecha,
-        tipo: locale === 'es' ? s.tipoEs : s.tipoEn,
+        tipo: getLocalized(s, 'tipo', locale),
       })),
     }))
 

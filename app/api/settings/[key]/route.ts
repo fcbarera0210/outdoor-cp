@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
-import { getLocaleFromRequest } from '@/lib/locale'
+import { getLocaleFromRequest, getLocalized } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
 
 export const dynamic = 'force-dynamic'
@@ -27,7 +27,7 @@ export async function GET(
 
     // If key is contacto, map ubicacionEs/ubicacionEn to ubicacion by locale
     if (key === 'contacto' && (value.ubicacionEs != null || value.ubicacionEn != null)) {
-      const ubicacion = locale === 'es' ? value.ubicacionEs : value.ubicacionEn
+      const ubicacion = getLocalized(value, 'ubicacion', locale)
       return NextResponse.json({ ...value, ubicacion })
     }
     return NextResponse.json(value)

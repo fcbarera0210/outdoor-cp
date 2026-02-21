@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
+import { sileo } from 'sileo'
 
 interface ImageUploaderProps {
   value: string
@@ -26,7 +27,7 @@ export default function ImageUploader({ value, onChange, label = 'Imagen' }: Ima
       onChange(data.url)
     } catch (e) {
       console.error(e)
-      alert('Error al subir la imagen')
+      sileo.error({ title: 'Error al subir la imagen' })
     } finally {
       setUploading(false)
     }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getLocaleFromRequest } from '@/lib/locale'
+import { getLocaleFromRequest, getLocalized } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
 
 export const dynamic = 'force-dynamic'
@@ -15,9 +15,9 @@ export async function GET(request: NextRequest) {
     const list = miembros.map((m) => ({
       id: m.id,
       nombre: m.nombre,
-      rol: locale === 'es' ? m.rolEs : m.rolEn,
+      rol: getLocalized(m, 'rol', locale),
       imagen: m.imagen,
-      bio: locale === 'es' ? m.bioEs : m.bioEn,
+      bio: getLocalized(m, 'bio', locale),
     }))
     return NextResponse.json(list)
   } catch (e) {

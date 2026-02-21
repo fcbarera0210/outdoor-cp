@@ -8,9 +8,9 @@ import { sectionView, itemView } from '@/components/ui/animations'
 import { getRutas } from '@/services/rutas'
 import type { Ruta } from '@/services/rutas'
 import { useState, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { useTranslation } from 'react-i18next'
+import { useLocale, Link } from '@/i18n/navigation'
+
 
 const STORAGE_KEY = 'cherry_reserva'
 
@@ -20,9 +20,9 @@ function ReservaPaso1Content() {
   const locale = useLocale()
   const [rutas, setRutas] = useState<Ruta[]>([])
   const [loading, setLoading] = useState(true)
-  const t = useTranslations('reserva')
-  const tHome = useTranslations('home')
-  const tCommon = useTranslations('common')
+  const { t } = useTranslation('reserva')
+  const { t: tHome } = useTranslation('home')
+  const { t: tCommon } = useTranslation('common')
 
   useEffect(() => {
     getRutas(locale)
@@ -110,7 +110,7 @@ function ReservaPaso1Content() {
 }
 
 export default function ReservaPaso1Page() {
-  const tCommon = useTranslations('common')
+  const { t: tCommon } = useTranslation('common')
   return (
     <Suspense fallback={<div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center"><div className="animate-pulse text-brand-dark dark:text-white">{tCommon('loading')}</div></div>}>
       <ReservaPaso1Content />

@@ -6,9 +6,8 @@ import { motion } from 'framer-motion'
 import HeroCompact from '@/components/ui/HeroCompact'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getRutaBySlug } from '@/services/rutas'
-import { useLocale } from 'next-intl'
-import { useRouter, Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
+import { useTranslation } from 'react-i18next'
+import { useLocale, useRouter, Link } from '@/i18n/navigation'
 
 const STORAGE_KEY = 'cherry_reserva'
 
@@ -22,9 +21,9 @@ function ReservaDatosContent() {
     if (rutaSlug) getRutaBySlug(rutaSlug, locale).then(setRuta)
     else setRuta(null)
   }, [rutaSlug, locale])
-  const tHome = useTranslations('home')
-  const tReserva = useTranslations('reserva')
-  const tCommon = useTranslations('common')
+  const { t: tHome } = useTranslation('home')
+  const { t: tReserva } = useTranslation('reserva')
+  const { t: tCommon } = useTranslation('common')
 
   const [form, setForm] = useState({
     nombre: '',
@@ -126,7 +125,7 @@ function ReservaDatosContent() {
 }
 
 export default function ReservaDatosPage() {
-  const tCommon = useTranslations('common')
+  const { t: tCommon } = useTranslation('common')
   return (
     <Suspense fallback={<div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center"><div className="animate-pulse text-brand-dark dark:text-white">{tCommon('loading')}</div></div>}>
       <ReservaDatosContent />

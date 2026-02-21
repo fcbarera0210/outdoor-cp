@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
-import { getLocaleFromRequest } from '@/lib/locale'
+import { getLocalized } from '@/lib/locale'
+import type { Locale } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
 
 export const dynamic = 'force-dynamic'
@@ -47,21 +48,21 @@ export async function GET(
       })
     }
 
-    const locale = localeParam === 'en' ? 'en' : 'es'
+    const locale: Locale = localeParam === 'en' ? 'en' : 'es'
     const response = {
       id: ruta.id,
       slug: ruta.slug,
-      nombre: locale === 'es' ? ruta.nombreEs : ruta.nombreEn,
-      zona: locale === 'es' ? ruta.zonaEs : ruta.zonaEn,
-      descripcion: locale === 'es' ? ruta.descripcionEs : ruta.descripcionEn,
-      duracion: locale === 'es' ? ruta.duracionEs : ruta.duracionEn,
+      nombre: getLocalized(ruta, 'nombre', locale),
+      zona: getLocalized(ruta, 'zona', locale),
+      descripcion: getLocalized(ruta, 'descripcion', locale),
+      duracion: getLocalized(ruta, 'duracion', locale),
       dificultad: ruta.dificultad,
       imagen: ruta.imagen,
-      itinerario: ruta.itinerarios.map((i) => (locale === 'es' ? i.textoEs : i.textoEn)),
-      equipo: ruta.equipos.map((e) => (locale === 'es' ? e.textoEs : e.textoEn)),
+      itinerario: ruta.itinerarios.map((i) => getLocalized(i, 'texto', locale)),
+      equipo: ruta.equipos.map((e) => getLocalized(e, 'texto', locale)),
       proximasSalidas: ruta.proximasSalidas.map((s) => ({
         fecha: s.fecha,
-        tipo: locale === 'es' ? s.tipoEs : s.tipoEn,
+        tipo: getLocalized(s, 'tipo', locale),
       })),
     }
     return NextResponse.json(response)
@@ -90,6 +91,7 @@ export async function PUT(
     await prisma.rutaProximaSalida.deleteMany({ where: { rutaId: existing.id } })
 
     const {
+      slug: newSlug,
       nombreEs,
       nombreEn,
       zonaEs,
@@ -110,6 +112,7 @@ export async function PUT(
     const ruta = await prisma.ruta.update({
       where: { slug },
       data: {
+        ...(newSlug != null && newSlug !== slug && { slug: newSlug }),
         ...(nombreEs != null && { nombreEs }),
         ...(nombreEn != null && { nombreEn }),
         ...(zonaEs != null && { zonaEs }),

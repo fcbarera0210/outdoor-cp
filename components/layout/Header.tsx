@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTheme } from '@/components/providers/ThemeProvider'
-import { useTranslations } from 'next-intl'
+import { useTranslation } from 'react-i18next'
 import { Link, usePathname } from '@/i18n/navigation'
 
 const SCROLL_THRESHOLD = 80
@@ -20,7 +20,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [contact, setContact] = useState<ContactSettings>({})
   const { theme, toggleTheme } = useTheme()
-  const t = useTranslations('nav')
+  const { t } = useTranslation('nav')
   const pathname = usePathname()
 
   useEffect(() => {

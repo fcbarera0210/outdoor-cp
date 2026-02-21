@@ -8,7 +8,7 @@ Sitio web para **Cherry Experience**, servicio de turismo outdoor y trekking en 
 - **TypeScript**
 - **Tailwind CSS**
 - **Framer Motion** (animaciones)
-- **next-intl** (i18n: español e inglés)
+- **i18next** + **react-i18next** (i18n: español e inglés)
 - **Prisma** + **Neon** (PostgreSQL)
 - **NextAuth.js** (autenticación admin, JWT)
 - **Vercel Blob** (subida de imágenes)
@@ -82,7 +82,9 @@ turismo/
 │   ├── api/                 # API Routes: auth, rutas, blog, settings, home, equipo, reservas, upload
 │   └── layout.tsx
 ├── components/              # layout, admin, ui, demos
-├── lib/                    # prisma, auth, auth-admin, locale
+├── i18n/                   # routing, config, messages, navigation (Link/useLocale), path, redirect
+├── lib/                    # prisma, auth, auth-admin, locale (getLocaleFromRequest, getLocalized, pickLocale)
+├── messages/               # es.json, en.json (textos de UI por idioma)
 ├── services/               # api, rutas, blog, settings, home, equipo
 ├── prisma/
 │   ├── schema.prisma       # Modelos: User, Ruta, BlogPost, Setting, Reserva, HomeBlock, etc.
@@ -122,7 +124,7 @@ turismo/
 
 ## Características
 
-- ✅ i18n (español e inglés) con next-intl
+- ✅ i18n (español e inglés) con i18next
 - ✅ Base de datos Neon (Prisma): rutas, blog, configuración, reservas, usuarios
 - ✅ NextAuth.js para admin (credenciales + JWT)
 - ✅ Reservas: flujo en 4 pasos y guardado en BD; gestión en `/admin/reservas`
@@ -150,6 +152,17 @@ npm run build
 ```
 
 Si termina sin errores, el despliegue en Vercel será correcto. Las advertencias de ESLint (p. ej. `next/image`) no bloquean el deploy.
+
+## Cambios a subir a Git (i18n con i18next)
+
+Tras la migración de **next-intl** a **i18next**, al hacer commit incluye:
+
+- **Nuevos archivos:** `i18n/config.ts`, `i18n/messages.ts`, `i18n/navigation.tsx`, `i18n/path.ts`, `i18n/redirect.ts`, `components/I18nProvider.tsx`
+- **Modificados:** `i18n/routing.ts` (ya no usa next-intl), `app/[locale]/layout.tsx`, `middleware.ts`, `next.config.js` (sin plugin next-intl), `package.json` (sin next-intl; con i18next y react-i18next), `lib/locale.ts` (convención Es/En y helpers `getLocalized`/`pickLocale`), y todos los componentes/páginas que usaban `useTranslations`/`useLocale` (ahora `useTranslation` de react-i18next y `useLocale`/`Link` de `@/i18n/navigation`)
+- **Eliminados:** `i18n/request.ts`, `i18n/navigation.ts` (el antiguo que usaba next-intl)
+- **APIs:** rutas en `app/api/` que devuelven contenido por idioma usan `getLocalized`/`pickLocale` desde `lib/locale`
+
+Los mensajes de UI siguen en `messages/es.json` y `messages/en.json`. Las rutas públicas siguen siendo `/es/...` y `/en/...`.
 
 ## Branding
 

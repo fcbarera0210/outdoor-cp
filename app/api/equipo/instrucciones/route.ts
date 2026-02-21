@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getLocaleFromRequest } from '@/lib/locale'
+import { getLocalized } from '@/lib/locale'
+import type { Locale } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
 
 export const dynamic = 'force-dynamic'
@@ -32,21 +33,21 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    const locale = localeParam === 'en' ? 'en' : 'es'
+    const locale: Locale = localeParam === 'en' ? 'en' : 'es'
     return NextResponse.json({
-      seguridad: locale === 'es' ? row.seguridadEs : row.seguridadEn,
-      queLlevar: locale === 'es' ? row.queLlevarEs : row.queLlevarEn,
-      comportamiento: locale === 'es' ? row.comportamientoEs : row.comportamientoEn,
-      dificultadFacil: locale === 'es' ? row.dificultadFacilEs : row.dificultadFacilEn,
-      dificultadMedia: locale === 'es' ? row.dificultadMediaEs : row.dificultadMediaEn,
-      dificultadAlta: locale === 'es' ? row.dificultadAltaEs : row.dificultadAltaEn,
-      equipoNecesario: JSON.parse(row.equipoNecesarioJson || '[]').map((item: { tituloEs: string; tituloEn: string; textoEs: string; textoEn: string }) => ({
-        titulo: locale === 'es' ? item.tituloEs : item.tituloEn,
-        texto: locale === 'es' ? item.textoEs : item.textoEn,
+      seguridad: getLocalized(row, 'seguridad', locale),
+      queLlevar: getLocalized(row, 'queLlevar', locale),
+      comportamiento: getLocalized(row, 'comportamiento', locale),
+      dificultadFacil: getLocalized(row, 'dificultadFacil', locale),
+      dificultadMedia: getLocalized(row, 'dificultadMedia', locale),
+      dificultadAlta: getLocalized(row, 'dificultadAlta', locale),
+      equipoNecesario: JSON.parse(row.equipoNecesarioJson || '[]').map((item: Record<string, unknown>) => ({
+        titulo: getLocalized(item, 'titulo', locale),
+        texto: getLocalized(item, 'texto', locale),
       })),
-      senaletica: JSON.parse(row.senaleticaJson || '[]').map((item: { tituloEs: string; tituloEn: string; textoEs: string; textoEn: string }) => ({
-        titulo: locale === 'es' ? item.tituloEs : item.tituloEn,
-        texto: locale === 'es' ? item.textoEs : item.textoEn,
+      senaletica: JSON.parse(row.senaleticaJson || '[]').map((item: Record<string, unknown>) => ({
+        titulo: getLocalized(item, 'titulo', locale),
+        texto: getLocalized(item, 'texto', locale),
       })),
     })
   } catch (e) {

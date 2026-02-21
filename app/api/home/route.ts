@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getLocaleFromRequest } from '@/lib/locale'
+import { getLocaleFromRequest, pickLocale } from '@/lib/locale'
 
 export const dynamic = 'force-dynamic'
 
+/** Aplica convención Es/En y mantiene claves sin sufijo (ej. type, imagen). */
 function pickLang(obj: Record<string, unknown>, locale: 'es' | 'en'): Record<string, string> {
-  const suffix = locale === 'es' ? 'Es' : 'En'
-  const out: Record<string, string> = {}
+  const picked = pickLocale(obj, locale)
   for (const [k, v] of Object.entries(obj)) {
-    if (typeof v !== 'string') continue
-    if (k.endsWith('Es') || k.endsWith('En')) {
-      if (k.endsWith(suffix)) out[k.slice(0, -2)] = v
-    } else {
-      out[k] = v
-    }
+    if (typeof v === 'string' && !k.endsWith('Es') && !k.endsWith('En')) (picked as Record<string, string>)[k] = v
   }
-  return out
+  return picked as Record<string, string>
 }
 
 export async function GET(request: NextRequest) {

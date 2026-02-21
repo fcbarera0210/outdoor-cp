@@ -7,9 +7,8 @@ import HeroCompact from '@/components/ui/HeroCompact'
 import { sectionView, itemView, itemViewX } from '@/components/ui/animations'
 import { getRutaBySlug } from '@/services/rutas'
 import type { Ruta } from '@/services/rutas'
-import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
-import { Link as I18nLink } from '@/i18n/navigation'
+import { useTranslation } from 'react-i18next'
+import { useLocale, Link as I18nLink } from '@/i18n/navigation'
 
 const dificultadColors: Record<string, string> = {
   fácil: 'bg-green-500/20 text-green-800 dark:text-green-200',
@@ -21,8 +20,8 @@ export default function RutaDetailPage({ params }: { params: { slug: string } })
   const locale = useLocale()
   const [ruta, setRuta] = useState<Ruta | null>(null)
   const [loading, setLoading] = useState(true)
-  const tCommon = useTranslations('common')
-  const tHome = useTranslations('home')
+  const { t: tCommon } = useTranslation('common')
+  const { t: tHome } = useTranslation('home')
 
   useEffect(() => {
     getRutaBySlug(params.slug, locale)

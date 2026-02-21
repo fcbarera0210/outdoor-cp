@@ -6,8 +6,8 @@ import HeroCompact from '@/components/ui/HeroCompact'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getContactoSettings } from '@/services/settings'
 import type { ContactoSettings } from '@/services/settings'
-import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
+import { useTranslation } from 'react-i18next'
+import { useLocale } from '@/i18n/navigation'
 
 export default function ContactoPage() {
   const locale = useLocale()
@@ -16,8 +16,8 @@ export default function ContactoPage() {
   useEffect(() => {
     getContactoSettings(locale).then(setSettings).catch(() => setSettings(null))
   }, [locale])
-  const t = useTranslations('contacto')
-  const tHome = useTranslations('home')
+  const { t } = useTranslation('contacto')
+  const { t: tHome } = useTranslation('home')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

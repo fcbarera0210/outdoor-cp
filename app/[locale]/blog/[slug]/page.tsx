@@ -7,17 +7,16 @@ import HeroCompact from '@/components/ui/HeroCompact'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getPostBySlug } from '@/services/blog'
 import type { BlogPost } from '@/services/blog'
-import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { useTranslation } from 'react-i18next'
+import { useLocale, Link } from '@/i18n/navigation'
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const locale = useLocale()
   const [post, setPost] = useState<BlogPost | null>(null)
   const [loading, setLoading] = useState(true)
-  const tCommon = useTranslations('common')
-  const tHome = useTranslations('home')
-  const tBlog = useTranslations('blog')
+  const { t: tCommon } = useTranslation('common')
+  const { t: tHome } = useTranslation('home')
+  const { t: tBlog } = useTranslation('blog')
 
   useEffect(() => {
     getPostBySlug(params.slug, locale)

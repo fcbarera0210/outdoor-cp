@@ -6,17 +6,16 @@ import HeroCompact from '@/components/ui/HeroCompact'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getBlogPosts } from '@/services/blog'
 import type { BlogPost } from '@/services/blog'
-import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { useTranslation } from 'react-i18next'
+import { useLocale, Link } from '@/i18n/navigation'
 
 export default function BlogPage() {
   const locale = useLocale()
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
-  const t = useTranslations('blog')
-  const tHome = useTranslations('home')
-  const tCommon = useTranslations('common')
+  const { t } = useTranslation('blog')
+  const { t: tHome } = useTranslation('home')
+  const { t: tCommon } = useTranslation('common')
 
   useEffect(() => {
     getBlogPosts(locale)

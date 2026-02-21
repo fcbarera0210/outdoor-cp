@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import AdminTable from '@/components/admin/AdminTable'
 import AdminButton from '@/components/admin/AdminButton'
+import { sileo } from 'sileo'
 import { getRutas, deleteRuta } from '@/services/rutas'
 import type { Ruta } from '@/services/rutas'
 
@@ -31,7 +32,7 @@ export default function AdminRutasPage() {
       setRutas((prev) => prev.filter((r) => r.slug !== slug))
     } catch (e) {
       console.error(e)
-      alert('Error al eliminar')
+      sileo.error({ title: 'Error al eliminar' })
     }
   }
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useLocale } from 'next-intl'
+import { useLocale } from '@/i18n/navigation'
 import AndesTrekDemo from '@/components/demos/AndesTrekDemo'
 import { getHomeData } from '@/services/home'
 import { getRutas } from '@/services/rutas'

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
-import { getLocaleFromRequest } from '@/lib/locale'
+import { getLocaleFromRequest, getLocalized } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
 
 export const dynamic = 'force-dynamic'
@@ -15,12 +15,12 @@ export async function GET(request: NextRequest) {
 
     const list = posts.map((p) => ({
       slug: p.slug,
-      title: locale === 'es' ? p.titleEs : p.titleEn,
-      excerpt: locale === 'es' ? p.excerptEs : p.excerptEn,
-      content: locale === 'es' ? p.contentEs : p.contentEn,
+      title: getLocalized(p, 'title', locale),
+      excerpt: getLocalized(p, 'excerpt', locale),
+      content: getLocalized(p, 'content', locale),
       image: p.image,
       date: p.date,
-      author: locale === 'es' ? p.authorEs : p.authorEn,
+      author: getLocalized(p, 'author', locale),
     }))
     return NextResponse.json(list)
   } catch (e) {

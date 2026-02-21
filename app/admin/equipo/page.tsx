@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
 import AdminTable from '@/components/admin/AdminTable'
+import { sileo } from 'sileo'
 import { getInstruccionesForAdmin, updateInstrucciones } from '@/services/equipo'
 import { getMiembros, deleteMiembro } from '@/services/equipo'
 import type { InstruccionesAdmin } from '@/services/equipo'
@@ -63,10 +64,10 @@ export default function AdminEquipoPage() {
     setInstruccionesSaving(true)
     try {
       await updateInstrucciones(instrucciones as unknown as Record<string, unknown>)
-      alert('Guardado correctamente')
+      sileo.success({ title: 'Guardado correctamente' })
     } catch (err) {
       console.error(err)
-      alert('Error al guardar')
+      sileo.error({ title: 'Error al guardar' })
     } finally {
       setInstruccionesSaving(false)
     }
@@ -79,7 +80,7 @@ export default function AdminEquipoPage() {
       setMiembros((prev) => prev.filter((m) => m.id !== id))
     } catch (err) {
       console.error(err)
-      alert('Error al eliminar')
+      sileo.error({ title: 'Error al eliminar' })
     }
   }
 
@@ -153,7 +154,7 @@ export default function AdminEquipoPage() {
                 <AdminInput label="Alta (EN)" name="dificultadAltaEn" value={instrucciones.dificultadAltaEn} onChange={handleInstruccionesChange} />
               </div>
 
-              <AdminButton type="submit" disabled={instruccionesSaving}>
+              <AdminButton type="submit" loading={instruccionesSaving}>
                 <i className="fas fa-save"></i>
                 {instruccionesSaving ? 'Guardando...' : 'Guardar Instrucciones'}
               </AdminButton>

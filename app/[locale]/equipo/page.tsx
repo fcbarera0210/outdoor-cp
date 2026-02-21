@@ -6,9 +6,8 @@ import HeroCompact from '@/components/ui/HeroCompact'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getInstrucciones } from '@/services/equipo'
 import type { Instrucciones } from '@/services/equipo'
-import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { useTranslation } from 'react-i18next'
+import { useLocale, Link } from '@/i18n/navigation'
 
 export default function EquipoPage() {
   const locale = useLocale()
@@ -16,8 +15,8 @@ export default function EquipoPage() {
   useEffect(() => {
     getInstrucciones(locale).then(setInstrucciones).catch(() => setInstrucciones(null))
   }, [locale])
-  const t = useTranslations('equipo')
-  const tHome = useTranslations('home')
+  const { t } = useTranslation('equipo')
+  const { t: tHome } = useTranslation('home')
   return (
     <div>
       <HeroCompact

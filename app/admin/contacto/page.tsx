@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
+import { sileo } from 'sileo'
 import { getSettingRaw, updateSetting } from '@/services/settings'
 
 export default function AdminContactoPage() {
@@ -54,10 +55,10 @@ export default function AdminContactoPage() {
     setSaving(true)
     try {
       await updateSetting('contacto', formData)
-      alert('Guardado correctamente')
+      sileo.success({ title: 'Guardado correctamente' })
     } catch (err) {
       console.error(err)
-      alert('Error al guardar')
+      sileo.error({ title: 'Error al guardar' })
     } finally {
       setSaving(false)
     }
@@ -107,7 +108,7 @@ export default function AdminContactoPage() {
         </div>
 
         <div className="mt-8">
-          <AdminButton type="submit" disabled={saving}>
+          <AdminButton type="submit" loading={saving}>
             <i className="fas fa-save"></i>
             {saving ? 'Guardando...' : 'Guardar'}
           </AdminButton>

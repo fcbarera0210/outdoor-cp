@@ -1,7 +1,10 @@
-import { defineRouting } from 'next-intl/routing'
+/**
+ * Locale routing config. Used by middleware and navigation (no next-intl).
+ */
+export const locales = ['es', 'en'] as const
+export type Locale = (typeof locales)[number]
+export const defaultLocale: Locale = 'es'
 
-export const routing = defineRouting({
-  locales: ['es', 'en'],
-  defaultLocale: 'es',
-  localePrefix: 'always',
-})
+export function isLocale(value: string): value is Locale {
+  return locales.includes(value as Locale)
+}

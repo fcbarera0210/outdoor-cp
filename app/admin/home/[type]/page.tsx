@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import AdminButton from '@/components/admin/AdminButton'
+import { sileo } from 'sileo'
 import { getHomeBlock, updateHomeBlock } from '@/services/home'
 
 const TYPE_LABELS: Record<string, string> = {
@@ -43,9 +44,11 @@ export default function AdminHomeBlockPage() {
     setSaving(true)
     try {
       await updateHomeBlock(type, parsed)
-      alert('Guardado correctamente')
+      sileo.success({ title: 'Guardado correctamente' })
+      setError('')
     } catch (err) {
       console.error(err)
+      sileo.error({ title: 'Error al guardar' })
       setError('Error al guardar')
     } finally {
       setSaving(false)
@@ -88,7 +91,7 @@ export default function AdminHomeBlockPage() {
           spellCheck={false}
         />
         <div className="flex gap-4 mt-4">
-          <AdminButton type="button" onClick={handleSave} disabled={saving}>
+          <AdminButton type="button" onClick={handleSave} loading={saving}>
             <i className="fas fa-save"></i>
             {saving ? 'Guardando...' : 'Guardar'}
           </AdminButton>

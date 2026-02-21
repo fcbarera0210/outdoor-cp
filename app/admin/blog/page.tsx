@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import AdminTable from '@/components/admin/AdminTable'
 import AdminButton from '@/components/admin/AdminButton'
+import { sileo } from 'sileo'
 import { getBlogPosts, deletePost } from '@/services/blog'
 import type { BlogPost } from '@/services/blog'
 
@@ -25,7 +26,7 @@ export default function AdminBlogPage() {
       setPosts((prev) => prev.filter((p) => p.slug !== slug))
     } catch (e) {
       console.error(e)
-      alert('Error al eliminar')
+      sileo.error({ title: 'Error al eliminar' })
     }
   }
 

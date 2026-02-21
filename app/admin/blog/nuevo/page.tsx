@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
 import ImageUploader from '@/components/admin/ImageUploader'
+import { sileo } from 'sileo'
 import { createPost } from '@/services/blog'
 
 export default function AdminBlogNuevoPage() {
@@ -48,10 +49,11 @@ export default function AdminBlogNuevoPage() {
         authorEs: formData.authorEs,
         authorEn: formData.authorEn || formData.authorEs,
       })
+      sileo.success({ title: 'Post creado' })
       router.push('/admin/blog')
     } catch (err) {
       console.error(err)
-      alert('Error al guardar')
+      sileo.error({ title: 'Error al guardar' })
     } finally {
       setSaving(false)
     }
@@ -87,7 +89,7 @@ export default function AdminBlogNuevoPage() {
           <ImageUploader label="Imagen del artículo" value={formData.image} onChange={(url) => setFormData((prev) => ({ ...prev, image: url }))} />
         </div>
         <div className="flex gap-4">
-          <AdminButton type="submit" disabled={saving}>
+          <AdminButton type="submit" loading={saving}>
             <i className="fas fa-save"></i>
             {saving ? 'Guardando...' : 'Guardar'}
           </AdminButton>

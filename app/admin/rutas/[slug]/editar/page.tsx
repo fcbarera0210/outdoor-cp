@@ -6,6 +6,7 @@ import Link from 'next/link'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
 import ImageUploader from '@/components/admin/ImageUploader'
+import { sileo } from 'sileo'
 import { getRutaBySlugForAdmin, updateRuta } from '@/services/rutas'
 import type { Dificultad } from '@/services/rutas'
 
@@ -98,7 +99,7 @@ export default function AdminRutaEditarPage() {
         const [fecha, tipo] = line.split('|')
         return { fecha: (fecha ?? '').trim(), tipoEs: (tipo ?? '').trim(), tipoEn: (tipo ?? '').trim(), orden: i }
       })
-      await updateRuta(formData.slug, {
+      await updateRuta(slug, {
         slug: formData.slug,
         nombreEs: formData.nombreEs,
         nombreEn: formData.nombreEn,
@@ -115,12 +116,13 @@ export default function AdminRutaEditarPage() {
         equipo,
         proximasSalidas,
       })
+      sileo.success({ title: 'Guardado correctamente' })
       if (formData.slug !== slug) {
         window.location.href = `/admin/rutas/${formData.slug}/editar`
       }
     } catch (err) {
       console.error(err)
-      alert('Error al guardar')
+      sileo.error({ title: 'Error al guardar' })
     } finally {
       setSaving(false)
     }
@@ -188,7 +190,7 @@ export default function AdminRutaEditarPage() {
           <AdminInput label="Próximas salidas (fecha|tipo por línea)" name="proximasSalidas" value={formData.proximasSalidas} onChange={handleChange} as="textarea" rows={3} />
         </div>
         <div className="flex gap-4">
-          <AdminButton type="submit" disabled={saving}>
+          <AdminButton type="submit" loading={saving}>
             <i className="fas fa-save"></i>
             {saving ? 'Guardando...' : 'Guardar'}
           </AdminButton>

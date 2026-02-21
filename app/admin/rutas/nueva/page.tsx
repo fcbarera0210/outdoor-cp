@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
 import ImageUploader from '@/components/admin/ImageUploader'
+import { sileo } from 'sileo'
 import { createRuta } from '@/services/rutas'
 import type { Dificultad } from '@/services/rutas'
 
@@ -80,10 +81,11 @@ export default function AdminRutaNuevaPage() {
         equipo,
         proximasSalidas,
       })
+      sileo.success({ title: 'Ruta creada' })
       router.push('/admin/rutas')
     } catch (err) {
       console.error(err)
-      alert('Error al guardar')
+      sileo.error({ title: 'Error al guardar' })
     } finally {
       setSaving(false)
     }
@@ -134,7 +136,7 @@ export default function AdminRutaNuevaPage() {
           <AdminInput label="Próximas salidas (fecha|tipo por línea)" name="proximasSalidas" value={formData.proximasSalidas} onChange={handleChange} as="textarea" rows={3} placeholder="Ene 15 - 20|5 días" />
         </div>
         <div className="flex gap-4">
-          <AdminButton type="submit" disabled={saving}>
+          <AdminButton type="submit" loading={saving}>
             <i className="fas fa-save"></i>
             {saving ? 'Guardando...' : 'Guardar'}
           </AdminButton>

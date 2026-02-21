@@ -6,6 +6,7 @@ import Link from 'next/link'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
 import ImageUploader from '@/components/admin/ImageUploader'
+import { sileo } from 'sileo'
 import { getPostBySlugForAdmin, updatePost } from '@/services/blog'
 
 export default function AdminBlogEditarPage() {
@@ -63,7 +64,7 @@ export default function AdminBlogEditarPage() {
     e.preventDefault()
     setSaving(true)
     try {
-      await updatePost(formData.slug, {
+      await updatePost(slug, {
         slug: formData.slug,
         titleEs: formData.titleEs,
         titleEn: formData.titleEn,
@@ -76,12 +77,13 @@ export default function AdminBlogEditarPage() {
         authorEs: formData.authorEs,
         authorEn: formData.authorEn,
       })
+      sileo.success({ title: 'Guardado correctamente' })
       if (formData.slug !== slug) {
         window.location.href = `/admin/blog/${formData.slug}/editar`
       }
     } catch (err) {
       console.error(err)
-      alert('Error al guardar')
+      sileo.error({ title: 'Error al guardar' })
     } finally {
       setSaving(false)
     }
@@ -129,7 +131,7 @@ export default function AdminBlogEditarPage() {
           <ImageUploader label="Imagen del artículo" value={formData.image} onChange={(url) => setFormData((prev) => ({ ...prev, image: url }))} />
         </div>
         <div className="flex gap-4">
-          <AdminButton type="submit" disabled={saving}>
+          <AdminButton type="submit" loading={saving}>
             <i className="fas fa-save"></i>
             {saving ? 'Guardando...' : 'Guardar'}
           </AdminButton>

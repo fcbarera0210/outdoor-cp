@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useTranslations, useLocale } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { useTranslation } from 'react-i18next'
+import { Link, useLocale } from '@/i18n/navigation'
 
 interface BlogPostPreview {
   slug: string
@@ -18,7 +18,7 @@ interface ContactData {
 }
 
 export default function Footer() {
-  const t = useTranslations('footer')
+  const { t } = useTranslation('footer')
   const locale = useLocale()
   const [recentPosts, setRecentPosts] = useState<BlogPostPreview[]>([])
   const [contact, setContact] = useState<ContactData>({})

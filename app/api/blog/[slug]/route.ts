@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
-import { getLocaleFromRequest } from '@/lib/locale'
+import { getLocalized } from '@/lib/locale'
+import type { Locale } from '@/lib/locale'
 import { requireAdmin } from '@/lib/auth-admin'
 
 export const dynamic = 'force-dynamic'
@@ -33,15 +34,15 @@ export async function GET(
       })
     }
 
-    const locale = localeParam === 'en' ? 'en' : 'es'
+    const locale: Locale = localeParam === 'en' ? 'en' : 'es'
     return NextResponse.json({
       slug: post.slug,
-      title: locale === 'es' ? post.titleEs : post.titleEn,
-      excerpt: locale === 'es' ? post.excerptEs : post.excerptEn,
-      content: locale === 'es' ? post.contentEs : post.contentEn,
+      title: getLocalized(post, 'title', locale),
+      excerpt: getLocalized(post, 'excerpt', locale),
+      content: getLocalized(post, 'content', locale),
       image: post.image,
       date: post.date,
-      author: locale === 'es' ? post.authorEs : post.authorEn,
+      author: getLocalized(post, 'author', locale),
     })
   } catch (e) {
     console.error(e)
