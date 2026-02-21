@@ -178,11 +178,7 @@ export default function AdminRutaEditarPage() {
           <AdminInput label="Dificultad" name="dificultad" value={formData.dificultad} onChange={handleChange} as="select" options={[{ value: 'fácil', label: 'Fácil' }, { value: 'media', label: 'Media' }, { value: 'alta', label: 'Alta' }]} />
           <AdminInput label="Descripción (ES)" name="descripcionEs" value={formData.descripcionEs} onChange={handleChange} as="textarea" rows={4} />
           <AdminInput label="Descripción (EN)" name="descripcionEn" value={formData.descripcionEn} onChange={handleChange} as="textarea" rows={4} />
-          <ImageUploader label="Imagen de la ruta" value={formData.imagen} onChange={(url) => setFormData((prev) => ({ ...prev, imagen: url }))} />
-          <label className="flex items-center gap-2">
-            <input type="checkbox" name="destacada" checked={formData.destacada} onChange={handleChange} className="rounded border-gray-300" />
-            <span className="text-sm font-heading uppercase text-brand-dark dark:text-white">Destacada</span>
-          </label>
+          <ImageUploader label="Imagen de la ruta" value={formData.imagen} onChange={(url) => setFormData((prev) => ({ ...prev, imagen: url }))} tourSlug={slug} />
           <AdminInput label="Itinerario (ES, uno por línea)" name="itinerarioEs" value={formData.itinerarioEs} onChange={handleChange} as="textarea" rows={5} />
           <AdminInput label="Itinerario (EN, uno por línea)" name="itinerarioEn" value={formData.itinerarioEn} onChange={handleChange} as="textarea" rows={5} />
           <AdminInput label="Equipo (ES, uno por línea)" name="equipoEs" value={formData.equipoEs} onChange={handleChange} as="textarea" rows={4} />

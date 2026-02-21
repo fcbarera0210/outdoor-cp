@@ -18,6 +18,6 @@ export async function getHomeBlock(type: string): Promise<Record<string, unknown
   return fetchApi<Record<string, unknown>>(`/api/home/${type}`)
 }
 
-export async function updateHomeBlock(type: string, value: Record<string, unknown>): Promise<void> {
+export async function updateHomeBlock(type: string, value: unknown): Promise<void> {
   await fetchApi(`/api/home/${type}`, { method: 'PUT', body: JSON.stringify(value) })
 }

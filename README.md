@@ -128,7 +128,7 @@ turismo/
 - ✅ Base de datos Neon (Prisma): rutas, blog, configuración, reservas, usuarios
 - ✅ NextAuth.js para admin (credenciales + JWT)
 - ✅ Reservas: flujo en 4 pasos y guardado en BD; gestión en `/admin/reservas`
-- ✅ Subida de imágenes con Vercel Blob en rutas y blog
+- ✅ Subida de imágenes con Vercel Blob: optimización automática (WebP, ≤300 KB), soporte HEIC (heic-to), estructura `tours/{slug}/cover.webp` y `uploads/{id}.webp`; barra de progreso en el admin
 - ✅ Contenido del sitio (contacto, home, equipo) editable desde el admin y reflejado en la web
 - ✅ Tema claro/oscuro (header y admin)
 - ✅ Diseño responsive y animaciones (Framer Motion)
@@ -153,16 +153,37 @@ npm run build
 
 Si termina sin errores, el despliegue en Vercel será correcto. Las advertencias de ESLint (p. ej. `next/image`) no bloquean el deploy.
 
-## Cambios a subir a Git (i18n con i18next)
+## Cambios pendientes a subir a Git
 
-Tras la migración de **next-intl** a **i18next**, al hacer commit incluye:
+### Sistema de imágenes (upload y optimización)
+
+- **`lib/image-upload.ts`** (nuevo): Optimización en cliente con `browser-image-compression` (WebP, max 250 KB, 1920px), conversión HEIC→JPG con `heic-to`, y helpers `uploadTourCover` / `uploadImage`. Carga dinámica de librerías para evitar SSR (`window is not defined`).
+- **`app/api/upload/route.ts`**: Validación WebP y tamaño ≤300 KB; paths `tours/{slug}/cover.webp` (portadas, con `allowOverwrite: true`) y `uploads/{nanoid()}.webp` (genérico); URL de portada con `?v=timestamp` para evitar caché al reemplazar imagen; uso de `nanoid` para nombres.
+- **`components/admin/ImageUploader.tsx`**: Prop `tourSlug` para subir como portada de ruta; barra de progreso por pasos (recibiendo → HEIC→JPG → optimizando → subiendo); soporte HEIC/HEIF (acept y validación); input controlado con `value ?? ''`; aviso cuando la conversión HEIC puede tardar.
+- **`app/admin/rutas/[slug]/editar/page.tsx`**: `ImageUploader` con `tourSlug={slug}`; eliminado checkbox "Destacada" (solo una imagen por ruta).
+- **Dependencias:** `browser-image-compression`, `nanoid`, `heic-to` (reemplaza heic2any para HEIC de iPhones recientes).
+
+### Admin: home, footer y formularios
+
+- **Nuevos:** `app/admin/footer/`, `app/admin/home/secciones/`, `components/admin/AdminFooterForm.tsx`, `AdminHeroForm.tsx`, `AdminPartnersForm.tsx`, `AdminReservaForm.tsx`, `AdminSalidasSectionForm.tsx`.
+- **Modificados:** `app/admin/home/page.tsx`, `app/admin/home/[type]/page.tsx`, `components/admin/AdminSidebar.tsx`, `services/settings.ts`, `app/admin/contacto/page.tsx`, `components/layout/Footer.tsx`, `components/demos/AndesTrekDemo.tsx`, `app/[locale]/page.tsx`.
+
+### Resumen de archivos tocados
+
+| Tipo   | Archivos |
+|--------|----------|
+| Nuevos | `lib/image-upload.ts`, `app/admin/footer/`, `app/admin/home/secciones/`, `AdminFooterForm`, `AdminHeroForm`, `AdminPartnersForm`, `AdminReservaForm`, `AdminSalidasSectionForm` |
+| Modificados | `app/api/upload/route.ts`, `components/admin/ImageUploader.tsx`, `app/admin/rutas/[slug]/editar/page.tsx`, `package.json`, `package-lock.json`, y los listados en Admin arriba |
+
+## Cambios ya documentados (i18n con i18next)
+
+Tras la migración de **next-intl** a **i18next**:
 
 - **Nuevos archivos:** `i18n/config.ts`, `i18n/messages.ts`, `i18n/navigation.tsx`, `i18n/path.ts`, `i18n/redirect.ts`, `components/I18nProvider.tsx`
-- **Modificados:** `i18n/routing.ts` (ya no usa next-intl), `app/[locale]/layout.tsx`, `middleware.ts`, `next.config.js` (sin plugin next-intl), `package.json` (sin next-intl; con i18next y react-i18next), `lib/locale.ts` (convención Es/En y helpers `getLocalized`/`pickLocale`), y todos los componentes/páginas que usaban `useTranslations`/`useLocale` (ahora `useTranslation` de react-i18next y `useLocale`/`Link` de `@/i18n/navigation`)
-- **Eliminados:** `i18n/request.ts`, `i18n/navigation.ts` (el antiguo que usaba next-intl)
-- **APIs:** rutas en `app/api/` que devuelven contenido por idioma usan `getLocalized`/`pickLocale` desde `lib/locale`
+- **Modificados:** `i18n/routing.ts`, `app/[locale]/layout.tsx`, `middleware.ts`, `next.config.js`, `package.json`, `lib/locale.ts`, y componentes que usaban `useTranslations`/`useLocale`
+- **Eliminados:** `i18n/request.ts`, antiguo `i18n/navigation.ts`
 
-Los mensajes de UI siguen en `messages/es.json` y `messages/en.json`. Las rutas públicas siguen siendo `/es/...` y `/en/...`.
+Los mensajes de UI siguen en `messages/es.json` y `messages/en.json`. Las rutas públicas son `/es/...` y `/en/...`.
 
 ## Branding
 

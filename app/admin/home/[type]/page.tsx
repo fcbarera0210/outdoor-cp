@@ -6,6 +6,10 @@ import Link from 'next/link'
 import AdminButton from '@/components/admin/AdminButton'
 import { sileo } from 'sileo'
 import { getHomeBlock, updateHomeBlock } from '@/services/home'
+import AdminHeroForm from '@/components/admin/AdminHeroForm'
+import AdminSalidasSectionForm from '@/components/admin/AdminSalidasSectionForm'
+import AdminReservaForm from '@/components/admin/AdminReservaForm'
+import AdminPartnersForm from '@/components/admin/AdminPartnersForm'
 
 const TYPE_LABELS: Record<string, string> = {
   hero: 'Hero',
@@ -17,6 +21,8 @@ const TYPE_LABELS: Record<string, string> = {
   reserva: 'Bloque Reserva',
 }
 
+const FORM_TYPES = ['hero', 'partners', 'salidasSection', 'reserva']
+
 export default function AdminHomeBlockPage() {
   const params = useParams()
   const type = params.type as string
@@ -25,14 +31,20 @@ export default function AdminHomeBlockPage() {
   const [json, setJson] = useState('{}')
   const [error, setError] = useState('')
 
+  const useForm = FORM_TYPES.includes(type)
+
   useEffect(() => {
+    if (useForm) {
+      setLoading(false)
+      return
+    }
     getHomeBlock(type)
       .then((data) => setJson(JSON.stringify(data, null, 2)))
       .catch(() => setJson('{}'))
       .finally(() => setLoading(false))
-  }, [type])
+  }, [type, useForm])
 
-  const handleSave = async () => {
+  const handleSaveJson = async () => {
     setError('')
     let parsed: Record<string, unknown>
     try {
@@ -55,7 +67,7 @@ export default function AdminHomeBlockPage() {
     }
   }
 
-  if (loading) {
+  if (loading && !useForm) {
     return <p className="text-gray-500 dark:text-gray-400">Cargando...</p>
   }
 
@@ -73,33 +85,47 @@ export default function AdminHomeBlockPage() {
           {TYPE_LABELS[type] ?? type}
         </h1>
         <p className="text-gray-600 dark:text-gray-300">
-          Edita el JSON del bloque. Usa campos con sufijo Es/En para español e inglés.
+          {useForm
+            ? 'Edita los campos del bloque.'
+            : 'Edita el JSON del bloque. Usa campos con sufijo Es/En para español e inglés.'}
         </p>
       </div>
 
-      {error && (
-        <div className="mb-4 p-4 bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 rounded-lg">
-          {error}
+      {useForm && (
+        <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-6">
+          {type === 'hero' && <AdminHeroForm />}
+          {type === 'partners' && <AdminPartnersForm />}
+          {type === 'salidasSection' && <AdminSalidasSectionForm />}
+          {type === 'reserva' && <AdminReservaForm />}
         </div>
       )}
 
-      <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-6">
-        <textarea
-          value={json}
-          onChange={(e) => setJson(e.target.value)}
-          className="w-full h-[60vh] font-mono text-sm p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-900 text-brand-dark dark:text-white"
-          spellCheck={false}
-        />
-        <div className="flex gap-4 mt-4">
-          <AdminButton type="button" onClick={handleSave} loading={saving}>
-            <i className="fas fa-save"></i>
-            {saving ? 'Guardando...' : 'Guardar'}
-          </AdminButton>
-          <AdminButton href="/admin/home" variant="secondary">
-            Cancelar
-          </AdminButton>
-        </div>
-      </div>
+      {!useForm && (
+        <>
+          {error && (
+            <div className="mb-4 p-4 bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 rounded-lg">
+              {error}
+            </div>
+          )}
+          <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-6">
+            <textarea
+              value={json}
+              onChange={(e) => setJson(e.target.value)}
+              className="w-full h-[60vh] font-mono text-sm p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-900 text-brand-dark dark:text-white"
+              spellCheck={false}
+            />
+            <div className="flex gap-4 mt-4">
+              <AdminButton type="button" onClick={handleSaveJson} loading={saving}>
+                <i className="fas fa-save"></i>
+                {saving ? 'Guardando...' : 'Guardar'}
+              </AdminButton>
+              <AdminButton href="/admin/home" variant="secondary">
+                Cancelar
+              </AdminButton>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

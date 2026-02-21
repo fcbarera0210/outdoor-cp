@@ -13,6 +13,8 @@ const navItems = [
   { href: '/admin/reservas', label: 'Reservas', icon: 'fa-calendar-check' },
   { href: '/admin/contacto', label: 'Contacto', icon: 'fa-address-book' },
   { href: '/admin/equipo', label: 'Equipo', icon: 'fa-users' },
+  { href: '/admin/home', label: 'Home', icon: 'fa-th-large' },
+  { href: '/admin/footer', label: 'Footer', icon: 'fa-window-minimize' },
   { href: '/admin/imagenes', label: 'Galería', icon: 'fa-images' },
 ]
 

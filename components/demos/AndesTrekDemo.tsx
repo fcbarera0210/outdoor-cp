@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
 import type { HomeData } from '@/services/home'
 import type { Ruta } from '@/services/rutas'
+import type { HomeSectionsSettings } from '@/services/settings'
 
 const sectionView = {
   initial: { opacity: 0, y: 40 },
@@ -13,12 +14,15 @@ const sectionView = {
   transition: { duration: 0.5 },
 }
 
+const DEFAULT_SECTION_ORDER = ['partners', 'featuredSection', 'gallery', 'salidasSection', 'reserva']
+
 interface AndesTrekDemoProps {
   homeData?: HomeData | null
   featuredRutas?: Ruta[]
+  homeSections?: HomeSectionsSettings | null
 }
 
-export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemoProps) {
+export default function AndesTrekDemo({ homeData, featuredRutas, homeSections }: AndesTrekDemoProps) {
   const hero = homeData?.hero as Record<string, string> | undefined
   const partners = homeData?.partners as Record<string, string>[] | undefined
   const featuredSection = homeData?.featuredSection as Record<string, string> | undefined
@@ -26,6 +30,12 @@ export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemo
   const gallerySection = homeData?.gallerySection as Record<string, string> | undefined
   const salidasSection = homeData?.salidasSection as Record<string, string> | undefined
   const reserva = homeData?.reserva as Record<string, string> | undefined
+
+  const order = (homeSections?.order?.length ? homeSections.order : DEFAULT_SECTION_ORDER).filter((id) =>
+    DEFAULT_SECTION_ORDER.includes(id)
+  )
+  const visibility = homeSections?.visibility ?? {}
+  const toShow = order.filter((type) => visibility[type] !== false)
 
   useEffect(() => {
     // Image fallback handler
@@ -116,7 +126,9 @@ export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemo
         <div className="torn-separator-bottom"></div>
       </header>
 
-      {/* Partners / Logos Section */}
+      {toShow.map((sectionType) => (
+        <Fragment key={sectionType}>
+          {sectionType === 'partners' && (
       <motion.section
         className="py-16 bg-brand-light dark:bg-gray-900"
         {...sectionView}
@@ -125,7 +137,15 @@ export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemo
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
             {partners?.length ? partners.map((p, i) => (
               <div key={i} className="flex flex-col items-center group">
-                <i className="fas fa-hiking text-4xl mb-2 text-brand-dark dark:text-gray-300 group-hover:text-brand-primary transition"></i>
+                {p.logo ? (
+                  <img
+                    src={p.logo}
+                    alt={p.nombre ?? ''}
+                    className="h-12 w-auto max-w-[120px] object-contain mb-2 opacity-70 group-hover:opacity-100 transition"
+                  />
+                ) : (
+                  <i className="fas fa-hiking text-4xl mb-2 text-brand-dark dark:text-gray-300 group-hover:text-brand-primary transition"></i>
+                )}
                 <span className="font-heading font-bold text-xs tracking-widest uppercase text-brand-dark dark:text-gray-300">{p.nombre ?? ''}</span>
               </div>
             )) : (
@@ -150,8 +170,8 @@ export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemo
           </div>
         </div>
       </motion.section>
-
-      {/* Main Content: Travel Essentials Tips */}
+          )}
+          {sectionType === 'featuredSection' && (
       <motion.section
         className="py-20 bg-brand-light dark:bg-gray-900 bg-topo-pattern relative"
         {...sectionView}
@@ -257,8 +277,8 @@ export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemo
           )}
         </div>
       </motion.section>
-
-      {/* Gallery Grid */}
+          )}
+          {sectionType === 'gallery' && (
       <motion.section
         className="py-20 bg-brand-gray dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
         {...sectionView}
@@ -322,8 +342,8 @@ export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemo
           </div>
         </div>
       </motion.section>
-
-      {/* Próximas Salidas Section */}
+          )}
+          {sectionType === 'salidasSection' && (
       <motion.section
         className="relative py-20 bg-brand-light dark:bg-gray-900 overflow-hidden"
         {...sectionView}
@@ -426,8 +446,8 @@ export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemo
           </div>
         </div>
       </motion.section>
-
-      {/* Contact / Reservation Section */}
+          )}
+          {sectionType === 'reserva' && (
       <motion.section
         id="reserva"
         className="py-24 relative bg-brand-dark text-white overflow-hidden flex items-center"
@@ -512,6 +532,9 @@ export default function AndesTrekDemo({ homeData, featuredRutas }: AndesTrekDemo
           </div>
         </div>
       </motion.section>
+          )}
+        </Fragment>
+      ))}
 
     </div>
   )

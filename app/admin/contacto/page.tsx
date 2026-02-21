@@ -92,10 +92,10 @@ export default function AdminContactoPage() {
               Redes Sociales
             </h3>
             <div className="space-y-4">
-              <AdminInput label="Instagram URL" name="instagram" type="url" value={formData.instagram} onChange={handleChange} />
-              <AdminInput label="Facebook URL" name="facebook" type="url" value={formData.facebook} onChange={handleChange} />
-              <AdminInput label="WhatsApp URL" name="whatsapp" type="url" value={formData.whatsapp} onChange={handleChange} />
-              <AdminInput label="YouTube URL" name="youtube" type="url" value={formData.youtube} onChange={handleChange} />
+              <AdminInput label="Instagram URL" name="instagram" type="text" value={formData.instagram} onChange={handleChange} placeholder="https://instagram.com/..." />
+              <AdminInput label="Facebook URL" name="facebook" type="text" value={formData.facebook} onChange={handleChange} placeholder="https://facebook.com/..." />
+              <AdminInput label="WhatsApp URL" name="whatsapp" type="text" value={formData.whatsapp} onChange={handleChange} placeholder="https://wa.me/..." />
+              <AdminInput label="YouTube URL" name="youtube" type="text" value={formData.youtube} onChange={handleChange} placeholder="https://youtube.com/..." />
             </div>
           </div>
 
