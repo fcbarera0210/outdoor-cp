@@ -4,11 +4,12 @@ export interface Instrucciones {
   seguridad: string
   queLlevar: string
   comportamiento: string
+  instruccionesBasicas: { titulo: string; texto: string; icono?: string }[]
   dificultadFacil: string
   dificultadMedia: string
   dificultadAlta: string
-  equipoNecesario: { titulo: string; texto: string }[]
-  senaletica: { titulo: string; texto: string }[]
+  equipoNecesario: { titulo: string; texto: string; icono?: string }[]
+  senaletica: { titulo: string; texto: string; icono?: string }[]
 }
 
 export interface MiembroEquipo {
@@ -34,14 +35,15 @@ export interface InstruccionesAdmin {
   queLlevarEn: string
   comportamientoEs: string
   comportamientoEn: string
+  instruccionesBasicas: { tituloEs?: string; tituloEn?: string; textoEs?: string; textoEn?: string; icono?: string }[]
   dificultadFacilEs: string
   dificultadFacilEn: string
   dificultadMediaEs: string
   dificultadMediaEn: string
   dificultadAltaEs: string
   dificultadAltaEn: string
-  equipoNecesario: { tituloEs?: string; tituloEn?: string; textoEs?: string; textoEn?: string }[]
-  senaletica: { tituloEs?: string; tituloEn?: string; textoEs?: string; textoEn?: string }[]
+  equipoNecesario: { tituloEs?: string; tituloEn?: string; textoEs?: string; textoEn?: string; icono?: string }[]
+  senaletica: { tituloEs?: string; tituloEn?: string; textoEs?: string; textoEn?: string; icono?: string }[]
 }
 
 export async function getInstruccionesForAdmin(): Promise<InstruccionesAdmin | null> {

@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { sileo } from 'sileo'
+import { useConfirm } from '@/components/admin/AdminConfirmContext'
 
 interface Reserva {
   id: string
@@ -21,6 +23,7 @@ const estadoColors: Record<string, string> = {
 }
 
 export default function AdminReservasPage() {
+  const confirm = useConfirm()
   const [reservas, setReservas] = useState<Reserva[]>([])
   const [loading, setLoading] = useState(true)
   const [filtro, setFiltro] = useState<string>('todos')
@@ -61,14 +64,23 @@ export default function AdminReservasPage() {
   }
 
   const deleteReserva = async (id: string) => {
-    if (!confirm('¿Estás seguro de eliminar esta reserva?')) return
+    const ok = await confirm({
+      title: 'Eliminar reserva',
+      message: '¿Estás seguro de eliminar esta reserva?',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
     try {
       const res = await fetch(`/api/reservas/${id}`, { method: 'DELETE' })
       if (res.ok) {
         setReservas((prev) => prev.filter((r) => r.id !== id))
+        sileo.success({ title: 'Reserva eliminada' })
+      } else {
+        sileo.error({ title: 'Error al eliminar' })
       }
     } catch (e) {
       console.error(e)
+      sileo.error({ title: 'Error al eliminar' })
     }
   }
 

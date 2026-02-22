@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
+    "@iconify/react": "^6.0.2",
     "@prisma/client": "^5.22.0",
     "@vercel/blob": "^2.3.0",
     "bcryptjs": "^3.0.3",

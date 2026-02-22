@@ -32,10 +32,16 @@ export async function GET(request: NextRequest) {
       imagen: r.imagen,
       destacada: r.destacada,
       itinerario: r.itinerarios.map((i) => getLocalized(i, 'texto', locale)),
-      equipo: r.equipos.map((e) => getLocalized(e, 'texto', locale)),
+      equipo: r.equipos.map((e) => ({
+        titulo: getLocalized(e, 'titulo', locale),
+        texto: getLocalized(e, 'texto', locale),
+        icono: e.icono || undefined,
+      })),
       proximasSalidas: r.proximasSalidas.map((s) => ({
+        id: s.id,
         fecha: s.fecha,
-        tipo: getLocalized(s, 'tipo', locale),
+        cupos: s.cupos ?? 0,
+        cuposDisponibles: s.cupos ?? 0,
       })),
     }))
 
@@ -61,6 +67,8 @@ export async function POST(request: NextRequest) {
       descripcionEn,
       duracionEs,
       duracionEn,
+      duracionDias,
+      duracionNoches,
       dificultad,
       imagen,
       destacada,
@@ -81,6 +89,8 @@ export async function POST(request: NextRequest) {
         descripcionEn: descripcionEn ?? '',
         duracionEs: duracionEs ?? '',
         duracionEn: duracionEn ?? '',
+        duracionDias: duracionDias != null ? Number(duracionDias) : 0,
+        duracionNoches: duracionNoches != null ? Number(duracionNoches) : 0,
         dificultad: dificultad ?? 'media',
         imagen: imagen ?? '',
         destacada: Boolean(destacada),
@@ -93,17 +103,19 @@ export async function POST(request: NextRequest) {
             })) }
           : undefined,
         equipos: Array.isArray(equipo)
-          ? { create: equipo.map((t: { textoEs: string; textoEn?: string }, i: number) => ({
-              textoEs: typeof t === 'string' ? t : t.textoEs,
+          ? { create: equipo.map((t: { tituloEs?: string; tituloEn?: string; textoEs: string; textoEn?: string; icono?: string }, i: number) => ({
+              tituloEs: t?.tituloEs ?? '',
+              tituloEn: t?.tituloEn ?? '',
+              textoEs: typeof t === 'string' ? t : (t.textoEs ?? ''),
               textoEn: typeof t === 'object' && t?.textoEn != null ? t.textoEn : '',
+              icono: typeof t === 'object' && t?.icono != null ? t.icono : '',
               orden: i,
             })) }
           : undefined,
         proximasSalidas: Array.isArray(proximasSalidas)
-          ? { create: proximasSalidas.map((s: { fecha: string; tipoEs?: string; tipoEn?: string; tipo?: string }, i: number) => ({
+          ? { create: proximasSalidas.map((s: { fecha: string; cupos?: number }, i: number) => ({
               fecha: s.fecha ?? '',
-              tipoEs: s.tipoEs ?? s.tipo ?? '',
-              tipoEn: s.tipoEn ?? '',
+              cupos: typeof s.cupos === 'number' ? s.cupos : Number(s.cupos) || 0,
               orden: i,
             })) }
           : undefined,

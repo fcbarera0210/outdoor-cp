@@ -30,6 +30,8 @@ async function main() {
       descripcionEn: 'An unforgettable trek along the most iconic trails of Torres del Paine National Park. Walk past the Cuernos, the French Valley and Grey Glacier. Includes refuges and meals.',
       duracionEs: '5 Días / 4 Noches',
       duracionEn: '5 Days / 4 Nights',
+      duracionDias: 5,
+      duracionNoches: 4,
       dificultad: 'media',
       imagen: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
       destacada: true,
@@ -48,8 +50,8 @@ async function main() {
         { textoEs: 'Sleeping bag', textoEn: 'Sleeping bag', orden: 3 },
       ],
       proximasSalidas: [
-        { fecha: 'Ene 15 - 20', tipoEs: '5 días', tipoEn: '5 days', orden: 0 },
-        { fecha: 'Feb 05 - 10', tipoEs: 'Full Experience', tipoEn: 'Full Experience', orden: 1 },
+        { fecha: '2025-01-15', cupos: 12, orden: 0 },
+        { fecha: '2025-02-05', cupos: 12, orden: 1 },
       ],
     },
     {
@@ -62,6 +64,8 @@ async function main() {
       descripcionEn: 'Challenge your limits climbing one of South America\'s most active volcanoes. Panoramic views of lakes and mountains from the smoking summit. Technical equipment included.',
       duracionEs: 'Full Day',
       duracionEn: 'Full Day',
+      duracionDias: 1,
+      duracionNoches: 0,
       dificultad: 'alta',
       imagen: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
       destacada: true,
@@ -80,8 +84,8 @@ async function main() {
         { textoEs: 'Ropa técnica', textoEn: 'Technical clothing', orden: 3 },
       ],
       proximasSalidas: [
-        { fecha: 'Ene 20', tipoEs: 'Full Day', tipoEn: 'Full Day', orden: 0 },
-        { fecha: 'Feb 02', tipoEs: 'Full Day', tipoEn: 'Full Day', orden: 1 },
+        { fecha: '2025-01-20', cupos: 8, orden: 0 },
+        { fecha: '2025-02-02', cupos: 8, orden: 1 },
       ],
     },
     {
@@ -94,6 +98,8 @@ async function main() {
       descripcionEn: 'A full-day route through the Maipo Valley. Perfect for starting trekking with high mountain landscapes just minutes from Santiago.',
       duracionEs: '1 Día',
       duracionEn: '1 Day',
+      duracionDias: 1,
+      duracionNoches: 0,
       dificultad: 'fácil',
       imagen: 'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
       destacada: false,
@@ -111,7 +117,7 @@ async function main() {
         { textoEs: 'Agua 2L', textoEn: '2L Water', orden: 2 },
       ],
       proximasSalidas: [
-        { fecha: 'Cada Sábado', tipoEs: 'Full Day', tipoEn: 'Full Day', orden: 0 },
+        { fecha: '2025-02-01', cupos: 10, orden: 0 },
       ],
     },
     {
@@ -124,6 +130,8 @@ async function main() {
       descripcionEn: 'Explore the most impressive glaciers of the south. Views of Grey Glacier, walk on ancient ice and nights under the stars.',
       duracionEs: '5 Días / 4 Noches',
       duracionEn: '5 Days / 4 Nights',
+      duracionDias: 5,
+      duracionNoches: 4,
       dificultad: 'media',
       imagen: 'https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
       destacada: false,
@@ -141,7 +149,7 @@ async function main() {
         { textoEs: 'Ropa térmica', textoEn: 'Thermal clothing', orden: 2 },
       ],
       proximasSalidas: [
-        { fecha: 'Ene 15 - 20', tipoEs: '5 días', tipoEn: '5 days', orden: 0 },
+        { fecha: '2025-01-15', cupos: 8, orden: 0 },
       ],
     },
     {
@@ -154,6 +162,8 @@ async function main() {
       descripcionEn: 'Extreme contrasts: geysers at dawn, endless salt flats and highland lagoons. A unique experience in the world\'s driest desert.',
       duracionEs: '4 Días / 3 Noches',
       duracionEn: '4 Days / 3 Nights',
+      duracionDias: 4,
+      duracionNoches: 3,
       dificultad: 'fácil',
       imagen: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
       destacada: false,
@@ -170,7 +180,7 @@ async function main() {
         { textoEs: 'Agua', textoEn: 'Water', orden: 2 },
       ],
       proximasSalidas: [
-        { fecha: 'Todo el año', tipoEs: 'Flexible', tipoEn: 'Flexible', orden: 0 },
+        { fecha: '2025-03-01', cupos: 6, orden: 0 },
       ],
     },
   ]

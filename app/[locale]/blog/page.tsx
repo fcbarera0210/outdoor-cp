@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import HeroCompact from '@/components/ui/HeroCompact'
+import { Skeleton, SkeletonLine, SkeletonImage } from '@/components/ui/Skeleton'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getBlogPosts } from '@/services/blog'
 import type { BlogPost } from '@/services/blog'
@@ -33,7 +34,18 @@ export default function BlogPage() {
       >
         <div className="container mx-auto px-6 max-w-6xl">
           {loading ? (
-            <div className="flex justify-center py-20 text-brand-dark dark:text-white font-heading uppercase">{tCommon('loading')}</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="bg-brand-light dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                  <SkeletonImage className="h-48" aspectRatio="" />
+                  <div className="p-6 space-y-2">
+                    <Skeleton className="h-6 w-4/5" />
+                    <SkeletonLine className="w-full" />
+                    <SkeletonLine className="w-3/4" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post, index) => (

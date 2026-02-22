@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import HeroCompact from '@/components/ui/HeroCompact'
+import { Skeleton, SkeletonLine } from '@/components/ui/Skeleton'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getRutaBySlug } from '@/services/rutas'
 import { useTranslation } from 'react-i18next'
@@ -66,7 +67,43 @@ function ReservaConfirmacionContent() {
     }
   }
 
-  if (ruta === undefined) return <div className="min-h-screen flex items-center justify-center"><p className="font-heading uppercase text-brand-dark dark:text-white">{tCommon('loading')}</p></div>
+  if (ruta === undefined) {
+    return (
+      <div>
+        <HeroCompact title="Confirmar Reserva" subtitle="Paso 4 de 4" breadcrumb={[{ label: tHome('breadcrumbHome'), href: '/' }, { label: tReserva('breadcrumb'), href: '/reserva' }]} />
+        <section className="py-20 bg-brand-light dark:bg-gray-900">
+          <div className="container mx-auto px-6 max-w-4xl">
+            <div className="flex justify-center gap-4 mb-16">
+              {[1, 2, 3, 4].map((step) => (
+                <Skeleton key={step} className="w-10 h-10 rounded-full" />
+              ))}
+            </div>
+            <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-8 space-y-8">
+              <div className="space-y-2">
+                <SkeletonLine className="w-16 h-3" />
+                <Skeleton className="h-6 w-48" />
+                <SkeletonLine className="w-36" />
+              </div>
+              <div className="space-y-2">
+                <SkeletonLine className="w-28 h-3" />
+                <Skeleton className="h-5 w-32" />
+            </div>
+              <div className="space-y-2">
+                <SkeletonLine className="w-20 h-3" />
+                <Skeleton className="h-5 w-40" />
+                <Skeleton className="h-5 w-56" />
+                <SkeletonLine className="w-24" />
+              </div>
+            </div>
+            <div className="flex gap-4 mt-8">
+              <Skeleton className="h-11 w-24 rounded-lg" />
+              <Skeleton className="h-11 w-40 rounded-lg" />
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
   if (!ruta) return null
 
   return (
@@ -161,10 +198,51 @@ function ReservaConfirmacionContent() {
   )
 }
 
-export default function ReservaConfirmacionPage() {
-  const { t: tCommon } = useTranslation('common')
+function ReservaConfirmacionSkeleton() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center"><div className="animate-pulse text-brand-dark dark:text-white">{tCommon('loading')}</div></div>}>
+    <div>
+      <header className="relative h-[55vh] min-h-[400px] flex flex-col items-center justify-end bg-gray-800 overflow-hidden">
+        <div className="relative z-10 pb-16 flex flex-col items-center gap-2">
+          <Skeleton className="h-12 w-56 rounded" />
+          <Skeleton className="h-5 w-44 rounded" />
+        </div>
+      </header>
+      <section className="py-20 bg-brand-light dark:bg-gray-900">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <div className="flex justify-center gap-4 mb-16">
+            {[1, 2, 3, 4].map((s) => (
+              <Skeleton key={s} className="w-10 h-10 rounded-full" />
+            ))}
+          </div>
+          <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-8 space-y-8">
+            <div className="space-y-2">
+              <SkeletonLine className="w-16 h-3" />
+              <Skeleton className="h-6 w-48" />
+              <SkeletonLine className="w-36" />
+            </div>
+            <div className="space-y-2">
+              <SkeletonLine className="w-28 h-3" />
+              <Skeleton className="h-5 w-32" />
+            </div>
+            <div className="space-y-2">
+              <SkeletonLine className="w-20 h-3" />
+              <Skeleton className="h-5 w-40" />
+              <Skeleton className="h-5 w-56" />
+            </div>
+          </div>
+          <div className="flex gap-4 mt-8">
+            <Skeleton className="h-11 w-24 rounded-lg" />
+            <Skeleton className="h-11 w-40 rounded-lg" />
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default function ReservaConfirmacionPage() {
+  return (
+    <Suspense fallback={<ReservaConfirmacionSkeleton />}>
       <ReservaConfirmacionContent />
     </Suspense>
   )

@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
         queLlevarEn: row.queLlevarEn,
         comportamientoEs: row.comportamientoEs,
         comportamientoEn: row.comportamientoEn,
+        instruccionesBasicas: JSON.parse(row.instruccionesBasicasJson || '[]'),
         dificultadFacilEs: row.dificultadFacilEs,
         dificultadFacilEn: row.dificultadFacilEn,
         dificultadMediaEs: row.dificultadMediaEs,
@@ -34,20 +35,28 @@ export async function GET(request: NextRequest) {
     }
 
     const locale: Locale = localeParam === 'en' ? 'en' : 'es'
+    const instruccionesBasicasRaw = JSON.parse(row.instruccionesBasicasJson || '[]') as Record<string, unknown>[]
     return NextResponse.json({
       seguridad: getLocalized(row, 'seguridad', locale),
       queLlevar: getLocalized(row, 'queLlevar', locale),
       comportamiento: getLocalized(row, 'comportamiento', locale),
+      instruccionesBasicas: instruccionesBasicasRaw.map((item) => ({
+        titulo: getLocalized(item, 'titulo', locale),
+        texto: getLocalized(item, 'texto', locale),
+        icono: typeof item.icono === 'string' ? item.icono : undefined,
+      })),
       dificultadFacil: getLocalized(row, 'dificultadFacil', locale),
       dificultadMedia: getLocalized(row, 'dificultadMedia', locale),
       dificultadAlta: getLocalized(row, 'dificultadAlta', locale),
       equipoNecesario: JSON.parse(row.equipoNecesarioJson || '[]').map((item: Record<string, unknown>) => ({
         titulo: getLocalized(item, 'titulo', locale),
         texto: getLocalized(item, 'texto', locale),
+        icono: typeof item.icono === 'string' ? item.icono : undefined,
       })),
       senaletica: JSON.parse(row.senaleticaJson || '[]').map((item: Record<string, unknown>) => ({
         titulo: getLocalized(item, 'titulo', locale),
         texto: getLocalized(item, 'texto', locale),
+        icono: typeof item.icono === 'string' ? item.icono : undefined,
       })),
     })
   } catch (e) {
@@ -70,6 +79,7 @@ export async function PUT(request: NextRequest) {
       queLlevarEn: body.queLlevarEn ?? '',
       comportamientoEs: body.comportamientoEs ?? '',
       comportamientoEn: body.comportamientoEn ?? '',
+      instruccionesBasicasJson: typeof body.instruccionesBasicas === 'string' ? body.instruccionesBasicas : JSON.stringify(body.instruccionesBasicas ?? []),
       dificultadFacilEs: body.dificultadFacilEs ?? '',
       dificultadFacilEn: body.dificultadFacilEn ?? '',
       dificultadMediaEs: body.dificultadMediaEs ?? '',
@@ -90,6 +100,7 @@ export async function PUT(request: NextRequest) {
         queLlevarEn: data.queLlevarEn,
         comportamientoEs: data.comportamientoEs,
         comportamientoEn: data.comportamientoEn,
+        instruccionesBasicasJson: data.instruccionesBasicasJson,
         dificultadFacilEs: data.dificultadFacilEs,
         dificultadFacilEn: data.dificultadFacilEn,
         dificultadMediaEs: data.dificultadMediaEs,

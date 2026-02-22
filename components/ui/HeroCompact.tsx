@@ -17,7 +17,7 @@ export default function HeroCompact({ title, subtitle, breadcrumb }: HeroCompact
           alt=""
           className="w-full h-full object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-dark/80"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/60 via-transparent to-brand-dark/80"></div>
       </div>
       <div className="relative z-10 text-center text-white px-4 pb-12 md:pb-16">
         {breadcrumb && breadcrumb.length > 0 && (

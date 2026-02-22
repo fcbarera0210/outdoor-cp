@@ -3,6 +3,7 @@
 import { Fragment, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
+import { Skeleton, SkeletonLine, SkeletonImage, SkeletonAvatar } from '@/components/ui/Skeleton'
 import type { HomeData } from '@/services/home'
 import type { Ruta } from '@/services/rutas'
 import type { HomeSectionsSettings } from '@/services/settings'
@@ -17,12 +18,13 @@ const sectionView = {
 const DEFAULT_SECTION_ORDER = ['partners', 'featuredSection', 'gallery', 'salidasSection', 'reserva']
 
 interface AndesTrekDemoProps {
+  loading?: boolean
   homeData?: HomeData | null
   featuredRutas?: Ruta[]
   homeSections?: HomeSectionsSettings | null
 }
 
-export default function AndesTrekDemo({ homeData, featuredRutas, homeSections }: AndesTrekDemoProps) {
+export default function AndesTrekDemo({ loading, homeData, featuredRutas, homeSections }: AndesTrekDemoProps) {
   const hero = homeData?.hero as Record<string, string> | undefined
   const partners = homeData?.partners as Record<string, string>[] | undefined
   const featuredSection = homeData?.featuredSection as Record<string, string> | undefined
@@ -38,21 +40,169 @@ export default function AndesTrekDemo({ homeData, featuredRutas, homeSections }:
   const toShow = order.filter((type) => visibility[type] !== false)
 
   useEffect(() => {
-    // Image fallback handler
+    if (loading) return
     const images = document.querySelectorAll('img[src*="unsplash.com"]')
     const fallbackImages = [
       'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
       'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
       'https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80',
     ]
-
     images.forEach((img) => {
       img.addEventListener('error', () => {
         const randomFallback = fallbackImages[Math.floor(Math.random() * fallbackImages.length)]
         ;(img as HTMLImageElement).src = randomFallback
       })
     })
-  }, [])
+  }, [loading])
+
+  if (loading) {
+    return (
+      <div>
+        <header className="relative h-screen min-h-[600px] flex items-center justify-center bg-gray-900 overflow-hidden pt-[120px]">
+          <div className="absolute inset-0 z-0 bg-gray-800" />
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/60 via-transparent to-brand-dark/30" />
+          <div className="relative z-10 text-center text-white px-4 max-w-5xl flex flex-col items-center">
+            <Skeleton className="h-8 w-48 mb-4 bg-white/20" />
+            <Skeleton className="h-14 w-80 max-w-full mb-2 bg-white/20" />
+            <Skeleton className="h-14 w-72 max-w-full mb-6 bg-white/20" />
+            <SkeletonLine className="w-96 max-w-full h-5 mb-10 bg-white/20" />
+            <div className="flex gap-4">
+              <Skeleton className="h-12 w-40 bg-white/20" />
+              <Skeleton className="h-12 w-40 bg-white/20" />
+            </div>
+          </div>
+          <div className="torn-separator-bottom" />
+        </header>
+        <section className="py-16 bg-brand-light dark:bg-gray-900">
+          <div className="container mx-auto px-6">
+            <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <Skeleton className="h-12 w-24 rounded" />
+                  <SkeletonLine className="w-16 mt-2" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="py-20 bg-brand-light dark:bg-gray-900">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-20">
+              <SkeletonLine className="w-40 h-6 mx-auto mb-2" />
+              <Skeleton className="h-12 w-96 max-w-full mx-auto" />
+            </div>
+            <div className="flex flex-col md:flex-row items-center gap-12 mb-24">
+              <div className="w-full md:w-1/2">
+                <SkeletonImage className="h-[400px] rounded-lg" aspectRatio="" />
+              </div>
+              <div className="w-full md:w-1/2 space-y-3">
+                <SkeletonLine className="w-3/4" />
+                <Skeleton className="h-10 w-full" />
+                <SkeletonLine className="w-full" />
+                <SkeletonLine className="w-full" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row-reverse items-center gap-12 mb-20">
+              <div className="w-full md:w-1/2">
+                <SkeletonImage className="h-[400px] rounded-lg" aspectRatio="" />
+              </div>
+              <div className="w-full md:w-1/2 space-y-3 md:text-right">
+                <SkeletonLine className="w-3/4 md:ml-auto" />
+                <Skeleton className="h-10 w-full" />
+                <SkeletonLine className="w-full" />
+                <SkeletonLine className="w-full" />
+                <Skeleton className="h-4 w-32 md:ml-auto" />
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="py-20 bg-brand-gray dark:bg-gray-800">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 pb-6 border-b border-gray-300 dark:border-gray-600">
+              <div>
+                <SkeletonLine className="w-48 h-6 mb-1" />
+                <Skeleton className="h-10 w-64" />
+              </div>
+              <Skeleton className="h-4 w-36 mt-4 md:mt-0" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <SkeletonImage key={i} className={`h-[450px] ${i === 2 ? 'mt-0 md:-mt-8' : ''}`} aspectRatio="" />
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="py-20 bg-brand-light dark:bg-gray-900">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-12">
+              <SkeletonLine className="w-40 h-6 mx-auto mb-2" />
+              <Skeleton className="h-12 w-72 mx-auto" />
+            </div>
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-brand-light dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-6 w-full md:w-auto">
+                    <Skeleton className="h-14 w-40 rounded-lg" />
+                    <div className="flex flex-col gap-2">
+                      <SkeletonLine className="w-48" />
+                      <SkeletonLine className="w-24" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex -space-x-2">
+                      <SkeletonAvatar size="w-8 h-8" />
+                      <SkeletonAvatar size="w-8 h-8" />
+                    </div>
+                    <Skeleton className="h-8 w-28 rounded-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="py-24 relative bg-brand-dark overflow-hidden">
+          <div className="torn-separator-top" />
+          <div className="absolute inset-0 z-0 bg-gray-800/50" />
+          <div className="container mx-auto px-6 relative z-10 max-w-5xl">
+            <div className="flex flex-col lg:flex-row gap-16 items-center">
+              <div className="w-full lg:w-1/2 text-center lg:text-left space-y-4">
+                <Skeleton className="h-14 w-12 rounded bg-white/20" />
+                <Skeleton className="h-16 w-full max-w-md bg-white/20" />
+                <SkeletonLine className="w-full max-w-sm h-5 bg-white/20" />
+                <div className="space-y-2">
+                  <SkeletonLine className="w-48 h-4 bg-white/20" />
+                  <SkeletonLine className="w-56 h-4 bg-white/20" />
+                  <SkeletonLine className="w-40 h-4 bg-white/20" />
+                </div>
+              </div>
+              <div className="w-full lg:w-1/2 rounded-lg bg-white/5 p-8 border border-white/10 space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <SkeletonLine className="w-20 h-3 bg-white/20" />
+                    <Skeleton className="h-10 bg-white/10" />
+                  </div>
+                  <div className="space-y-2">
+                    <SkeletonLine className="w-20 h-3 bg-white/20" />
+                    <Skeleton className="h-10 bg-white/10" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <SkeletonLine className="w-28 h-3 bg-white/20" />
+                  <Skeleton className="h-10 bg-white/10" />
+                </div>
+                <div className="space-y-2">
+                  <SkeletonLine className="w-24 h-3 bg-white/20" />
+                  <Skeleton className="h-16 bg-white/10" />
+                </div>
+                <Skeleton className="h-14 w-full rounded-lg bg-white/20" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
 
   return (
     <div>

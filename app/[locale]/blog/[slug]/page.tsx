@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { notFound } from 'next/navigation'
 import { motion } from 'framer-motion'
 import HeroCompact from '@/components/ui/HeroCompact'
+import { Skeleton, SkeletonLine, SkeletonImage } from '@/components/ui/Skeleton'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getPostBySlug } from '@/services/blog'
 import type { BlogPost } from '@/services/blog'
@@ -26,8 +27,29 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-brand-dark dark:text-white font-heading uppercase">{tCommon('loading')}</p>
+      <div>
+        <header className="relative h-[55vh] min-h-[400px] flex flex-col items-center justify-end bg-gray-800 overflow-hidden">
+          <div className="relative z-10 pb-16 flex flex-col items-center px-4">
+            <Skeleton className="h-12 w-96 max-w-full rounded" />
+          </div>
+        </header>
+        <article className="py-20 bg-brand-light dark:bg-gray-900">
+          <div className="container mx-auto px-6 max-w-4xl">
+            <SkeletonImage className="h-80 rounded-lg mb-8" aspectRatio="" />
+            <div className="flex gap-4 mb-8">
+              <SkeletonLine className="w-32 h-4" />
+              <SkeletonLine className="w-24 h-4" />
+            </div>
+            <div className="space-y-4 mb-12">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <SkeletonLine key={i} className="w-full" />
+              ))}
+            </div>
+            <div className="pt-8 border-t border-gray-200 dark:border-gray-600">
+              <Skeleton className="h-5 w-32" />
+            </div>
+          </div>
+        </article>
       </div>
     )
   }

@@ -6,8 +6,15 @@ import Link from 'next/link'
 import AdminButton from '@/components/admin/AdminButton'
 import AdminInput from '@/components/admin/AdminInput'
 import ImageUploader from '@/components/admin/ImageUploader'
+import AdminEquipoSelector from '@/components/admin/AdminEquipoSelector'
+import type { EquipoItem } from '@/components/admin/AdminEquipoSelector'
+import AdminItinerarioList from '@/components/admin/AdminItinerarioList'
+import type { ItinerarioItem } from '@/components/admin/AdminItinerarioList'
+import AdminProximasSalidasList from '@/components/admin/AdminProximasSalidasList'
+import type { ProximaSalidaItem } from '@/components/admin/AdminProximasSalidasList'
 import { sileo } from 'sileo'
 import { getRutaBySlugForAdmin, updateRuta } from '@/services/rutas'
+import { getInstruccionesForAdmin } from '@/services/equipo'
 import type { Dificultad } from '@/services/rutas'
 
 export default function AdminRutaEditarPage() {
@@ -26,15 +33,22 @@ export default function AdminRutaEditarPage() {
     descripcionEn: '',
     duracionEs: '',
     duracionEn: '',
+    duracionDias: 0,
+    duracionNoches: 0,
     dificultad: 'media' as Dificultad,
     imagen: '',
     destacada: false,
-    itinerarioEs: '',
-    itinerarioEn: '',
-    equipoEs: '',
-    equipoEn: '',
-    proximasSalidas: '',
+    itinerarios: [] as ItinerarioItem[],
+    equipoSelected: [] as EquipoItem[],
+    proximasSalidas: [] as ProximaSalidaItem[],
   })
+  const [equipoDisponible, setEquipoDisponible] = useState<EquipoItem[]>([])
+
+  useEffect(() => {
+    getInstruccionesForAdmin()
+      .then((data) => setEquipoDisponible(data?.equipoNecesario ?? []))
+      .catch(() => setEquipoDisponible([]))
+  }, [])
 
   useEffect(() => {
     getRutaBySlugForAdmin(slug)
@@ -56,11 +70,23 @@ export default function AdminRutaEditarPage() {
           dificultad: ruta.dificultad ?? 'media',
           imagen: ruta.imagen ?? '',
           destacada: Boolean(ruta.destacada),
-          itinerarioEs: (ruta.itinerarios ?? []).map((i) => i.textoEs).join('\n'),
-          itinerarioEn: (ruta.itinerarios ?? []).map((i) => i.textoEn).join('\n'),
-          equipoEs: (ruta.equipos ?? []).map((e) => e.textoEs).join('\n'),
-          equipoEn: (ruta.equipos ?? []).map((e) => e.textoEn).join('\n'),
-          proximasSalidas: (ruta.proximasSalidas ?? []).map((s) => `${s.fecha}|${s.tipoEs ?? s.tipoEn ?? ''}`).join('\n'),
+          itinerarios: (ruta.itinerarios ?? []).map((i) => ({
+            textoEs: i.textoEs ?? '',
+            textoEn: i.textoEn ?? '',
+          })),
+          equipoSelected: (ruta.equipos ?? []).map((e) => ({
+            tituloEs: e.tituloEs ?? '',
+            tituloEn: e.tituloEn ?? '',
+            textoEs: e.textoEs ?? '',
+            textoEn: e.textoEn ?? '',
+            icono: e.icono ?? undefined,
+          })),
+          duracionDias: ruta.duracionDias ?? 0,
+          duracionNoches: ruta.duracionNoches ?? 0,
+          proximasSalidas: (ruta.proximasSalidas ?? []).map((s) => ({
+            fecha: s.fecha ?? '',
+            cupos: s.cupos ?? 0,
+          })),
         })
       })
       .catch(() => setNotFound(true))
@@ -79,26 +105,26 @@ export default function AdminRutaEditarPage() {
     e.preventDefault()
     setSaving(true)
     try {
-      const linesEs = formData.itinerarioEs.split('\n').filter(Boolean)
-      const linesEn = formData.itinerarioEn.split('\n').filter(Boolean)
-      const maxIt = Math.max(linesEs.length, linesEn.length)
-      const itinerario = Array.from({ length: maxIt }, (_, i) => ({
-        textoEs: linesEs[i] ?? '',
-        textoEn: linesEn[i] ?? '',
+      const itinerario = formData.itinerarios.map((item, i) => ({
+        textoEs: item.textoEs ?? '',
+        textoEn: item.textoEn ?? '',
         orden: i,
       }))
-      const eqEs = formData.equipoEs.split('\n').filter(Boolean)
-      const eqEn = formData.equipoEn.split('\n').filter(Boolean)
-      const maxEq = Math.max(eqEs.length, eqEn.length)
-      const equipo = Array.from({ length: maxEq }, (_, i) => ({
-        textoEs: eqEs[i] ?? '',
-        textoEn: eqEn[i] ?? '',
-        orden: i,
+      const equipo = formData.equipoSelected.map((item, i) => ({
+        tituloEs: item.tituloEs ?? '',
+        tituloEn: item.tituloEn ?? '',
+        textoEs: item.textoEs ?? '',
+        textoEn: item.textoEn ?? '',
+        icono: item.icono ?? '',
       }))
-      const proximasSalidas = formData.proximasSalidas.split('\n').filter(Boolean).map((line, i) => {
-        const [fecha, tipo] = line.split('|')
-        return { fecha: (fecha ?? '').trim(), tipoEs: (tipo ?? '').trim(), tipoEn: (tipo ?? '').trim(), orden: i }
-      })
+      const duracionDias = formData.duracionDias ?? 0
+      const duracionNoches = formData.duracionNoches ?? 0
+      const duracionEs = duracionDias || duracionNoches ? `${duracionDias} Días / ${duracionNoches} Noches` : formData.duracionEs
+      const duracionEn = duracionDias || duracionNoches ? `${duracionDias} Days / ${duracionNoches} Nights` : formData.duracionEn
+      const proximasSalidas = formData.proximasSalidas.map((s, i) => ({
+        fecha: s.fecha ?? '',
+        cupos: typeof s.cupos === 'number' ? s.cupos : Number(s.cupos) || 0,
+      }))
       await updateRuta(slug, {
         slug: formData.slug,
         nombreEs: formData.nombreEs,
@@ -107,8 +133,10 @@ export default function AdminRutaEditarPage() {
         zonaEn: formData.zonaEn,
         descripcionEs: formData.descripcionEs,
         descripcionEn: formData.descripcionEn,
-        duracionEs: formData.duracionEs,
-        duracionEn: formData.duracionEn,
+        duracionEs,
+        duracionEn,
+        duracionDias,
+        duracionNoches,
         dificultad: formData.dificultad,
         imagen: formData.imagen,
         destacada: formData.destacada,
@@ -172,18 +200,44 @@ export default function AdminRutaEditarPage() {
             <AdminInput label="Zona (EN)" name="zonaEn" value={formData.zonaEn} onChange={handleChange} />
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <AdminInput label="Duración (ES)" name="duracionEs" value={formData.duracionEs} onChange={handleChange} />
-            <AdminInput label="Duración (EN)" name="duracionEn" value={formData.duracionEn} onChange={handleChange} />
+            <AdminInput
+              label="Duración días (número)"
+              name="duracionDias"
+              type="number"
+              min={0}
+              value={String(formData.duracionDias ?? 0)}
+              onChange={(e) => setFormData((prev) => ({ ...prev, duracionDias: Number((e.target as HTMLInputElement).value) || 0 }))}
+            />
+            <AdminInput
+              label="Duración noches (número)"
+              name="duracionNoches"
+              type="number"
+              min={0}
+              value={String(formData.duracionNoches ?? 0)}
+              onChange={(e) => setFormData((prev) => ({ ...prev, duracionNoches: Number((e.target as HTMLInputElement).value) || 0 }))}
+            />
           </div>
+          <p className="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+            Se mostrará como &quot;X Días / Y Noches&quot; según el idioma. Sirve para calcular la fecha de término en próximas salidas.
+          </p>
           <AdminInput label="Dificultad" name="dificultad" value={formData.dificultad} onChange={handleChange} as="select" options={[{ value: 'fácil', label: 'Fácil' }, { value: 'media', label: 'Media' }, { value: 'alta', label: 'Alta' }]} />
           <AdminInput label="Descripción (ES)" name="descripcionEs" value={formData.descripcionEs} onChange={handleChange} as="textarea" rows={4} />
           <AdminInput label="Descripción (EN)" name="descripcionEn" value={formData.descripcionEn} onChange={handleChange} as="textarea" rows={4} />
           <ImageUploader label="Imagen de la ruta" value={formData.imagen} onChange={(url) => setFormData((prev) => ({ ...prev, imagen: url }))} tourSlug={slug} />
-          <AdminInput label="Itinerario (ES, uno por línea)" name="itinerarioEs" value={formData.itinerarioEs} onChange={handleChange} as="textarea" rows={5} />
-          <AdminInput label="Itinerario (EN, uno por línea)" name="itinerarioEn" value={formData.itinerarioEn} onChange={handleChange} as="textarea" rows={5} />
-          <AdminInput label="Equipo (ES, uno por línea)" name="equipoEs" value={formData.equipoEs} onChange={handleChange} as="textarea" rows={4} />
-          <AdminInput label="Equipo (EN, uno por línea)" name="equipoEn" value={formData.equipoEn} onChange={handleChange} as="textarea" rows={4} />
-          <AdminInput label="Próximas salidas (fecha|tipo por línea)" name="proximasSalidas" value={formData.proximasSalidas} onChange={handleChange} as="textarea" rows={3} />
+          <AdminItinerarioList
+            items={formData.itinerarios}
+            onChange={(itinerarios) => setFormData((prev) => ({ ...prev, itinerarios }))}
+          />
+          <AdminEquipoSelector
+            available={equipoDisponible}
+            selected={formData.equipoSelected}
+            onChange={(equipoSelected) => setFormData((prev) => ({ ...prev, equipoSelected }))}
+          />
+          <AdminProximasSalidasList
+            items={formData.proximasSalidas}
+            onChange={(proximasSalidas) => setFormData((prev) => ({ ...prev, proximasSalidas }))}
+            duracionDias={formData.duracionDias}
+          />
         </div>
         <div className="flex gap-4">
           <AdminButton type="submit" loading={saving}>

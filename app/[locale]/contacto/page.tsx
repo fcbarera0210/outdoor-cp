@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import HeroCompact from '@/components/ui/HeroCompact'
+import { Skeleton, SkeletonLine } from '@/components/ui/Skeleton'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getContactoSettings } from '@/services/settings'
 import type { ContactoSettings } from '@/services/settings'
@@ -13,6 +14,7 @@ export default function ContactoPage() {
   const locale = useLocale()
   const [enviado, setEnviado] = useState(false)
   const [settings, setSettings] = useState<ContactoSettings | null>(null)
+  const loading = settings === null
   useEffect(() => {
     getContactoSettings(locale).then(setSettings).catch(() => setSettings(null))
   }, [locale])
@@ -22,6 +24,73 @@ export default function ContactoPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setEnviado(true)
+  }
+
+  if (loading) {
+    return (
+      <div>
+        <HeroCompact
+          title={t('title')}
+          subtitle={t('subtitle')}
+          breadcrumb={[{ label: tHome('breadcrumbHome'), href: '/' }, { label: t('title') }]}
+        />
+        <section className="py-20 bg-brand-light dark:bg-gray-900">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="grid md:grid-cols-2 gap-16">
+              <div>
+                <Skeleton className="h-8 w-48 mb-8" />
+                <div className="space-y-6">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex gap-4">
+                      <Skeleton className="w-8 h-8 shrink-0 rounded" />
+                      <div className="flex-1 space-y-2">
+                        <SkeletonLine className="w-16" />
+                        <SkeletonLine className="w-40" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-12">
+                  <Skeleton className="aspect-video w-full rounded-lg" />
+                </div>
+              </div>
+              <div>
+                <Skeleton className="h-8 w-56 mb-8" />
+                <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg p-8 space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <SkeletonLine className="w-20 h-3" />
+                      <Skeleton className="h-10" />
+                    </div>
+                    <div className="space-y-2">
+                      <SkeletonLine className="w-20 h-3" />
+                      <Skeleton className="h-10" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <SkeletonLine className="w-16 h-3" />
+                    <Skeleton className="h-10" />
+                  </div>
+                  <div className="space-y-2">
+                    <SkeletonLine className="w-24 h-3" />
+                    <Skeleton className="h-10" />
+                  </div>
+                  <div className="space-y-2">
+                    <SkeletonLine className="w-28 h-3" />
+                    <Skeleton className="h-10" />
+                  </div>
+                  <div className="space-y-2">
+                    <SkeletonLine className="w-20 h-3" />
+                    <Skeleton className="h-24" />
+                  </div>
+                  <Skeleton className="h-14 w-full rounded-lg mt-8" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    )
   }
 
   return (

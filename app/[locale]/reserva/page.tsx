@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import HeroCompact from '@/components/ui/HeroCompact'
+import { Skeleton, SkeletonLine, SkeletonImage } from '@/components/ui/Skeleton'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getRutas } from '@/services/rutas'
 import type { Ruta } from '@/services/rutas'
@@ -67,7 +68,24 @@ function ReservaPaso1Content() {
           </motion.div>
 
           {loading ? (
-            <div className="flex justify-center py-20 text-brand-dark dark:text-white font-heading uppercase">{tCommon('loading')}</div>
+            <div className="grid gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="block p-6 rounded-lg border-2 border-gray-200 dark:border-gray-600">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <SkeletonImage className="w-full sm:w-40 h-32 rounded-lg shrink-0" aspectRatio="" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-6 w-48" />
+                      <SkeletonLine className="w-36" />
+                      <SkeletonLine className="w-full" />
+                      <SkeletonLine className="w-3/4" />
+                    </div>
+                    <div className="flex items-center">
+                      <Skeleton className="h-10 w-24 rounded-lg" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
           <div className="grid gap-6">
             {rutas.map((ruta, index) => (
@@ -109,10 +127,47 @@ function ReservaPaso1Content() {
   )
 }
 
-export default function ReservaPaso1Page() {
-  const { t: tCommon } = useTranslation('common')
+function ReservaPaso1Skeleton() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-brand-light dark:bg-gray-900 flex items-center justify-center"><div className="animate-pulse text-brand-dark dark:text-white">{tCommon('loading')}</div></div>}>
+    <div>
+      <header className="relative h-[55vh] min-h-[400px] flex flex-col items-center justify-end bg-gray-800 overflow-hidden">
+        <div className="relative z-10 pb-16 flex flex-col items-center gap-4">
+          <Skeleton className="h-12 w-64 rounded" />
+          <Skeleton className="h-6 w-48 rounded" />
+        </div>
+      </header>
+      <section className="py-20 bg-brand-light dark:bg-gray-900">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <div className="flex justify-center gap-4 mb-16">
+            {[1, 2, 3, 4].map((step) => (
+              <Skeleton key={step} className="w-10 h-10 rounded-full" />
+            ))}
+          </div>
+          <div className="grid gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="p-6 rounded-lg border-2 border-gray-200 dark:border-gray-600">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Skeleton className="w-full sm:w-40 h-32 rounded-lg shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-6 w-48" />
+                    <SkeletonLine className="w-36" />
+                    <SkeletonLine className="w-full" />
+                    <SkeletonLine className="w-3/4" />
+                  </div>
+                  <Skeleton className="h-10 w-24 rounded-lg shrink-0" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default function ReservaPaso1Page() {
+  return (
+    <Suspense fallback={<ReservaPaso1Skeleton />}>
       <ReservaPaso1Content />
     </Suspense>
   )

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import HeroCompact from '@/components/ui/HeroCompact'
+import { Skeleton, SkeletonLine, SkeletonImage } from '@/components/ui/Skeleton'
 import { sectionView, itemView } from '@/components/ui/animations'
 import { getRutas } from '@/services/rutas'
 import type { Ruta } from '@/services/rutas'
@@ -15,12 +16,19 @@ const dificultadColors: Record<string, string> = {
   alta: 'bg-brand-primary/20 text-brand-primary',
 }
 
+const dificultadLabelKey: Record<string, string> = {
+  fácil: 'easy',
+  media: 'medium',
+  alta: 'hard',
+}
+
 export default function RutasPage() {
   const locale = useLocale()
   const [rutas, setRutas] = useState<Ruta[]>([])
   const [loading, setLoading] = useState(true)
   const { t } = useTranslation('rutas')
   const { t: tCommon } = useTranslation('common')
+  const { t: tEquipo } = useTranslation('equipo')
   const { t: tHome } = useTranslation('home')
 
   useEffect(() => {
@@ -43,7 +51,28 @@ export default function RutasPage() {
       >
         <div className="container mx-auto px-6 max-w-6xl">
           {loading ? (
-            <div className="flex justify-center py-20 text-brand-dark dark:text-white font-heading uppercase">{tCommon('loading')}</div>
+            <div className="space-y-16">
+              {[1, 2, 3, 4].map((index) => (
+                <div
+                  key={index}
+                  className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12`}
+                >
+                  <div className="w-full md:w-1/2">
+                    <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                      <SkeletonImage className="h-[350px]" aspectRatio="" />
+                    </div>
+                    <Skeleton className="h-8 w-24 rounded-lg -mt-4 ml-4 md:ml-0" />
+                  </div>
+                  <div className="w-full md:w-1/2 md:pl-10 md:pr-10 space-y-3">
+                    <SkeletonLine className="w-2/3" />
+                    <Skeleton className="h-9 w-full" />
+                    <SkeletonLine className="w-full" />
+                    <SkeletonLine className="w-full" />
+                    <Skeleton className="h-4 w-28" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="space-y-16">
               {rutas.map((ruta, index) => (
@@ -73,7 +102,7 @@ export default function RutasPage() {
                       <i className="far fa-clock mr-1"></i> {ruta.duracion}
                       <span className="mx-2 text-gray-300 dark:text-gray-500">|</span>
                       <span className={`px-2 py-0.5 rounded-lg ${dificultadColors[ruta.dificultad]}`}>
-                        {tCommon('difficulty')}: {ruta.dificultad}
+                        {tCommon('difficulty')}: {tEquipo(dificultadLabelKey[ruta.dificultad] ?? ruta.dificultad)}
                       </span>
                     </div>
                     <h2 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark dark:text-white">

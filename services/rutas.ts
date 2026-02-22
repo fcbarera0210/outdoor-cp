@@ -12,8 +12,8 @@ export interface Ruta {
   imagen: string
   destacada?: boolean
   itinerario: string[]
-  equipo: string[]
-  proximasSalidas: { fecha: string; tipo: string }[]
+  equipo: { titulo: string; texto: string; icono?: string }[]
+  proximasSalidas: { id?: string; fecha: string; cupos: number; cuposDisponibles?: number }[]
 }
 
 export async function getRutas(locale: string = 'es', destacadasOnly?: boolean): Promise<Ruta[]> {
@@ -42,13 +42,15 @@ export interface RutaAdmin {
   descripcionEn: string
   duracionEs: string
   duracionEn: string
+  duracionDias?: number
+  duracionNoches?: number
   dificultad: Dificultad
   imagen: string
   destacada?: boolean
   orden?: number
   itinerarios: { textoEs: string; textoEn: string; orden: number }[]
-  equipos: { textoEs: string; textoEn: string; orden: number }[]
-  proximasSalidas: { fecha: string; tipoEs: string; tipoEn: string; orden?: number }[]
+  equipos: { tituloEs: string; tituloEn: string; textoEs: string; textoEn: string; icono?: string; orden: number }[]
+  proximasSalidas: { id: string; fecha: string; cupos: number; orden?: number }[]
 }
 
 export async function getRutaBySlugForAdmin(slug: string): Promise<RutaAdmin | null> {

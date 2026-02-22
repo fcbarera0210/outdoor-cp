@@ -18,9 +18,11 @@ model Ruta {
   zonaEn     String   @default("")
   descripcionEs String
   descripcionEn String @default("")
-  duracionEs String
-  duracionEn String   @default("")
-  dificultad String
+  duracionEs     String @default("")
+  duracionEn     String @default("")
+  duracionDias   Int    @default(0)
+  duracionNoches Int    @default(0)
+  dificultad     String
   imagen     String
   destacada  Boolean  @default(false)
   orden      Int      @default(0)
@@ -45,8 +47,11 @@ model RutaEquipo {
   id       String @id @default(cuid())
   rutaId   String
   ruta     Ruta   @relation(fields: [rutaId], references: [id], onDelete: Cascade)
+  tituloEs String @default("")
+  tituloEn String @default("")
   textoEs  String
   textoEn  String @default("")
+  icono    String @default("")
   orden    Int    @default(0)
 }
 
@@ -55,8 +60,7 @@ model RutaProximaSalida {
   rutaId String
   ruta   Ruta   @relation(fields: [rutaId], references: [id], onDelete: Cascade)
   fecha  String
-  tipoEs String
-  tipoEn String @default("")
+  cupos  Int    @default(0)
   orden  Int    @default(0)
 }
 
@@ -100,7 +104,9 @@ model EquipoInstrucciones {
   dificultadMediaEn String   @default("")
   dificultadAltaEs  String
   dificultadAltaEn  String   @default("")
-  // Equipo necesario + señalética as JSON arrays of { tituloEs, tituloEn, textoEs, textoEn }
+  // Instrucciones básicas dinámicas: array de { tituloEs, tituloEn, textoEs, textoEn, icono }
+  instruccionesBasicasJson String @default("[]")
+  // Equipo necesario + señalética as JSON arrays of { tituloEs, tituloEn, textoEs, textoEn, icono? }
   equipoNecesarioJson String @default("[]")
   senaleticaJson      String @default("[]")
   updatedAt          DateTime @updatedAt

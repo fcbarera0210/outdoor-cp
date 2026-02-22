@@ -5,6 +5,7 @@ import Link from 'next/link'
 import AdminTable from '@/components/admin/AdminTable'
 import AdminButton from '@/components/admin/AdminButton'
 import { sileo } from 'sileo'
+import { useConfirm } from '@/components/admin/AdminConfirmContext'
 import { getRutas, deleteRuta } from '@/services/rutas'
 import type { Ruta } from '@/services/rutas'
 
@@ -15,6 +16,7 @@ const dificultadColors: Record<string, string> = {
 }
 
 export default function AdminRutasPage() {
+  const confirm = useConfirm()
   const [rutas, setRutas] = useState<Ruta[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -26,10 +28,16 @@ export default function AdminRutasPage() {
   }, [])
 
   const handleDelete = async (slug: string) => {
-    if (!confirm('¿Eliminar esta ruta?')) return
+    const ok = await confirm({
+      title: 'Eliminar ruta',
+      message: '¿Eliminar esta ruta?',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
     try {
       await deleteRuta(slug)
       setRutas((prev) => prev.filter((r) => r.slug !== slug))
+      sileo.success({ title: 'Ruta eliminada' })
     } catch (e) {
       console.error(e)
       sileo.error({ title: 'Error al eliminar' })

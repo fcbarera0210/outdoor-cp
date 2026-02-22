@@ -15,6 +15,7 @@ export default function Home() {
   const [homeData, setHomeData] = useState<HomeData | null>(null)
   const [featuredRutas, setFeaturedRutas] = useState<Ruta[]>([])
   const [homeSections, setHomeSections] = useState<HomeSectionsSettings | null>(null)
+  const loading = homeData === null
 
   useEffect(() => {
     getHomeData(locale).then(setHomeData).catch(() => setHomeData(null))
@@ -24,6 +25,7 @@ export default function Home() {
 
   return (
     <AndesTrekDemo
+      loading={loading}
       homeData={homeData ?? undefined}
       featuredRutas={featuredRutas.length > 0 ? featuredRutas : undefined}
       homeSections={homeSections ?? undefined}

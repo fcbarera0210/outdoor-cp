@@ -5,10 +5,12 @@ import Link from 'next/link'
 import AdminTable from '@/components/admin/AdminTable'
 import AdminButton from '@/components/admin/AdminButton'
 import { sileo } from 'sileo'
+import { useConfirm } from '@/components/admin/AdminConfirmContext'
 import { getBlogPosts, deletePost } from '@/services/blog'
 import type { BlogPost } from '@/services/blog'
 
 export default function AdminBlogPage() {
+  const confirm = useConfirm()
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -20,10 +22,16 @@ export default function AdminBlogPage() {
   }, [])
 
   const handleDelete = async (slug: string) => {
-    if (!confirm('¿Eliminar este post?')) return
+    const ok = await confirm({
+      title: 'Eliminar post',
+      message: '¿Eliminar este post?',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
     try {
       await deletePost(slug)
       setPosts((prev) => prev.filter((p) => p.slug !== slug))
+      sileo.success({ title: 'Post eliminado' })
     } catch (e) {
       console.error(e)
       sileo.error({ title: 'Error al eliminar' })
