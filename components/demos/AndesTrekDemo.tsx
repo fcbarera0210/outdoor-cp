@@ -382,48 +382,11 @@ export default function AndesTrekDemo({ loading, homeData, featuredRutas, homeSe
               </motion.div>
             ))
           ) : (
-            <>
-              <motion.div className="flex flex-col md:flex-row items-center gap-12 mb-24" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5 }}>
-                <div className="w-full md:w-1/2 relative group">
-                  <div className="p-2 bg-gray-100 shadow-xl transform rotate-1 transition duration-500 group-hover:rotate-0">
-                    <div className="overflow-hidden relative h-[400px]">
-                      <img src="https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Trekking" className="w-full h-full object-cover transform transition duration-1000 group-hover:scale-110" />
-                    </div>
-                  </div>
-                  <div className="absolute -top-4 -left-4 rounded-lg bg-brand-primary text-white px-4 py-2 text-xs font-bold uppercase tracking-widest shadow-lg z-10">
-                    <i className="fas fa-map-marker-alt mr-2"></i> Patagonia
-                  </div>
-                </div>
-                <div className="w-full md:w-1/2 md:pl-10">
-                  <div className="text-xs text-brand-earth mb-3 font-heading uppercase tracking-widest font-bold">
-                    <i className="far fa-clock mr-1"></i> 5 Días / 4 Noches <span className="mx-2 text-gray-300">|</span> Dificultad: Media
-                  </div>
-                  <h4 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark dark:text-white">Circuito W: <br /> El Corazón de Paine</h4>
-                  <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed font-light text-lg">Una travesía inolvidable por los senderos más icónicos del Parque Nacional Torres del Paine.</p>
-                  <Link href="/rutas/circuito-w" className="inline-flex items-center text-brand-dark dark:text-white font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group">Ver Itinerario <span className="bg-brand-primary w-8 h-[2px] ml-3 group-hover:w-12 transition-all duration-300"></span></Link>
-                </div>
-              </motion.div>
-              <motion.div className="flex flex-col md:flex-row-reverse items-center gap-12 mb-20" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5, delay: 0.1 }}>
-                <div className="w-full md:w-1/2 relative group">
-                  <div className="p-2 bg-gray-100 shadow-xl transform -rotate-1 transition duration-500 group-hover:rotate-0">
-                    <div className="overflow-hidden relative h-[400px]">
-                      <img src="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nature" className="w-full h-full object-cover transform transition duration-1000 group-hover:scale-110" />
-                    </div>
-                  </div>
-                  <div className="absolute -top-4 -right-4 rounded-lg bg-brand-primary text-white px-4 py-2 text-xs font-bold uppercase tracking-widest shadow-lg z-10">
-                    <i className="fas fa-map-marker-alt mr-2"></i> Araucanía
-                  </div>
-                </div>
-                <div className="w-full md:w-1/2 md:pr-10 text-left md:text-right">
-                  <div className="text-xs text-brand-earth mb-3 font-heading uppercase tracking-widest font-bold flex items-center justify-start md:justify-end">
-                    <i className="far fa-clock mr-1"></i> Full Day <span className="mx-2 text-gray-300">|</span> Dificultad: Alta
-                  </div>
-                  <h4 className="text-3xl md:text-4xl font-heading font-bold uppercase leading-tight mb-6 text-brand-dark dark:text-white">Ascenso al Cráter: <br /> Volcán Villarrica</h4>
-                  <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed font-light text-lg">Desafía tus límites con el ascenso a uno de los volcanes más activos de Sudamérica.</p>
-                  <Link href="/rutas/volcan-villarrica" className="inline-flex items-center flex-row-reverse text-brand-dark dark:text-white font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group">Ver Itinerario <span className="bg-brand-primary w-8 h-[2px] mr-3 group-hover:w-12 transition-all duration-300"></span></Link>
-                </div>
-              </motion.div>
-            </>
+            <div className="text-center py-8">
+              <Link href="/rutas" className="inline-flex items-center text-brand-dark dark:text-white font-heading font-bold uppercase text-sm tracking-widest hover:text-brand-primary transition group">
+                Ver todas las rutas <span className="bg-brand-primary w-8 h-[2px] ml-3 group-hover:w-12 transition-all duration-300"></span>
+              </Link>
+            </div>
           )}
         </div>
       </motion.section>
